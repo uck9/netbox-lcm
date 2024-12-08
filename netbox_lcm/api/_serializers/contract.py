@@ -34,13 +34,13 @@ class SupportContractSerializer(NetBoxModelSerializer):
     class Meta:
         model = SupportContract
         fields = (
-            'url', 'id', 'display', 'vendor', 'contract_id', 'start', 'renewal', 'end', 'description', 'comments',
+            'url', 'id', 'display', 'vendor', 'contract_id', 'start', 'renewal', 'end', 'description', 'comments', 'custom_fields',
         )
         brief_fields = ('url', 'id', 'display', 'vendor', 'contract_id', )
 
 
 class SupportContractAssignmentSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_lcm-api:licenseassignment-detail')
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_lcm-api:supportcontractassignment-detail')
     contract = SupportContractSerializer(nested=True)
     sku = SupportSKUSerializer(nested=True, required=False, allow_null=True)
     device = DeviceSerializer(nested=True, required=False, allow_null=True)

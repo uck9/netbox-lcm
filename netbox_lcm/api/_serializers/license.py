@@ -18,7 +18,7 @@ class LicenseSerializer(NetBoxModelSerializer):
 
     class Meta:
         model = License
-        fields = ('url', 'id', 'display', 'name', 'manufacturer', 'description', 'comments', )
+        fields = ('url', 'id', 'display', 'name', 'manufacturer', 'description', 'comments', 'custom_fields', )
         brief_fields = ('url', 'id', 'display', 'name', )
 
 
