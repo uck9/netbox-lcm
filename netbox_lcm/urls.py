@@ -6,14 +6,14 @@ from .models import HardwareLifecycle, SupportContract, License, LicenseAssignme
     SupportSKU, Vendor
 
 urlpatterns = [
-    path('lifecycle/', views.HardwareLifecycleListView.as_view(), name='hardwarelifecycle_list'),
-    path('lifecycle/add', views.HardwareLifecycleEditView.as_view(), name='hardwarelifecycle_add'),
-    path('lifecycle/edit', views.HardwareLifecycleBulkEditView.as_view(), name='hardwarelifecycle_bulk_edit'),
-    path('lifecycle/delete', views.HardwareLifecycleBulkDeleteView.as_view(), name='hardwarelifecycle_bulk_delete'),
-    path('lifecycle/<int:pk>', views.HardwareLifecycleView.as_view(), name='hardwarelifecycle'),
-    path('lifecycle/<int:pk>/edit', views.HardwareLifecycleEditView.as_view(), name='hardwarelifecycle_edit'),
-    path('lifecycle/<int:pk>/delete', views.HardwareLifecycleDeleteView.as_view(), name='hardwarelifecycle_delete'),
-    path('lifecycle/<int:pk>/changelog', ObjectChangeLogView.as_view(), name='hardwarelifecycle_changelog', kwargs={'model': HardwareLifecycle}),
+    path('hardware/', views.HardwareLifecycleListView.as_view(), name='hardwarelifecycle_list'),
+    path('hardware/add', views.HardwareLifecycleEditView.as_view(), name='hardwarelifecycle_add'),
+    path('hardware/edit', views.HardwareLifecycleBulkEditView.as_view(), name='hardwarelifecycle_bulk_edit'),
+    path('hardware/delete', views.HardwareLifecycleBulkDeleteView.as_view(), name='hardwarelifecycle_bulk_delete'),
+    path('hardware/<int:pk>', views.HardwareLifecycleView.as_view(), name='hardwarelifecycle'),
+    path('hardware/<int:pk>/edit', views.HardwareLifecycleEditView.as_view(), name='hardwarelifecycle_edit'),
+    path('hardware/<int:pk>/delete', views.HardwareLifecycleDeleteView.as_view(), name='hardwarelifecycle_delete'),
+    path('hardware/<int:pk>/changelog', ObjectChangeLogView.as_view(), name='hardwarelifecycle_changelog', kwargs={'model': HardwareLifecycle}),
 
     path('vendors/', views.VendorListView.as_view(), name='vendor_list'),
     path('vendors/add', views.VendorEditView.as_view(), name='vendor_add'),

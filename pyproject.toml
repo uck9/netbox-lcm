@@ -28,7 +28,7 @@ dependencies = [
 
 [project.urls]
 Documentation = "https://github.com/uck9/netbox-lcm/blob/main/README.md"
-Source = "https://github.com/uck9/netbox-lcm
+Source = "https://github.com/uck9/netbox-lcm"
 Tracker = "https://github.com/uck9/netbox-lcm/issues"
 
 [tool.setuptools.packages.find]

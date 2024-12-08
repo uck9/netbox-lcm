@@ -37,7 +37,16 @@ Example:
 
 ## Configuration
 
-None
+To use the sync_cisco_hw_eox_data command, you need to generate a client id and secret in the Cisco API console
+for the support API and include them as part of the plugin configuration.
+
+```python
+    PLUGINS_CONFIG = [
+        'netbox_lcm': {
+            'cisco_support_api_client_id': '',     # Client ID for the Cisco Support API
+            'cisco_support_api_client_secret': ''  # Client Secret for the Cisco Support API
+    ],
+```
 
 ## Usage
 

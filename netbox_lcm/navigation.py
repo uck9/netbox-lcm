@@ -39,7 +39,7 @@ license_assignments = PluginMenuItem(
 
 
 menu = PluginMenu(
-    label='Hardware Lifecycle',
+    label='Lifecycle Management',
     groups=(
         ('Lifecycle', (lifecycle, )),
         ('Support Contracts', (vendors, skus, contracts, contract_assignments)),
