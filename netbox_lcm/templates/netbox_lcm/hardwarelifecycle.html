@@ -35,19 +35,19 @@
             <td><span {{ object.end_of_sale|date_badge_class }}>{{ object.end_of_sale }}</span></td>
           </tr>
           <tr>
-            <td>End of Maintenance Updates</td>
+            <td>End of SW Maintenance</td>
             <td><span {{ object.end_of_maintenance|date_badge_class }}>{{ object.end_of_maintenance }}</span></td>
           </tr>
           <tr>
-            <td>End of Security Updates</td>
+            <td>End of Security Vulnerability</td>
             <td><span {{ object.end_of_security|date_badge_class }}>{{ object.end_of_security }}</span></td>
           </tr>
           <tr>
-            <td>Last Date for new Support Contract Attach</td>
+            <td>End of Contract Attach</td>
             <td><span {{ object.last_contract_attach|date_badge_class }}>{{ object.last_contract_attach }}</span></td>
           </tr>
           <tr>
-            <td>Last Date for Support Contract Renewal</td>
+            <td>End of Contract Renewal</td>
             <td><span {{ object.last_contract_renewal|date_badge_class }}>{{ object.last_contract_renewal }}</span></td>
           </tr>
           <tr>
@@ -63,7 +63,7 @@
               <tr>
                 <th scope="row">Product Notice</th>
                 <td>
-                  {% if object.notice_url %}<span class="text-center"><a href="{{ object.notice_url }}" target="_blank">{{ object.assigned_object }} Hardware Notice</a>
+                  {% if object.notice_url %}<span class="text-center"><a href="{{ object.notice_url }}" target="_blank">{{ object.assigned_object }} Notice</a>
                     {% else %}<span class="text-muted">&mdash;{% endif %}
                   </span>
                 </td>
