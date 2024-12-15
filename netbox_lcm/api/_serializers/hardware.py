@@ -25,13 +25,14 @@ class HardwareLifecycleSerializer(NetBoxModelSerializer):
     last_contract_attach = serializers.DateField(required=False)
     last_contract_renewal = serializers.DateField(required=False)
     end_of_support = serializers.DateField()
+    notice_url = serializers.URLField(required=False)
 
     class Meta:
         model = HardwareLifecycle
         fields = (
             'url', 'id', 'display', 'assigned_object_type', 'assigned_object_id', 'end_of_sale',
-            'end_of_maintenance', 'end_of_security', 'last_contract_attach', 'last_contract_renewal', 'end_of_support', 'notice', 'documentation',
-            'description', 'comments', 'custom_fields',
+            'end_of_maintenance', 'end_of_security', 'last_contract_attach', 'last_contract_renewal', 'end_of_support',
+            'notice_url', 'migration_pid', 'migration_pid_cost', 'migration_pid_cost_currency', 'description', 'comments', 'custom_fields',
         )
         brief_fields = (
             'url', 'id', 'display', 'assigned_object_type', 'assigned_object_id', 'end_of_sale',

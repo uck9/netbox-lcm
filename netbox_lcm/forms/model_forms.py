@@ -160,8 +160,8 @@ class HardwareLifecycleForm(NetBoxModelForm):
     class Meta:
         model = HardwareLifecycle
         fields = (
-            'last_contract_attach', 'last_contract_renewal', 'end_of_sale', 'end_of_maintenance', 'end_of_security', 'end_of_support', 'notice',
-            'documentation', 'description', 'comments', 'tags',
+            'last_contract_attach', 'last_contract_renewal', 'end_of_sale', 'end_of_maintenance', 'end_of_security', 'end_of_support',
+            'notice_url', 'migration_pid', 'migration_pid_cost', 'migration_pid_cost_currency', 'description', 'comments', 'tags',
         )
         widgets = {
             'last_contract_attach': DatePicker(),

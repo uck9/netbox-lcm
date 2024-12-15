@@ -15,10 +15,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='supportcontract',
-            name='manufacturer',
-        ),
         migrations.CreateModel(
             name='SupportSKU',
             fields=[

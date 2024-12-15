@@ -109,8 +109,10 @@ class HardwareLifecycleType(NetBoxObjectType):
     last_contract_attach: str | None
     last_contract_renewal: str | None
     end_of_support: str
-    notice: str | None
-    documentation: str | None
+    notice_url: str | None
+    migration_pid: str | None
+    migration_pid_cost: str | None
+    migration_pid_cost_currency: str | None
 
 
 class HardwareLifecycleObjectTypes:

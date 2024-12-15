@@ -36,7 +36,7 @@
 
     <div class="field-group my-5">
       <div class="row mb-2">
-        <h5 class="offset-sm-3">Key Dates</h5>
+        <h5 class="offset-sm-3">Lifecycle Dates</h5>
       </div>
       {% render_field form.end_of_sale %}
       {% render_field form.end_of_maintenance %}
@@ -44,6 +44,15 @@
       {% render_field form.last_contract_attach %}
       {% render_field form.last_contract_renewal %}
       {% render_field form.end_of_support %}
+    </div>
+    <div class="field-group my-5">
+      <div class="row mb-2">
+        <h5 class="offset-sm-3">Lifecycle Details</h5>
+      </div>
+      {% render_field form.notice_url %}
+      {% render_field form.migration_pid %}
+      {% render_field form.migration_pid_cost %}
+      {% render_field form.migration_pid_cost_currency %}
     </div>
     <div class="field-group my-5">
       {% render_field form.tags %}

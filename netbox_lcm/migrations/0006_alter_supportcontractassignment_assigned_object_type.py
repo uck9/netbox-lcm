@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('contenttypes', '0002_remove_content_type_name'),
-        ('netbox_lcm', '0005_remove_supportcontract_manufacturer_supportsku_and_more'),
+        ('netbox_lcm', '0005_create_supportsku_and_more'),
     ]
 
     operations = [

@@ -5,6 +5,7 @@ from django.urls import reverse
 
 from dcim.models import DeviceType, ModuleType, Device, Module
 from netbox.models import PrimaryModel
+from utilities.choices import ChoiceSet
 
 from netbox_lcm.constants import HARDWARE_LIFECYCLE_MODELS
 
@@ -12,6 +13,18 @@ from netbox_lcm.constants import HARDWARE_LIFECYCLE_MODELS
 __all__ = (
     'HardwareLifecycle',
 )
+
+
+class CurrencyChoices(ChoiceSet):
+    key = 'HardwaeLifecycle.migration_pid_cost_currency'
+    CURRENCY_USD = 'usd'
+
+    CHOICES = [
+        (CURRENCY_USD, 'USD'),
+        ('aud', 'AUD'),
+    ]
+
+CURRENCY_DEFAULT = CurrencyChoices.CHOICES[0][0]
 
 
 class HardwareLifecycle(PrimaryModel):
@@ -39,8 +52,11 @@ class HardwareLifecycle(PrimaryModel):
     last_contract_renewal = models.DateField(blank=True, null=True)
     end_of_support = models.DateField()
 
-    notice = models.CharField(max_length=500, blank=True, null=True)
-    documentation = models.CharField(max_length=500, blank=True, null=True)
+    notice_url = models.URLField(blank=True)
+    migration_pid = models.CharField(max_length=100, blank=True, null=True)
+    migration_pid_cost = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    migration_pid_cost_currency = models.CharField(max_length=3, choices=CurrencyChoices, default=CURRENCY_DEFAULT)
+
 
     class Meta:
         ordering = ['assigned_object_type']
