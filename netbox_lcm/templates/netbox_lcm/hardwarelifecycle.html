@@ -90,25 +90,15 @@
     <div class="col col-md-6">
       <div class="card">
         <h2 class="card-header">Related Objects</h2>
-        <table class="table table-hover attr-table">
-          <tr>
-            <th>
-              {% if object.assigned_object_type|stringformat:"s" == 'DCIM | device type' %}
-                Device Type:
-              {% elif object.assigned_object_type|stringformat:"s" == 'DCIM | module type' %}
-                Module Type:
-              {% endif %}
-            </th>
-            <td>
-              {% if object.assigned_object_type|stringformat:"s" == 'DCIM | device type' %}
-                <span class="text-center"><a href="{% url 'dcim:device_list' %}?device_type_id={{ object.assigned_object.id }}">{{ object.assigned_object_count}}</a></span>
-              {% elif object.assigned_object_type|stringformat:"s" == 'DCIM | module type' %}
-                <span class="text-center"><a href="{% url 'dcim:module_list' %}?module_type_id={{ object.assigned_object.id }}">{{ object.assigned_object_count}}</a></span>
-              {% endif %}
-            </td>
-            <td><span class="text-center"><a href="{{ object.notice_url }}"></a></td>
-          </tr>
-        </table>
+        <ul class="list-group list-group-flush" role="presentation">
+          {% if object.assigned_object_type|stringformat:"s" == 'DCIM | device type' %}
+            <a href="{% url 'dcim:device_list' %}?device_type_id={{ object.assigned_object.id }}" class="list-group-item list-group-item-action d-flex justify-content-between">
+              Devices<span class="badge text-bg-primary rounded-pill">{{ object.assigned_object_count}}</span></a>
+          {% elif object.assigned_object_type|stringformat:"s" == 'DCIM | module type' %}
+            <a href="{% url 'dcim:device_list' %}?device_type_id={{ object.assigned_object.id }}" class="list-group-item list-group-item-action d-flex justify-content-between"></a>
+              Modules<span class="badge text-bg-primary rounded-pill">{{ object.assigned_object_count}}</span></a>
+          {% endif %}
+        </ul>
       </div>
       {% include 'inc/panels/custom_fields.html' %}
       {% include 'inc/panels/comments.html' %}
