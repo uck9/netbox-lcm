@@ -33,8 +33,8 @@ class MigrationCalcKeyChoices(ChoiceSet):
     DEFAULT_KEY = 'security'
 
     CHOICES = [
-        (DEFAULT_KEY, 'Security Vulnerability'),
-        ('support', 'Support'),
+        (DEFAULT_KEY, 'End of Security'),
+        ('support', 'End of Support'),
     ]
 
 CURRENCY_DEFAULT = CurrencyChoices.CHOICES[0][0]

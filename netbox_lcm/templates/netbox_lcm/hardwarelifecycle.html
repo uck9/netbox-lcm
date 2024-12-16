@@ -39,7 +39,7 @@
             </td>
           </tr>
           <tr>
-            <td>End of Sale</td>
+            <th scope="row">End of Sale</th>
             <td><span {{ object.end_of_sale|date_badge_class }}>{{ object.end_of_sale }}</span></td>
           </tr>
           <tr>
@@ -115,7 +115,7 @@
               <tr>
                 <th scope="row">Dates Calculated from</th>
                 <td>
-                  {% if object.migration_calc_key %}<span class="text-center">{{ object.migration_calc_key|capfirst}}{% else %}<span class="text-muted">&mdash;{% endif %}
+                  {% if object.migration_calc_key %}<span class="text-center">{{ object.get_migration_calc_key_display|capfirst}}{% else %}<span class="text-muted">&mdash;{% endif %}
                   </span>
                 </td>
               </tr>
