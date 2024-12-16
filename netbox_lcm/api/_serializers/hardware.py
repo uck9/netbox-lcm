@@ -32,8 +32,8 @@ class HardwareLifecycleSerializer(NetBoxModelSerializer):
         fields = (
             'url', 'id', 'display', 'assigned_object_type', 'assigned_object_id', 'assigned_object_count', 'end_of_sale',
             'end_of_maintenance', 'end_of_security', 'last_contract_attach', 'last_contract_renewal', 'end_of_support',
-            'notice_url', 'migration_pid', 'migration_pid_cost', 'migration_pid_cost_currency', 'description', 
-            'comments', 'custom_fields',
+            'notice_url', 'migration_pid', 'migration_pid_cost', 'migration_pid_cost_currency', 'migration_calc_key',
+            'calc_replacement_year', 'calc_budget_year', 'description', 'comments', 'custom_fields',
         )
         brief_fields = (
             'url', 'id', 'display', 'assigned_object_type', 'assigned_object_id', 'end_of_sale', 'assigned_object_count',

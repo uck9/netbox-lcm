@@ -28,60 +28,40 @@
         </table>
       </div>
       <div class="card">
-        <h2 class="card-header">Lifecycle Dates</h2>
+        <h2 class="card-header">Lifecycle Details</h2>
         <table class="table table-hover attr-table">
+          <tr>
+            <th scope="row">Product Notice</th>
+            <td>
+              {% if object.notice_url %}<span class="text-center"><a href="{{ object.notice_url }}" target="_blank">{{ object.assigned_object }} Notice</a>
+                {% else %}<span class="text-muted">&mdash;{% endif %}
+              </span>
+            </td>
+          </tr>
           <tr>
             <td>End of Sale</td>
             <td><span {{ object.end_of_sale|date_badge_class }}>{{ object.end_of_sale }}</span></td>
           </tr>
           <tr>
-            <td>End of SW Maintenance</td>
+            <th scope="row">End of SW Maintenance</th>
             <td><span {{ object.end_of_maintenance|date_badge_class }}>{{ object.end_of_maintenance }}</span></td>
           </tr>
           <tr>
-            <td>End of Security Vulnerability</td>
+            <th scope="row">End of Security Vulnerability</th>
             <td><span {{ object.end_of_security|date_badge_class }}>{{ object.end_of_security }}</span></td>
           </tr>
           <tr>
-            <td>End of Contract Attach</td>
+            <th scope="row">End of Contract Attach</th>
             <td><span {{ object.last_contract_attach|date_badge_class }}>{{ object.last_contract_attach }}</span></td>
           </tr>
           <tr>
-            <td>End of Contract Renewal</td>
+            <th scope="row">End of Contract Renewal</th>
             <td><span {{ object.last_contract_renewal|date_badge_class }}>{{ object.last_contract_renewal }}</span></td>
           </tr>
           <tr>
-            <td>End of Support</td>
+            <th scope="row">End of Support</th>
             <td><span {{ object.end_of_support|date_badge_class }}>{{ object.end_of_support }}</span></td>
           </tr>
-        </table>
-      </div>
-      <div class="card">
-        <h2 class="card-header">Lifecycle Details</h2>
-        <table class="table table-hover attr-table">
-            <tbody>
-              <tr>
-                <th scope="row">Product Notice</th>
-                <td>
-                  {% if object.notice_url %}<span class="text-center"><a href="{{ object.notice_url }}" target="_blank">{{ object.assigned_object }} Notice</a>
-                    {% else %}<span class="text-muted">&mdash;{% endif %}
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">Migration Product ID</th>
-                <td>
-                  {% if object.migration_pid %}<span class="text-center">{{ object.migration_pid }}{% else %}<span class="text-muted">&mdash;{% endif %}
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">Migration Product Cost ({{ object.migration_pid_cost_currency|upper }})</th>
-                <td>
-                  {% if object.migration_pid_cost %}<span class="text-center">{{ object.migration_pid_cost }}{% else %}<span class="text-muted">&mdash;{% endif %}
-                  </span>
-                </td>
-              </tr>
         </table>
       </div>
       {% plugin_left_page object %}
@@ -99,6 +79,47 @@
               Modules<span class="badge text-bg-primary rounded-pill">{{ object.assigned_object_count}}</span></a>
           {% endif %}
         </ul>
+      </div>
+      <div class="card">
+        <h2 class="card-header">Business Planning</h2>
+        <table class="table table-hover attr-table">
+            <tbody>
+              <tr>
+                <th scope="row">Migration Product ID</th>
+                <td>
+                  {% if object.migration_pid %}<span class="text-center">{{ object.migration_pid }}{% else %}<span class="text-muted">&mdash;{% endif %}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Migration Product Cost ({{ object.migration_pid_cost_currency|upper }})</th>
+                <td>
+                  {% if object.migration_pid_cost %}<span class="text-center">{{ object.migration_pid_cost }}{% else %}<span class="text-muted">&mdash;{% endif %}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Budget Year</th>
+                <td>
+                  {% if object.calc_budget_year %}<span class="text-center">{{ object.calc_budget_year}}{% else %}<span class="text-muted">&mdash;{% endif %}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Planned Replacement Year</th>
+                <td>
+                  {% if object.calc_replacement_year %}<span class="text-center">{{ object.calc_replacement_year}}{% else %}<span class="text-muted">&mdash;{% endif %}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Dates Calculated from</th>
+                <td>
+                  {% if object.migration_calc_key %}<span class="text-center">{{ object.migration_calc_key|capfirst}}{% else %}<span class="text-muted">&mdash;{% endif %}
+                  </span>
+                </td>
+              </tr>
+        </table>
       </div>
       {% include 'inc/panels/custom_fields.html' %}
       {% include 'inc/panels/comments.html' %}

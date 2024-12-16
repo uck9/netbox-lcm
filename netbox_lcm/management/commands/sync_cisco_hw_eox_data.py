@@ -209,7 +209,8 @@ class Command(BaseCommand):
 
         if (value_changed and end_of_sale_defined and end_of_support_defined):
             if (self.SET_MISSING_DATA_AS_END_OF_SUPPORT):
-                # Check whether end of security is blank.  Use end_of_support value in that case
+                # We rely upon End of Security in other areas.
+                # Use end_of_support value in tte case no Security date has been located
                 if (hw_lifecycle.end_of_security is None):
                     hw_lifecycle.end_of_security = hw_lifecycle.end_of_support
                 if (hw_lifecycle.end_of_maintenance is None):

@@ -69,6 +69,7 @@ class Migration(migrations.Migration):
                 ('migration_pid', models.CharField(blank=True, max_length=100, null=True)),
                 ('migration_pid_cost', models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True)),
                 ('migration_pid_cost_currency', models.CharField(default='usd', max_length=3)),
+                ('migration_calc_key', models.CharField(default='security', max_length=10)),
                 ('assigned_object_type', models.ForeignKey(blank=True, limit_choices_to=(dcim.models.devices.DeviceType, dcim.models.devices.ModuleType), null=True, on_delete=django.db.models.deletion.PROTECT, related_name='+', to='contenttypes.contenttype')),
                 ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
             ],
