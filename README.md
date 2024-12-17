@@ -35,6 +35,8 @@ Example:
     ],
 ```
 
+Note that this plugin does not support simultaeneous installation of the netbox_lifecycle plugin.
+
 ## Configuration
 
 To use the sync_cisco_hw_eox_data command, you need to generate a client id and secret in the Cisco API console
@@ -45,11 +47,12 @@ be configured to manage the data import process from the script.
     PLUGINS_CONFIG = [
         'netbox_lcm': {
             'cisco_support_api_client_id': '',      # Client ID for the Cisco Support API
-            'cisco_support_api_client_secret': ''   # Client Secret for the Cisco Support API
+            'cisco_support_api_client_secret': '',   # Client Secret for the Cisco Support API
             'lifecycle_only_active_pids': True,     # Only keep Lifecycle Data for PIDs we have as defined devices
             'api_is_source_of_truth': True,         # Data received from API is considered the soruce of truth and will overwrite non matching data
             'use_eos_for_missing': True,            # If a date is not returned, use end_of_support as the date to use, otherwise null values retained
             'hw_lcm_migration_calc_month': 6,       # Month used to calc replacement and budget years. Default is 6
+        },
     ],
 ```
 
