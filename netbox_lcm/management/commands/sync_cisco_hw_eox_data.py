@@ -15,9 +15,9 @@ from netbox_lcm.models import hardware
 class Command(BaseCommand):
     help = 'Sync Hardware Lifecycle Information from Cisco EoX Support API'
 
-    TRACK_ONLY_ACTIVE_PIDS = bool
+    LIFECYCLE_ONLY_ACTIVE_PIDS = bool
     API_IS_SOURCE_OF_TRUTH = bool
-    SET_MISSING_DATA_AS_END_OF_SUPPORT = bool
+    USE_EOS_FOR_MISSING_DATA = bool
 
     def add_arguments(self, parser):
         # Named (optional) arguments
@@ -32,9 +32,9 @@ class Command(BaseCommand):
         PLUGIN_SETTINGS = settings.PLUGINS_CONFIG.get("netbox_lcm", dict())
         CISCO_CLIENT_ID = PLUGIN_SETTINGS.get("cisco_support_api_client_id", "")
         CISCO_CLIENT_SECRET = PLUGIN_SETTINGS.get("cisco_support_api_client_secret", "")
-        self.TRACK_ONLY_ACTIVE_PIDS = PLUGIN_SETTINGS.get("track_only_active_pids", "True")
+        self.LIFECYCLE_ONLY_ACTIVE_PIDS = PLUGIN_SETTINGS.get("lifecycle_only_active_pids", "True")
         self.API_IS_SOURCE_OF_TRUTH = PLUGIN_SETTINGS.get("api_is_source_of_truth", "True")
-        self.SET_MISSING_DATA_AS_END_OF_SUPPORT = PLUGIN_SETTINGS.get("set_missing_data_as_end_of_support", "True")
+        self.USE_EOS_FOR_MISSING_DATA = PLUGIN_SETTINGS.get("use_eos_for_missing_data", "True")
 
         token_url = "https://id.cisco.com/oauth2/default/v1/token"
         data = {'grant_type': 'client_credentials', 'client_id': CISCO_CLIENT_ID, 'client_secret': CISCO_CLIENT_SECRET}
@@ -81,13 +81,13 @@ class Command(BaseCommand):
         try:
             hw_lifecycle = hardware.HardwareLifecycle.objects.get(assigned_object_id=hw_obj.id)
             self.stdout.write(self.style.SUCCESS(f"{pid} - has an existing NetBox hardware lifecycle record"))
-            if ((hw_count == 0) and (self.TRACK_ONLY_ACTIVE_PIDS)):
+            if ((hw_count == 0) and (self.LIFECYCLE_ONLY_ACTIVE_PIDS)):
                 self.stdout.write(self.style.NOTICE(f"{pid} - has no active hardware with this PID - We're tracking only active PIDs - Deleting Lifecycle record"))
                 hw_lifecycle.delete()
                 return
         # If not, create a new one for this Device Type
         except hardware.HardwareLifecycle.DoesNotExist:
-            if ((hw_count == 0) and (self.TRACK_ONLY_ACTIVE_PIDS)):
+            if ((hw_count == 0) and (self.LIFECYCLE_ONLY_ACTIVE_PIDS)):
                 self.stdout.write(self.style.NOTICE(f"{pid} - no active hardware with this PID - We're only tracking active PIDs - no Lifecycle record created"))
                 return
             else:
@@ -208,7 +208,7 @@ class Command(BaseCommand):
             self.stdout.write(self.style.NOTICE(f"{pid} - has no last_date_of_support"))
 
         if (value_changed and end_of_sale_defined and end_of_support_defined):
-            if (self.SET_MISSING_DATA_AS_END_OF_SUPPORT):
+            if (self.USE_EOS_FOR_MISSING_DATA):
                 # We rely upon End of Security in other areas.
                 # Use end_of_support value in tte case no Security date has been located
                 if (hw_lifecycle.end_of_security is None):
