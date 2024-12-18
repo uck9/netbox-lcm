@@ -54,6 +54,7 @@ class Command(BaseCommand):
                     # Get the device type object for the supplied PID
                     hw_obj = DeviceType.objects.get(part_number=pid)
                     hw_count = Device.objects.filter(device_type=hw_obj).count()
+                    self.stdout.write(self.style.SUCCESS(f"{pid} - ID:{hw_obj.id}"))
                     self.stdout.write(self.style.SUCCESS(f"{pid} - {hw_count} active devices"))
                 except MultipleObjectsReturned:
                     # Error if Netbox returns multiple duplicate PN's
@@ -67,7 +68,8 @@ class Command(BaseCommand):
                     # Get the device type object for the supplied PID
                     hw_obj = ModuleType.objects.get(part_number=pid)
                     hw_count = Module.objects.filter(module_type=hw_obj).count()
-                    self.stdout.write(self.style.SUCCESS(f"{pid} - {hw_count} active moduletypes"))
+                    self.stdout.write(self.style.SUCCESS(f"{pid} - ID:{hw_obj.id}"))
+                    self.stdout.write(self.style.SUCCESS(f"{pid} - {hw_count} active modules"))
                 except MultipleObjectsReturned:
                     # Error if Netbox returns multiple duplicate PN's
                     self.stdout.write(self.style.NOTICE(f"ERROR: Multiple objects exist with Part Number {pid}"))
@@ -79,20 +81,20 @@ class Command(BaseCommand):
 
         # Check if a HardwareLifecycle record already exists
         try:
-            hw_lifecycle = hardware.HardwareLifecycle.objects.get(assigned_object_id=hw_obj.id)
-            self.stdout.write(self.style.SUCCESS(f"{pid} - has an existing NetBox hardware lifecycle record"))
+            hw_lifecycle = hardware.HardwareLifecycle.objects.get(assigned_object_id=hw_obj.id, assigned_object_type_id=content_type.id)
+            self.stdout.write(self.style.SUCCESS(f"{pid} - has an existing NetBox hardware lifecycle record (ID:{hw_lifecycle.id})"))
             if ((hw_count == 0) and (self.LIFECYCLE_ONLY_ACTIVE_PIDS)):
-                self.stdout.write(self.style.NOTICE(f"{pid} - has no active hardware with this PID - We're tracking only active PIDs - Deleting Lifecycle record"))
+                self.stdout.write(self.style.NOTICE(f"{pid} - No active hardware with this PID - Tracking only active PIDs - Deleting Lifecycle record"))
                 hw_lifecycle.delete()
                 return
         # If not, create a new one for this Device Type
         except hardware.HardwareLifecycle.DoesNotExist:
             if ((hw_count == 0) and (self.LIFECYCLE_ONLY_ACTIVE_PIDS)):
-                self.stdout.write(self.style.NOTICE(f"{pid} - no active hardware with this PID - We're only tracking active PIDs - no Lifecycle record created"))
+                self.stdout.write(self.style.NOTICE(f"{pid} - No active hardware with this PID - Tracking only active PIDs - no Lifecycle record to be created"))
                 return
             else:
                 hw_lifecycle = hardware.HardwareLifecycle(assigned_object_id=hw_obj.id, assigned_object_type_id=content_type.id)
-                self.stdout.write(self.style.NOTICE(f"{pid} - has no existing NetBox hardware lifecycle record"))
+                self.stdout.write(self.style.NOTICE(f"{pid} - Check if new NetBox hardware lifecycle record is to be created"))
 
         # Only save if something has changed
         value_changed = False
@@ -179,6 +181,7 @@ class Command(BaseCommand):
         except KeyError:
             self.stdout.write(self.style.NOTICE(f"{pid} - has no end_of_service_contract_attach date"))
 
+        # Look for Product Bulletin information to include in the lifecycle record.
         try:
             if not eox_data["EOXRecord"][0]["LinkToProductBulletinURL"]:
                 self.stdout.write(self.style.NOTICE(f"{pid} - has no product bulletin url"))
@@ -212,10 +215,13 @@ class Command(BaseCommand):
                 # We rely upon End of Security in other areas.
                 # Use end_of_support value in tte case no Security date has been located
                 if (hw_lifecycle.end_of_security is None):
+                    self.stdout.write(self.style.NOTICE(f"{pid} - has no end_of_security - Using end_of_support instead."))
                     hw_lifecycle.end_of_security = hw_lifecycle.end_of_support
                 if (hw_lifecycle.end_of_maintenance is None):
+                    self.stdout.write(self.style.NOTICE(f"{pid} - has no end_of_maintenance - Using end_of_support instead."))
                     hw_lifecycle.end_of_maintenance = hw_lifecycle.end_of_support
             # Save the record
+            self.stdout.write(self.style.SUCCESS(f"{pid} - Saving new HW Lifecycle Record"))
             hw_lifecycle.save()
 
         return
@@ -280,8 +286,8 @@ class Command(BaseCommand):
             filename = django.utils.text.get_valid_filename(f"{pid}.json")
 
             # debug API answer to text file
-            with open('/opt/netbox_lcm/%s' % filename, 'w') as outfile:
-                outfile.write(api_call_response.text)
+            #with open('/opt/netbox_lcm/%s' % filename, 'w') as outfile:
+            #    outfile.write(api_call_response.text)
 
             # Validate response from Cisco
             if api_call_response.status_code == 200:

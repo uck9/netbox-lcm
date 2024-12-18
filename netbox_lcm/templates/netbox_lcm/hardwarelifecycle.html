@@ -75,7 +75,7 @@
             <a href="{% url 'dcim:device_list' %}?device_type_id={{ object.assigned_object.id }}" class="list-group-item list-group-item-action d-flex justify-content-between">
               Devices<span class="badge text-bg-primary rounded-pill">{{ object.assigned_object_count}}</span></a>
           {% elif object.assigned_object_type|stringformat:"s" == 'DCIM | module type' %}
-            <a href="{% url 'dcim:device_list' %}?device_type_id={{ object.assigned_object.id }}" class="list-group-item list-group-item-action d-flex justify-content-between">
+            <a href="{% url 'dcim:module_list' %}?module_type_id={{ object.assigned_object.id }}" class="list-group-item list-group-item-action d-flex justify-content-between">
               Modules<span class="badge text-bg-primary rounded-pill">{{ object.assigned_object_count}}</span></a>
           {% endif %}
         </ul>
