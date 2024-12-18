@@ -281,7 +281,7 @@ class Command(BaseCommand):
             url = f'https://apix.cisco.com/supporttools/eox/rest/5/EOXByProductID/1/{pid}?responseencoding=json'
             api_call_response = requests.get(url, headers=api_call_headers)
             self.stdout.write(self.style.SUCCESS('#######################################################'))
-            self.stdout.write(self.style.SUCCESS(f"Calling {url}"))
+            self.stdout.write(self.style.SUCCESS(f"{pid} - Calling {url}"))
             # sanatize file name
             filename = django.utils.text.get_valid_filename(f"{pid}.json")
 
