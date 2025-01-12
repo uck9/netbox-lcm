@@ -25,10 +25,10 @@
         </div>
       </div>
       <div class="tab-content p-0 border-0">
-        <div class="tab-pane {% if not form.initial.module_type %}active{% endif %}" id="device-type" role="tabpanel" aria-labeled-by="device_tab">
+        <div class="tab-pane {% if not form.initial.module_type %}active{% endif %}" id="device-type" role="tabpanel" aria-labeledby="device_tab">
           {% render_field form.device_type %}
         </div>
-        <div class="tab-pane {% if form.initial.module_type %}active{% endif %}" id="module-type" role="tabpanel" aria-labeled-by="vm_tab">
+        <div class="tab-pane {% if form.initial.module_type %}active{% endif %}" id="module-type" role="tabpanel" aria-labeledby="vm_tab">
           {% render_field form.module_type %}
         </div>
       </div>
