@@ -19,7 +19,7 @@ skus = PluginMenuItem(
 contracts = PluginMenuItem(
     link='plugins:netbox_lcm:supportcontract_list',
     link_text='Contracts',
-    permissions=['netbox_lcm.view_supportcontrnact'],
+    permissions=['netbox_lcm.view_supportcontract'],
 )
 contract_assignments = PluginMenuItem(
     link='plugins:netbox_lcm:supportcontractassignment_list',
