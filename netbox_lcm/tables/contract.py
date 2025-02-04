@@ -124,5 +124,5 @@ class SupportContractAssignmentTable(NetBoxTable):
             'renewal', 'end', 'description', 'comments',
         )
         default_columns = (
-            'pk', 'contract', 'sku', 'device_name', 'license_name', 'device_model', 'device_serial'
+            'pk', 'contract', 'sku', 'device_name', 'license_name', 'device_model', 'device_serial', 'end_date'
         )
