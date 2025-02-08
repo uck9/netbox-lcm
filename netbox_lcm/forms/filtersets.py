@@ -1,6 +1,7 @@
 from django.utils.translation import gettext as _
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
+from django.forms import DateField
 
 from dcim.models import Device, Manufacturer
 from netbox.forms import NetBoxModelFilterSetForm
