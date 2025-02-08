@@ -56,7 +56,7 @@ class VendorListView(ObjectListView):
 
 
 @register_model_view(Vendor)
-class VendorView(ObjectView):
+class VendorView(GetRelatedModelsMixin, ObjectView):
     queryset = Vendor.objects.all()
 
     def get_extra_context(self, request, instance):
