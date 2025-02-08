@@ -9,7 +9,7 @@ from netbox_lcm.models import HardwareLifecycle, SupportContract, Vendor, Licens
 from utilities.filters import MultiValueCharFilter, MultiValueNumberFilter
 from utilities.forms.fields import DynamicModelMultipleChoiceField, TagFilterField
 from utilities.forms.rendering import FieldSet
-from utilities.forms.widgets import APISelectMultiple
+from utilities.forms.widgets import APISelectMultiple, DatePicker
 
 
 __all__ = (
@@ -27,7 +27,8 @@ class HardwareLifecycleFilterForm(NetBoxModelFilterSetForm):
     model = HardwareLifecycle
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
-        FieldSet('assigned_object_type_id', name=_('Hardware'))
+        FieldSet('assigned_object_type_id', name=_('Hardware')),
+        FieldSet('end_of_sale__lt', 'end_of_maintenance__lt', 'end_of_security__lt', 'last_contract_attach__lt', 'last_contract_renewal__lt', 'end_of_support__lt', name=_('Dates'))
     )
 
     assigned_object_type_id = DynamicModelMultipleChoiceField(
@@ -37,6 +38,35 @@ class HardwareLifecycleFilterForm(NetBoxModelFilterSetForm):
         widget=APISelectMultiple(
             api_url='/api/extras/content-types/',
         )
+    )
+    end_of_sale__lt = DateField(
+        required=False,
+        label=_('End of sale before'),
+        widget=DatePicker,
+    )
+    end_of_maintenance__lt = DateField(
+        required=False,
+        label=_('End of maintenance before'),
+    )
+    end_of_security__lt = DateField(
+        required=False,
+        label=_('End of security before'),
+        widget=DatePicker,
+    )
+    last_contract_attach__lt = DateField(
+        required=False,
+        label=_('Last contract attach before'),
+        widget=DatePicker,
+    )
+    last_contract_renewal__lt = DateField(
+        required=False,
+        label=_('Last contract renewal before'),
+        widget=DatePicker,
+    )
+    end_of_support__lt = DateField(
+        required=False,
+        label=_('End of support before'),
+        widget=DatePicker,
     )
     tag = TagFilterField(model)
 
