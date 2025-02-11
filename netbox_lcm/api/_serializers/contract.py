@@ -49,7 +49,7 @@ class SupportContractAssignmentSerializer(NetBoxModelSerializer):
     class Meta:
         model = SupportContractAssignment
         fields = (
-            'url', 'id', 'display', 'contract', 'sku', 'device', 'license', 'end', 'description', 'comments',
+            'url', 'id', 'display', 'contract', 'sku', 'device', 'license', 'end', 'tags', 'description', 'comments',
         )
 
         brief_fields = ('url', 'id', 'display', 'contract', 'sku', 'device', 'license', )

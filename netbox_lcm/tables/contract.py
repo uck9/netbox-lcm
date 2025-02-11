@@ -2,7 +2,7 @@ from django.utils.translation import gettext as _
 
 import django_tables2 as tables
 
-from netbox.tables import NetBoxTable, ChoiceFieldColumn
+from netbox.tables import columns, NetBoxTable, ChoiceFieldColumn
 from netbox_lcm.models import SupportContract, Vendor, SupportContractAssignment, SupportSKU
 
 __all__ = (
@@ -116,13 +116,14 @@ class SupportContractAssignmentTable(NetBoxTable):
         accessor='end_date',
         orderable=False,
     )
+    tags = columns.TagColumn()
 
     class Meta(NetBoxTable.Meta):
         model = SupportContractAssignment
         fields = (
             'pk', 'contract', 'sku', 'device_name', 'license_name', 'device_model', 'device_serial', 'quantity',
-            'renewal', 'end', 'description', 'comments',
+            'renewal', 'end', 'tags','description', 'comments',
         )
         default_columns = (
-            'pk', 'contract', 'sku', 'device_name', 'license_name', 'device_model', 'device_serial', 'end_date'
+            'pk', 'contract', 'sku', 'device_name', 'license_name', 'device_model', 'device_serial', 'end_date', 'tags'
         )
