@@ -160,7 +160,9 @@ class SupportContractAssignmentsView(ObjectChildrenView):
     actions = {
         'add': {'add'},
         'edit': {'change'},
-        'delete': {'delete'}
+        'delete': {'delete'},
+        'bulk_edit': {'change'},
+        'bulk_delete': {'delete'},
     }
     tab = ViewTab(
         label='Assignments',
