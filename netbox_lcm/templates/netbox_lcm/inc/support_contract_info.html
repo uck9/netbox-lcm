@@ -36,6 +36,10 @@
           <td><span {{ support_contract.end|date_badge_class }}>{{ support_contract.end }}</span></td>
           {% endif %}
         </tr>
+        <tr>
+          <th scope="row">Tags</th>
+          <td>{% for tag in support_contract.tags.all %}{% tag tag url %}{% empty %} None {% endfor %}</td>
+        </tr>
       </table>
     {% else %}
       </h2>
