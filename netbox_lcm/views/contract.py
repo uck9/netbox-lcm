@@ -105,9 +105,16 @@ class SupportSKUListView(ObjectListView):
 
 
 @register_model_view(SupportSKU)
-class SupportSKUView(ObjectView):
+class SupportSKUView(GetRelatedModelsMixin, ObjectView):
     queryset = SupportSKU.objects.all()
 
+    def get_extra_context(self, request, instance):
+        return {
+            'related_models': self.get_related_models(
+                request, instance
+            ),
+        } 
+    
 
 @register_model_view(SupportSKU, 'edit')
 class SupportSKUEditView(ObjectEditView):

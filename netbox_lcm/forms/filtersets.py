@@ -128,7 +128,7 @@ class SupportContractAssignmentFilterForm(NetBoxModelFilterSetForm):
     model = SupportContractAssignment
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
-        FieldSet('contract_id', 'device_id', 'license_id', name='Assignment'),
+        FieldSet('contract_id', 'device_id', 'license_id', 'sku_id', name='Assignment'),
     )
     contract_id = DynamicModelMultipleChoiceField(
         queryset=SupportContract.objects.all(),
@@ -147,6 +147,12 @@ class SupportContractAssignmentFilterForm(NetBoxModelFilterSetForm):
         required=False,
         selector=True,
         label=_('Devices'),
+    )
+    sku_id = DynamicModelMultipleChoiceField(
+        queryset=SupportSKU.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Support SKU'),
     )
     tag = TagFilterField(model)
 
