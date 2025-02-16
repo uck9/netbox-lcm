@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.template import Template
 from netbox.plugins import PluginTemplateExtension
 
-from .models import hardware, contract
+from .models import hardware, contract, license
 
 
 class DeviceHardwareInfoExtension(PluginTemplateExtension):
@@ -48,14 +48,14 @@ class TypeInfoExtension(PluginTemplateExtension):
         return self.render('netbox_lcm/inc/hardware_lifecycle_info.html', extra_context=context)
 
 
-class DeviceLicenseeInfoExtension(PluginTemplateExtension):
+class DeviceLicenseInfoExtension(PluginTemplateExtension):
     def right_page(self):
         licenses_info = license.LicenseAssignment.objects.filter(device_id=self.context['object'].id)
         context = {'licenses': licenses_info, 'device_id': self.context['object'].id}
         return self.render('netbox_lcm/inc/license_assignment_info.html', extra_context=context)
 
 
-class DeviceLicenseAssignmentInfo(DeviceLicenseeInfoExtension):
+class DeviceLicenseAssignmentInfo(DeviceLicenseInfoExtension):
     model='dcim.device'
 
 
@@ -80,6 +80,7 @@ class ModuleTypeHardwareLifecycleInfo(TypeInfoExtension):
 
 
 template_extensions = (
+    DeviceLicenseAssignmentInfo,
     DeviceHardwareLifecycleInfo,
     ModuleHardwareLifecycleInfo,
     DeviceTypeHardwareLifecycleInfo,
