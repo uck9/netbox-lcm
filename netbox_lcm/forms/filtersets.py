@@ -156,6 +156,7 @@ class LicenseAssignmentFilterForm(NetBoxModelFilterSetForm):
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
         FieldSet('license_id', 'vendor_id', 'device_id', name='Assignment'),
+        FieldSet('end__lt', _name=('Dates')),
     )
     license_id = DynamicModelMultipleChoiceField(
         queryset=License.objects.all(),
@@ -174,5 +175,10 @@ class LicenseAssignmentFilterForm(NetBoxModelFilterSetForm):
         required=False,
         selector=True,
         label=_('Devices'),
+    )
+    end__lt = DateField(
+        required=False,
+        label=_('License End before'),
+        widget=DatePicker,
     )
     tag = TagFilterField(model)

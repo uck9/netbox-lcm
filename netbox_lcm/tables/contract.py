@@ -22,10 +22,10 @@ class VendorTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = Vendor
         fields = (
-            'pk', 'name',
+            'id', 'pk', 'name',
         )
         default_columns = (
-            'pk', 'name',
+            'id', 'pk', 'name',
         )
 
 
@@ -42,10 +42,10 @@ class SupportSKUTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = SupportSKU
         fields = (
-            'pk', 'manufacturer', 'sku', 'description', 'comments',
+            'id', 'pk', 'manufacturer', 'sku', 'description', 'comments',
         )
         default_columns = (
-            'pk', 'manufacturer', 'sku',
+            'id', 'pk', 'manufacturer', 'sku',
         )
 
 
@@ -58,10 +58,10 @@ class SupportContractTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = SupportContract
         fields = (
-            'pk', 'contract_id', 'start', 'renewal', 'end', 'description', 'comments',
+            'id', 'pk', 'contract_id', 'start', 'renewal', 'end', 'description', 'comments',
         )
         default_columns = (
-            'pk', 'contract_id',
+            'id', 'pk', 'contract_id',
         )
 
 
@@ -121,9 +121,9 @@ class SupportContractAssignmentTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = SupportContractAssignment
         fields = (
-            'pk', 'contract', 'sku', 'device_name', 'license_name', 'device_model', 'device_serial', 'quantity',
+            'id', 'pk', 'contract', 'sku', 'device_name', 'license_name', 'device_model', 'device_serial', 'quantity',
             'renewal', 'end', 'tags','description', 'comments',
         )
         default_columns = (
-            'pk', 'contract', 'sku', 'device_name', 'license_name', 'device_model', 'device_serial', 'end_date', 'tags'
+            'id', 'pk', 'contract', 'sku', 'device_name', 'license_name', 'device_model', 'device_serial', 'end_date', 'tags'
         )

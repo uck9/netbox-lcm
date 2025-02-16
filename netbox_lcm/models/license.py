@@ -65,6 +65,14 @@ class LicenseAssignment(PrimaryModel):
         null=True,
         blank=True,
     )
+    start = models.DateField(
+        null=True, 
+        blank=True
+    )
+    end = models.DateField(
+        null=True, 
+        blank=True
+    )
 
     clone_fields = (
         'vendor', 'license',

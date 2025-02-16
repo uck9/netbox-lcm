@@ -76,7 +76,7 @@ class LicenseAssignmentFilterSet(NetBoxModelFilterSet):
 
     class Meta:
         model = LicenseAssignment
-        fields = ('id', 'q', )
+        fields = ('id', 'q', 'end' )
 
     def search(self, queryset, name, value):
         if not value.strip():

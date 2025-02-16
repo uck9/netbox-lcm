@@ -29,9 +29,9 @@ class HardwareLifecycleTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = HardwareLifecycle
         fields = (
-            'pk', 'name', 'assigned_object', 'end_of_sale', 'end_of_maintenance', 'end_of_security', 'end_of_support',
+            'id', 'pk', 'name', 'assigned_object', 'end_of_sale', 'end_of_maintenance', 'end_of_security', 'end_of_support',
             'description', 'comments',
         )
         default_columns = (
-            'pk', 'name', 'assigned_object', 'end_of_sale', 'end_of_maintenance'
+            'id', 'pk', 'name', 'assigned_object', 'end_of_sale', 'end_of_maintenance'
         )

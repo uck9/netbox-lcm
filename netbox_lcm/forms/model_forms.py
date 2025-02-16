@@ -140,7 +140,11 @@ class LicenseAssignmentForm(NetBoxModelForm):
 
     class Meta:
         model = LicenseAssignment
-        fields = ('vendor', 'license', 'device', 'quantity', 'description', 'comments', 'tags', )
+        fields = ('vendor', 'license', 'device', 'quantity', 'description', 'start', 'end', 'comments', 'tags', )
+        widgets = {
+            'start': DatePicker(),
+            'end': DatePicker(),
+        }
 
 
 class HardwareLifecycleForm(NetBoxModelForm):
