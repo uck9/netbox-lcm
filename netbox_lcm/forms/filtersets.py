@@ -162,7 +162,7 @@ class LicenseAssignmentFilterForm(NetBoxModelFilterSetForm):
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
         FieldSet('license_id', 'vendor_id', 'device_id', name='Assignment'),
-        FieldSet('end__lt', _name=('Dates')),
+        FieldSet('end__lt', name=('Dates')),
     )
     license_id = DynamicModelMultipleChoiceField(
         queryset=License.objects.all(),

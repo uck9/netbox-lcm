@@ -48,6 +48,17 @@ class TypeInfoExtension(PluginTemplateExtension):
         return self.render('netbox_lcm/inc/hardware_lifecycle_info.html', extra_context=context)
 
 
+class DeviceLicenseeInfoExtension(PluginTemplateExtension):
+    def right_page(self):
+        licenses_info = license.LicenseAssignment.objects.filter(device_id=self.context['object'].id)
+        context = {'licenses': licenses_info, 'device_id': self.context['object'].id}
+        return self.render('netbox_lcm/inc/license_assignment_info.html', extra_context=context)
+
+
+class DeviceLicenseAssignmentInfo(DeviceLicenseeInfoExtension):
+    model='dcim.device'
+
+
 class DeviceHardwareLifecycleInfo(DeviceHardwareInfoExtension):
     model = 'dcim.device'
     kind = 'device'

@@ -1,0 +1,45 @@
+
+{% load lcm_filters %}
+{% load helpers %}
+{# renders panel on object (device) with info for licenses assigned to it #}
+
+<div class="card">
+  <h2 class="card-header">
+    License Assignments {{ device_id }}
+    
+    <div class="card-actions"><a href="{% url 'plugins:netbox_lcm:licenseassignment_list' %}?device_id={{ device_id }}" class="btn btn-sm btn-ghost-primary">
+      <i class="mdi mdi-chevron-right-box-outline" aria-hidden="true"></i> View Details
+    </a></div>
+      </h2>
+      <table class="table table-hover attr-table">
+        <thead>
+          <tr class="border-bottom">
+            <th>License PID</th>
+            <th>Quantity</th>
+            <th>End Date</th>
+          </tr>
+        </thead>
+        {% if licenses %}
+        <tbody>
+        {% for license in licenses %}
+        <tr>
+          <td>{{ license.license }}</td>
+          <td>{{ license.quantity }}</td>
+          {% if license.end == None %}
+          <td>No End Date</td>
+          {% else %}
+          <td><span {{ license.end|date_badge_class }}>{{ license.end }}</span></td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      </h2>
+        <tbody>
+          <tr>
+            <td colspan="2" class="text-center text-muted">— No Licenses Assigned —</td>
+          </tr>
+        </tbody>
+      </table>
+  {% endif %}
+</div>
