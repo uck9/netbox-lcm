@@ -1,5 +1,6 @@
 from netbox.api.viewsets import NetBoxModelViewSet
 from netbox_lcm.api.serializers import LicenseSerializer, LicenseAssignmentSerializer
+from netbox_lcm.filtersets import LicenseAssignmentFilterSet
 from netbox_lcm.models import License, LicenseAssignment
 
 
@@ -17,3 +18,4 @@ class LicenseViewSet(NetBoxModelViewSet):
 class LicenseAssignmentViewSet(NetBoxModelViewSet):
     queryset = LicenseAssignment.objects.all()
     serializer_class = LicenseAssignmentSerializer
+    filterset_class = LicenseAssignmentFilterSet
