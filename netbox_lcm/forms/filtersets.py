@@ -10,7 +10,7 @@ from netbox.forms import NetBoxModelFilterSetForm
 from netbox_lcm.models import HardwareLifecycle, SupportContract, Vendor, License, LicenseAssignment, \
     SupportContractAssignment, SupportSKU
 from utilities.filters import MultiValueCharFilter, MultiValueNumberFilter
-from utilities.forms.fields import DynamicModelMultipleChoiceField, TagFilterField, DynamicMultipleChoiceField
+from utilities.forms.fields import DynamicModelMultipleChoiceField, TagFilterField
 from utilities.forms.rendering import FieldSet
 from utilities.forms.widgets import APISelectMultiple, DatePicker
 
