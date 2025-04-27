@@ -33,7 +33,9 @@
         </div>
       </div>
     </div>
-
+    <div class="field-group my-5">
+      {% render_field form.tags %}
+    </div>
     <div class="field-group my-5">
       <div class="row mb-2">
         <h5 class="offset-sm-3">Lifecycle Details</h5>
@@ -56,7 +58,7 @@
       {% render_field form.migration_calc_key label="Calculate Years from" %}
     </div>
     <div class="field-group my-5">
-      {% render_field form.tags %}
+      {% render_field form.comments %}
     </div>
     {% if form.custom_fields %}
     <div class="field-group my-5">
