@@ -1,14 +1,16 @@
+from django import forms
 from django.utils.translation import gettext as _
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.forms import DateField
 
+from dcim.choices import DeviceStatusChoices
 from dcim.models import Device, Manufacturer
 from netbox.forms import NetBoxModelFilterSetForm
 from netbox_lcm.models import HardwareLifecycle, SupportContract, Vendor, License, LicenseAssignment, \
     SupportContractAssignment, SupportSKU
 from utilities.filters import MultiValueCharFilter, MultiValueNumberFilter
-from utilities.forms.fields import DynamicModelMultipleChoiceField, TagFilterField
+from utilities.forms.fields import DynamicModelMultipleChoiceField, TagFilterField, DynamicMultipleChoiceField
 from utilities.forms.rendering import FieldSet
 from utilities.forms.widgets import APISelectMultiple, DatePicker
 
@@ -128,7 +130,7 @@ class SupportContractAssignmentFilterForm(NetBoxModelFilterSetForm):
     model = SupportContractAssignment
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
-        FieldSet('contract_id', 'device_id', 'license_id', 'sku_id', name='Assignment'),
+        FieldSet('contract_id', 'device_id', 'license_id', 'sku_id', 'device_status', name='Assignment'),
     )
     contract_id = DynamicModelMultipleChoiceField(
         queryset=SupportContract.objects.all(),
@@ -147,6 +149,11 @@ class SupportContractAssignmentFilterForm(NetBoxModelFilterSetForm):
         required=False,
         selector=True,
         label=_('Devices'),
+    )
+    device_status = forms.MultipleChoiceField(
+        label=_('Status'),
+        choices=DeviceStatusChoices,
+        required=False
     )
     sku_id = DynamicModelMultipleChoiceField(
         queryset=SupportSKU.objects.all(),
