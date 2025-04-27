@@ -7,8 +7,8 @@
   <h2 class="card-header">
     License Assignments
     
-    <div class="card-actions"><a href="{% url 'plugins:netbox_lcm:licenseassignment_list' %}?device_id={{ device_id }}" class="btn btn-sm btn-ghost-primary">
-      <i class="mdi mdi-chevron-right-box-outline" aria-hidden="true"></i> View Details
+    <div class="card-actions"><a href="{% url 'plugins:netbox_lcm:licenseassignment_add' %}?device={{ object.pk }}&return_url={% url 'dcim:device' pk=object.pk %}" class="btn btn-ghost-primary btn-sm">
+      <span class="mdi mdi-plus-thick" aria-hidden="true"></span> Assign License
     </a></div>
       </h2>
       <table class="table table-hover attr-table">
