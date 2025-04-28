@@ -112,28 +112,28 @@ class SupportContract(PrimaryModel):
 class SupportContractAssignment(PrimaryModel):
     contract = models.ForeignKey(
         to='netbox_lcm.SupportContract',
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True,
         blank=True,
         related_name='assignments',
     )
     sku = models.ForeignKey(
         to='netbox_lcm.SupportSKU',
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True,
         blank=True,
         related_name='assignments',
     )
     device = models.ForeignKey(
         to='dcim.Device',
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True,
         blank=True,
         related_name='contracts',
     )
     license = models.ForeignKey(
         to='netbox_lcm.LicenseAssignment',
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True,
         blank=True,
         related_name='contracts',
