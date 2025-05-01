@@ -15,17 +15,17 @@ __all__ = (
 
 
 class SupportSKUSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_lcm-api:hardwarelifecycle-detail')
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_lcm-api:supportsku-detail')
     manufacturer = ManufacturerSerializer(nested=True)
 
     class Meta:
         model = SupportSKU
-        fields = ('url', 'id', 'display', 'manufacturer', 'sku', 'description', 'comments', )
+        fields = ('url', 'id', 'display', 'manufacturer', 'sku', 'description', 'comments', 'custom_fields' )
         brief_fields = ('url', 'id', 'display', 'manufacturer', 'sku', )
 
 
 class SupportContractSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_lcm-api:hardwarelifecycle-detail')
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_lcm-api:supportcontract-detail')
     vendor = VendorSerializer(nested=True)
     start = serializers.DateField(required=False)
     renewal = serializers.DateField(required=False)
@@ -49,7 +49,7 @@ class SupportContractAssignmentSerializer(NetBoxModelSerializer):
     class Meta:
         model = SupportContractAssignment
         fields = (
-            'url', 'id', 'display', 'contract', 'sku', 'device', 'license', 'end', 'tags', 'description', 'comments',
+            'url', 'id', 'display', 'contract', 'sku', 'device', 'license', 'end', 'tags', 'description', 'comments', 'custom_fields',
         )
 
         brief_fields = ('url', 'id', 'display', 'contract', 'sku', 'device', 'license', )
