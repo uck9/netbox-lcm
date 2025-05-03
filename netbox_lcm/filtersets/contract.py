@@ -138,7 +138,7 @@ class SupportContractAssignmentFilterSet(NetBoxModelFilterSet):
     
     class Meta:
         model = SupportContractAssignment
-        fields = ('id', 'q', )
+        fields = ('id', 'q', 'end')
 
     def search(self, queryset, name, value):
         if not value.strip():
