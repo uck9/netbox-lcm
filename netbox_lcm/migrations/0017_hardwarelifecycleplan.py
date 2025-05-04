@@ -28,7 +28,6 @@ class Migration(migrations.Migration):
                 ('status', models.CharField(default='to_review', max_length=20)),
                 ('resourcing_type', models.CharField(default='to_review', max_length=20)),
                 ('completion_by', models.DateField(blank=True, null=True)),
-                ('is_supported', models.BooleanField(blank=True, null=True)),
                 ('device', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='device', to='dcim.device')),
                 ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
             ],

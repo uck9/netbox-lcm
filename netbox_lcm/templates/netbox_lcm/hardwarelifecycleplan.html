@@ -50,10 +50,6 @@
             <th scope="row">Planned Completion Date</th>
             <td><span {{ object.completion_by|date_badge_class }}>{{ object.completion_by }}</span></td>
           </tr>
-          <tr>
-            <th scope="row">Is Vendor Supported</th>
-            <td>{{ object.is_supported }}</td>
-          </tr>
         </table>
       </div>
       {% plugin_left_page object %}

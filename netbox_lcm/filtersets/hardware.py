@@ -91,7 +91,7 @@ class HardwareLifecyclePlanFilterSet(NetBoxModelFilterSet):
     class Meta:
         model = HardwareLifecyclePlan
         fields = (
-            'id', 'device', 'plan_type', 'status', 'resourcing_type', 'completion_by', 'is_supported',
+            'id', 'device', 'plan_type', 'status', 'resourcing_type', 'completion_by',
         )
 
     def search(self, queryset, name, value):

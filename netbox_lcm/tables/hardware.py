@@ -48,7 +48,7 @@ class HardwareLifecyclePlanTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = HardwareLifecyclePlan
         fields = (
-            'id', 'pk', 'device', 'plan_type', 'status', 'resourcing_type', 'completion_by', 'is_supported',
+            'id', 'pk', 'device', 'plan_type', 'status', 'resourcing_type', 'completion_by',
             'tags','description', 'comments',
         )
         default_columns = (

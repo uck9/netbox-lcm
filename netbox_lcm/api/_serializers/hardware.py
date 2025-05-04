@@ -57,8 +57,8 @@ class HardwareLifecyclePlanSerializer(NetBoxModelSerializer):
         model = HardwareLifecyclePlan
         fields = (
             'url', 'id', 'display', 'device', 'plan_type', 'status', 'resourcing_type', 'completion_by',
-            'is_supported', 'description', 'comments', 'custom_fields',
+            'description', 'comments', 'custom_fields',
         )
         brief_fields = (
-            'url', 'id', 'display', 'device', 'plan_type', 'status', 'resourcing_type', 'completion_by', 'is_supported',
+            'url', 'id', 'display', 'device', 'plan_type', 'status', 'resourcing_type', 'completion_by',
         )

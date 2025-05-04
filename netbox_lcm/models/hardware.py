@@ -9,6 +9,7 @@ from netbox.models import PrimaryModel
 from utilities.choices import ChoiceSet
 
 from datetime import date, datetime
+
 from dateutil.relativedelta import relativedelta
 
 from netbox_lcm.constants import HARDWARE_LIFECYCLE_MODELS
@@ -139,6 +140,20 @@ class HardwareLifecycle(PrimaryModel):
         return f'Device Type: {self.assigned_object.model}'
 
     @property
+    def is_currently_supported(self):
+        """
+        Return False if the current date is greater than the selected EoX date.
+
+        If the current date is less than or equal to the end of support date, return True.
+        """
+        today = datetime.today().date()
+        # Find the Key we're using
+        if (getattr(self, "migration_calc_key") == "support"):
+            return today < getattr(self, "end_of_support")
+        else:
+            return today < getattr(self, "end_of_security")
+
+    @property
     def assigned_object_count(self):
         if isinstance(self.assigned_object, DeviceType):
             return Device.objects.filter(device_type=self.assigned_object).count()
@@ -197,7 +212,6 @@ class HardwareLifecyclePlan(PrimaryModel):
         max_length=20, choices=HardwareLifecyclePlanResourceTypeChoices, default=HARDWARE_LIFECYCLE_PLAN_RESOURCE_TYPE_DEFAULT
     )
     completion_by = models.DateField(blank=True, null=True)
-    is_supported = models.BooleanField(blank=True, null=True)
 
     class Meta:
         ordering = ['plan_type']
@@ -208,10 +222,7 @@ class HardwareLifecyclePlan(PrimaryModel):
 
     def __str__(self):
         """String representation of HardwareLifecyclePlan."""
-        if self.is_supported:
-            msg = f"Device: {self.device} - Vendor Supported"
-        else:
-            msg = f"Device: {self.device} - Not Vendor Supported"
+        msg = f"Device: {self.device}"
         return msg
 
     def get_absolute_url(self):

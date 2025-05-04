@@ -221,7 +221,7 @@ class HardwareLifecyclePlanForm(NetBoxModelForm):
     class Meta:
         model = HardwareLifecyclePlan
         fields = (
-            'device', 'plan_type', 'status', 'resourcing_type', 'completion_by', 'is_supported', \
+            'device', 'plan_type', 'status', 'resourcing_type', 'completion_by', \
             'description', 'comments', 'tags',
         )
         widgets = {
