@@ -16,6 +16,7 @@ from netbox_lcm.constants import HARDWARE_LIFECYCLE_MODELS
 
 __all__ = (
     'HardwareLifecycle',
+    'HardwareLifecyclePlan',
 )
 
 
@@ -28,6 +29,7 @@ class CurrencyChoices(ChoiceSet):
         ('aud', 'AUD'),
     ]
 
+
 class MigrationCalcKeyChoices(ChoiceSet):
     key = 'HardwareLifecycle.migration_calc__key'
     DEFAULT_KEY = 'security'
@@ -37,10 +39,51 @@ class MigrationCalcKeyChoices(ChoiceSet):
         ('support', 'End of Support'),
     ]
 
+
+class HardwareLifecyclePlanStatusChoices(ChoiceSet):
+    key = 'HardwareLifecyclePlan.status'
+    DEFAULT_KEY = 'to_review'
+
+    CHOICES = [
+        (DEFAULT_KEY, 'To be reviewed'),
+        ('maintain', 'Maintain past EoX'),
+        ('replace', 'Replace Device'),
+        ('decommission', 'Decommission Device'),
+    ]
+
+
+class HardwareLifecyclePlanTypeChoices(ChoiceSet):
+    key = 'HardwareLifecyclePlan.plan_type'
+    DEFAULT_KEY = 'to_review'
+
+    CHOICES = [
+        (DEFAULT_KEY, 'To be reviewed'),
+        ('eox_mgmt', 'EoX Mgmt'),
+        ('ops_lc_mgmt', 'Operations Lifecycle Mgmt'),
+        ('other', 'Other'),
+    ]
+
+
+class HardwareLifecyclePlanResourceTypeChoices(ChoiceSet):
+    key = 'HardwareLifecyclePlan.resource_type'
+    DEFAULT_KEY = 'to_review'
+
+    CHOICES = [
+        (DEFAULT_KEY, 'To be reviewed'),
+        ('bau', 'BAU'),
+        ('project', 'Project'),
+        ('other', 'Other'),
+        ('not_applicable', 'Not Applicable')
+    ]
+
+
 CURRENCY_DEFAULT = CurrencyChoices.CHOICES[0][0]
 MIGRATION_CALC_KEY_DEFAULT = MigrationCalcKeyChoices.CHOICES[0][0]
-
+HARDWARE_LIFECYCLE_PLAN_STATUS_DEFAULT = HardwareLifecyclePlanStatusChoices.CHOICES[0][0]
+HARDWARE_LIFECYCLE_PLAN_TYPE_DEFAULT = HardwareLifecyclePlanTypeChoices.CHOICES[0][0]
+HARDWARE_LIFECYCLE_PLAN_RESOURCE_TYPE_DEFAULT = HardwareLifecyclePlanResourceTypeChoices.CHOICES[0][0]
 MIGRATION_CALC_MONTH = settings.PLUGINS_CONFIG["netbox_lcm"].get("hw_lcm_migration_calc_month", 6)
+
 
 class HardwareLifecycle(PrimaryModel):
     assigned_object_type = models.ForeignKey(
@@ -69,9 +112,10 @@ class HardwareLifecycle(PrimaryModel):
     end_of_support = models.DateField()
     migration_pid = models.CharField(max_length=100, blank=True, null=True)
     migration_pid_cost = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    migration_pid_cost_currency = models.CharField(max_length=3, choices=CurrencyChoices, default=CURRENCY_DEFAULT)
-    migration_calc_key = models.CharField(max_length=10, choices=MigrationCalcKeyChoices, default=MIGRATION_CALC_KEY_DEFAULT)
-
+    migration_pid_cost_currency = models.CharField(
+        max_length=3, choices=CurrencyChoices, default=CURRENCY_DEFAULT)
+    migration_calc_key = models.CharField(
+        max_length=10, choices=MigrationCalcKeyChoices, default=MIGRATION_CALC_KEY_DEFAULT)
 
     class Meta:
         ordering = ['assigned_object_type']
@@ -99,7 +143,7 @@ class HardwareLifecycle(PrimaryModel):
         if isinstance(self.assigned_object, DeviceType):
             return Device.objects.filter(device_type=self.assigned_object).count()
         return Module.objects.filter(module_type=self.assigned_object).count()
-    
+
     @property
     def calc_replacement_year(self):
         # Work out the date we're referencing
@@ -115,7 +159,7 @@ class HardwareLifecycle(PrimaryModel):
             replace_date = end_of_date
             replace_year = replace_date.year
         return replace_year
-    
+
     @property
     def calc_budget_year(self):
         # Find the Key we're using
@@ -134,3 +178,41 @@ class HardwareLifecycle(PrimaryModel):
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_lcm:hardwarelifecycle', args=[self.pk])
+
+
+class HardwareLifecyclePlan(PrimaryModel):
+    device = models.OneToOneField(
+        to="dcim.Device",
+        on_delete=models.CASCADE,
+        related_name='device',
+        blank=False,
+    )
+    plan_type = models.CharField(
+        max_length=20, choices=HardwareLifecyclePlanTypeChoices, default=HARDWARE_LIFECYCLE_PLAN_TYPE_DEFAULT
+    )
+    status = models.CharField(
+        max_length=20, choices=HardwareLifecyclePlanStatusChoices, default=HARDWARE_LIFECYCLE_PLAN_STATUS_DEFAULT
+    )
+    resourcing_type = models.CharField(
+        max_length=20, choices=HardwareLifecyclePlanResourceTypeChoices, default=HARDWARE_LIFECYCLE_PLAN_RESOURCE_TYPE_DEFAULT
+    )
+    completion_by = models.DateField(blank=True, null=True)
+    is_supported = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['plan_type']
+
+    @property
+    def name(self):
+        return self
+
+    def __str__(self):
+        """String representation of HardwareLifecyclePlan."""
+        if self.is_supported:
+            msg = f"Device: {self.device} - Vendor Supported"
+        else:
+            msg = f"Device: {self.device} - Not Vendor Supported"
+        return msg
+
+    def get_absolute_url(self):
+        return reverse('plugins:netbox_lcm:hardwarelifecycleplan', args=[self.pk])

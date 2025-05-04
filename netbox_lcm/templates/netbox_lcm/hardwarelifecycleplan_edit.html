@@ -1,0 +1,39 @@
+{% extends 'generic/object_edit.html' %}
+{% load form_helpers %}
+{% load i18n %}
+{% load static %}
+
+{% block form %}
+    <div class="field-group my-5">
+      <div class="row mb-2">
+        <h5 class="offset-sm-3">Device Assignment</h5>
+      </div>
+      <div class="tab-content p-0 border-0">
+        <div class="tab-pane {% if not form.initial.circuit %}active{% endif %}" id="device" role="tabpanel">
+          {% render_field form.device %}
+        </div>
+    </div>
+
+    <div class="field-group my-5">      
+      <div class="row mb-2">
+        <h5 class="offset-sm-3">Hardware Lifecycle Plan Detail</h5>
+      </div>
+      {% render_field form.plan_type label="Plan Type" %}
+      {% render_field form.status label="Plan Status" %}
+      {% render_field form.resourcing_type label="Plan resourced by" %}
+      {% render_field form.completion_by label="Planned Completion Date" %}
+      {% render_field form.is_supported label="Is Vendor supported" %}
+    </div>
+    <div class="field-group my-5">
+      {% render_field form.tags %}
+      {% render_field form.comments %}
+    </div>
+    {% if form.custom_fields %}
+    <div class="field-group my-5">
+        <div class="row mb-2">
+          <h5 class="offset-sm-3">Custom Fields</h5>
+        </div>
+        {% render_custom_fields form %}
+    </div>
+    {% endif %}
+{% endblock %}

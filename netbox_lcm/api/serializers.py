@@ -9,6 +9,7 @@ __all__ = (
     'SupportContractSerializer',
     'SupportContractAssignmentSerializer',
     'HardwareLifecycleSerializer',
+    'HardwareLifecyclePlanSerializer',
     'LicenseSerializer',
     'LicenseAssignmentSerializer',
 )

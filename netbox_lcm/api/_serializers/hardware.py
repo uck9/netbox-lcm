@@ -2,14 +2,16 @@ from django.contrib.contenttypes.models import ContentType
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
+from dcim.api.serializers_.devices import DeviceSerializer
 from netbox.api.fields import ContentTypeField
 from netbox.api.serializers import NetBoxModelSerializer
-from netbox_lcm.models import HardwareLifecycle
+from netbox_lcm.models import HardwareLifecycle, HardwareLifecyclePlan
 from utilities.api import get_serializer_for_model
 
 
 __all__ = (
     'HardwareLifecycleSerializer',
+    'HardwareLifecyclePlanSerializer',
 )
 
 
@@ -44,3 +46,19 @@ class HardwareLifecycleSerializer(NetBoxModelSerializer):
         serializer = get_serializer_for_model(instance.assigned_object)
         context = {'request': self.context['request']}
         return serializer(instance.assigned_object, context=context, nested=True).data
+
+
+class HardwareLifecyclePlanSerializer(NetBoxModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_lcm-api:hardwarelifecycleplan-detail')
+    device = DeviceSerializer(nested=True, required=False, allow_null=True)
+    completion_by = serializers.DateField()
+
+    class Meta:
+        model = HardwareLifecyclePlan
+        fields = (
+            'url', 'id', 'display', 'device', 'plan_type', 'status', 'resourcing_type', 'completion_by',
+            'is_supported', 'description', 'comments', 'custom_fields',
+        )
+        brief_fields = (
+            'url', 'id', 'display', 'device', 'plan_type', 'status', 'resourcing_type', 'completion_by', 'is_supported',
+        )

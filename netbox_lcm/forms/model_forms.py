@@ -3,8 +3,8 @@ from django.utils.translation import gettext as _
 
 from dcim.models import DeviceType, ModuleType, Manufacturer, Device
 from netbox.forms import NetBoxModelForm
-from netbox_lcm.models import HardwareLifecycle, Vendor, SupportContract, LicenseAssignment, License, \
-    SupportContractAssignment, SupportSKU
+from netbox_lcm.models import HardwareLifecycle, HardwareLifecyclePlan, Vendor, SupportContract, \
+    LicenseAssignment, License, SupportContractAssignment, SupportSKU
 from utilities.forms.fields import DynamicModelChoiceField, DynamicModelMultipleChoiceField
 from utilities.forms.widgets import DatePicker
 
@@ -16,7 +16,8 @@ __all__ = (
     'SupportContractAssignmentForm',
     'LicenseForm',
     'LicenseAssignmentForm',
-    'HardwareLifecycleForm'
+    'HardwareLifecycleForm',
+    'HardwareLifecyclePlanForm'
 )
 
 
@@ -164,9 +165,9 @@ class HardwareLifecycleForm(NetBoxModelForm):
     class Meta:
         model = HardwareLifecycle
         fields = (
-            'last_contract_attach', 'last_contract_renewal', 'end_of_sale', 'end_of_maintenance', 'end_of_security', 'end_of_support',
-            'notice_url', 'migration_pid', 'migration_pid_cost', 'migration_pid_cost_currency', 'migration_calc_key', 
-            'description', 'comments', 'tags',
+            'last_contract_attach', 'last_contract_renewal', 'end_of_sale', 'end_of_maintenance', 'end_of_security', \
+            'end_of_support', 'notice_url', 'migration_pid', 'migration_pid_cost', 'migration_pid_cost_currency', \
+            'migration_calc_key', 'description', 'comments', 'tags',
         )
         widgets = {
             'last_contract_attach': DatePicker(),
@@ -202,6 +203,42 @@ class HardwareLifecycleForm(NetBoxModelForm):
         if len(selected_objects) > 1:
             raise forms.ValidationError({
                 selected_objects[1]: "You can only have a lifecycle for a device or module type"
+            })
+        elif selected_objects:
+            self.instance.assigned_object = self.cleaned_data[selected_objects[0]]
+        else:
+            self.instance.assigned_object = None
+
+
+class HardwareLifecyclePlanForm(NetBoxModelForm):
+    device = DynamicModelChoiceField(
+            queryset=Device.objects.all(),
+            required=True,
+            selector=True,
+            label=_('Device'),
+        )
+
+    class Meta:
+        model = HardwareLifecyclePlan
+        fields = (
+            'device', 'plan_type', 'status', 'resourcing_type', 'completion_by', 'is_supported', \
+            'description', 'comments', 'tags',
+        )
+        widgets = {
+            'completion_by': DatePicker(),
+        }
+
+    def clean(self):
+        super().clean()
+
+        # Handle object assignment
+        selected_objects = [
+            field for field in ('device', ) if self.cleaned_data[field]
+        ]
+
+        if len(selected_objects) > 1:
+            raise forms.ValidationError({
+                selected_objects[1]: "You can only have a single lifecycle plan per device"
             })
         elif selected_objects:
             self.instance.assigned_object = self.cleaned_data[selected_objects[0]]
