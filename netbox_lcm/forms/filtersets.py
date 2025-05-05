@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import gettext as _
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from django.forms import DateField
+from django.forms import DateField, NullBooleanField, Select
 
 from dcim.choices import DeviceStatusChoices
 from dcim.models import Device, Manufacturer
@@ -10,6 +10,7 @@ from netbox.forms import NetBoxModelFilterSetForm
 from netbox_lcm.models import HardwareLifecycle, HardwareLifecyclePlan, SupportContract, \
     Vendor, License, LicenseAssignment, SupportContractAssignment, SupportSKU
 from utilities.filters import MultiValueCharFilter, MultiValueNumberFilter
+from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES
 from utilities.forms.fields import DynamicModelMultipleChoiceField, TagFilterField
 from utilities.forms.rendering import FieldSet
 from utilities.forms.widgets import APISelectMultiple, DatePicker
@@ -31,7 +32,7 @@ class HardwareLifecycleFilterForm(NetBoxModelFilterSetForm):
     model = HardwareLifecycle
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
-        FieldSet('assigned_object_type_id', name=_('Hardware')),
+        FieldSet('assigned_object_type_id', 'support_expired', name=_('Hardware')),
         FieldSet('end_of_sale__lt', 'end_of_maintenance__lt', 'end_of_security__lt', 'last_contract_attach__lt', \
             'last_contract_renewal__lt', 'end_of_support__lt', name=_('Dates'))
     )
@@ -53,6 +54,7 @@ class HardwareLifecycleFilterForm(NetBoxModelFilterSetForm):
     end_of_maintenance__lt = DateField(
         required=False,
         label=_('End of maintenance before'),
+        widget=DatePicker,
     )
     end_of_security__lt = DateField(
         required=False,
@@ -73,6 +75,11 @@ class HardwareLifecycleFilterForm(NetBoxModelFilterSetForm):
         required=False,
         label=_('End of support before'),
         widget=DatePicker,
+    )
+    support_expired = NullBooleanField(
+        required=False,
+        label=_("Vendor Support Expired"),
+        widget=Select(choices=BOOLEAN_WITH_BLANK_CHOICES)
     )
     tag = TagFilterField(model)
 

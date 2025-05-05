@@ -119,7 +119,7 @@ class HardwareLifecycle(PrimaryModel):
         max_length=10, choices=MigrationCalcKeyChoices, default=MIGRATION_CALC_KEY_DEFAULT)
 
     class Meta:
-        ordering = ['assigned_object_type']
+        ordering = ['assigned_object_type', 'end_of_support']
         constraints = (
             models.UniqueConstraint(
                 'assigned_object_type', 'assigned_object_id',
@@ -158,6 +158,16 @@ class HardwareLifecycle(PrimaryModel):
         if isinstance(self.assigned_object, DeviceType):
             return Device.objects.filter(device_type=self.assigned_object).count()
         return Module.objects.filter(module_type=self.assigned_object).count()
+
+    @property
+    def support_expired(self):
+        """
+        Return True if the current date is greater than the vendor EoS date.
+
+        If the current date is less than or equal to the end of support date, return False.
+        """
+        today = datetime.today().date()
+        return today > getattr(self, "end_of_support")
 
     @property
     def calc_replacement_year(self):
