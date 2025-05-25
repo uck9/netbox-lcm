@@ -2,7 +2,7 @@ from django.urls import path
 
 from netbox.views.generic import ObjectChangeLogView
 from . import views
-from .models import HardwareLifecycle, HardwareLifecyclePlan, SupportContract, License, \
+from netbox_lcm.models import HardwareLifecycle, HardwareLifecyclePlan, SupportContract, License, \
     LicenseAssignment, SupportContractAssignment, SupportSKU, Vendor
 
 urlpatterns = [
@@ -94,4 +94,6 @@ urlpatterns = [
     path('license-assignment/<int:pk>/delete', views.LicenseAssignmentDeleteView.as_view(), name='licenseassignment_delete'),
     path('license-assignment/<int:pk>/changelog', ObjectChangeLogView.as_view(), \
         name='licenseassignment_changelog', kwargs={'model': LicenseAssignment}),
+
+    path('device-lifecycle/', views.DeviceLifecycleListView.as_view(), name='devicelifecycle_list'),
 ]

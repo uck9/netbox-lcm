@@ -2,10 +2,10 @@ from django import forms
 from django.utils.translation import gettext as _
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from django.forms import DateField, NullBooleanField, Select
+from django.forms import CharField, DateField, NullBooleanField, Select
 
 from dcim.choices import DeviceStatusChoices
-from dcim.models import Device, Manufacturer
+from dcim.models import Device, DeviceType, Manufacturer, Site
 from netbox.forms import NetBoxModelFilterSetForm
 from netbox_lcm.models import HardwareLifecycle, HardwareLifecyclePlan, SupportContract, \
     Vendor, License, LicenseAssignment, SupportContractAssignment, SupportSKU
@@ -24,7 +24,8 @@ __all__ = (
     'VendorFilterForm',
     'LicenseFilterForm',
     'LicenseAssignmentFilterForm',
-    'SupportContractAssignmentFilterForm'
+    'SupportContractAssignmentFilterForm',
+    'DeviceLifecycleFilterForm'
 )
 
 
@@ -233,3 +234,35 @@ class LicenseAssignmentFilterForm(NetBoxModelFilterSetForm):
         widget=DatePicker,
     )
     tag = TagFilterField(model)
+
+
+class DeviceLifecycleFilterForm(NetBoxModelFilterSetForm):
+    model = Device
+
+    site = DynamicModelMultipleChoiceField(
+        queryset=Site.objects.all(),
+        required=False
+    )
+    name = CharField(
+        required=False,
+        label="Device Name"
+    )
+    device_type = DynamicModelMultipleChoiceField(
+        queryset=DeviceType.objects.all(),
+        required=False
+    )
+    has_support_contract  = NullBooleanField(
+        required=False,
+        label=_("Has Support Contract"),
+        widget=Select(choices=BOOLEAN_WITH_BLANK_CHOICES)
+    )
+    support_contract_end_before = DateField(
+        required=False, 
+        label="Support Contract ends before",
+        widget=DatePicker,
+    )
+    hw_eosec_before = DateField(
+        required=False, 
+        label="HW EoVSS before",
+        widget=DatePicker,
+    )
