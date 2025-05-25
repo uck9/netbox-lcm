@@ -5,7 +5,7 @@ from netbox.forms import NetBoxModelBulkEditForm
 from utilities.forms.fields import DynamicModelChoiceField, CommentField
 
 from netbox_lcm.models import SupportContract, SupportSKU, SupportContractAssignment, LicenseAssignment, \
-    License, HardwareLifecycle, Vendor
+    License, HardwareLifecycle, HardwareLifecyclePlan, Vendor
 from utilities.forms.rendering import FieldSet
 from utilities.forms.widgets import DatePicker
 
@@ -142,3 +142,23 @@ class HardwareLifecycleBulkEditForm(NetBoxModelBulkEditForm):
         FieldSet('description', ),
     )
     nullable_fields = ('description', )
+
+
+class HardwareLifecyclePlanBulkEditForm(NetBoxModelBulkEditForm):
+    description = forms.CharField(
+        label=_('Description'),
+        max_length=200,
+        required=False
+    )
+    comments = CommentField()
+    planned_by = forms.DateField(
+        label=_('Completion Date'),
+        required=False,
+        widget=DatePicker(),
+    )
+
+    model = HardwareLifecyclePlan
+    fieldsets = (
+        FieldSet('description', ),
+    )
+    nullable_fields = ('description', 'planned_by')

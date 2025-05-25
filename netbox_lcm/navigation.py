@@ -1,9 +1,21 @@
 from netbox.plugins import PluginMenuItem, PluginMenu
 
+device_lifecycle = PluginMenuItem(
+    link='plugins:netbox_lcm:devicelifecycle_list',
+    link_text='Device Lifecycle Information',
+    permissions=['netbox_lcm.view_devicelifecycle'],
+)
+
 lifecycle = PluginMenuItem(
     link='plugins:netbox_lcm:hardwarelifecycle_list',
-    link_text='Hardware Lifecycle',
+    link_text='Hardware Lifecycle Notices',
     permissions=['netbox_lcm.view_hardwarelifecycle'],
+)
+
+lifecycle_plans = PluginMenuItem(
+    link='plugins:netbox_lcm:hardwarelifecycleplan_list',
+    link_text='Hardware Lifecycle Plans',
+    permissions=['netbox_lcm.view_hardwarelifecycleplan'],
 )
 
 vendors = PluginMenuItem(
@@ -41,7 +53,7 @@ license_assignments = PluginMenuItem(
 menu = PluginMenu(
     label='Lifecycle Management',
     groups=(
-        ('Lifecycle', (lifecycle, )),
+        ('Lifecycle', (device_lifecycle, lifecycle, lifecycle_plans)),
         ('Support Contracts', (vendors, skus, contracts, contract_assignments)),
         ('Licensing', (licenses, license_assignments)),
     ),
