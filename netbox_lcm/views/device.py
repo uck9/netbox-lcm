@@ -36,6 +36,8 @@ class DeviceLifecycleListView(ObjectListView):
             hw_end_of_sale=Subquery(lifecycle_qs.values('end_of_sale')[:1]),
             hw_end_of_support=Subquery(lifecycle_qs.values('end_of_support')[:1]),
             hw_end_of_security=Subquery(lifecycle_qs.values('end_of_security')[:1])
+        ).select_related(
+            'device_type__manufacturer'
         ).prefetch_related(
             Prefetch(
                 'contracts',
@@ -45,5 +47,6 @@ class DeviceLifecycleListView(ObjectListView):
         )
 
         qs = qs.exclude(status='unmanaged')
+        qs = qs.exclude(status='passive')
 
         return qs

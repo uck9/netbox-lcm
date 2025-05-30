@@ -1,8 +1,10 @@
 import django_filters
 from django.utils.translation import gettext as _
+from django.db.models import Q
 
-from dcim.models import Device, Site, DeviceType
 from dcim.choices import DeviceStatusChoices
+from dcim.models import Device, Site, DeviceType, Manufacturer
+from tenancy.models import Tenant, TenantGroup
 from netbox.filtersets import NetBoxModelFilterSet
 from netbox_lcm.models import SupportContractAssignment, HardwareLifecycle
 
@@ -16,13 +18,30 @@ class DeviceLifecycleFilterSet(NetBoxModelFilterSet):
         lookup_expr='icontains', 
         label="Device Name"
     )
-    device_type = django_filters.ModelChoiceFilter(
-        queryset=DeviceType.objects.all(),
-        label="Device Type"
-    )
     site = django_filters.ModelMultipleChoiceFilter(
         queryset=Site.objects.all(),
         label='Site'
+    )
+    tenant_group = django_filters.ModelMultipleChoiceFilter(
+        field_name='tenant__group',
+        queryset=TenantGroup.objects.all()
+    )
+    tenant = django_filters.ModelMultipleChoiceFilter(
+        field_name='tenant',
+        queryset=Tenant.objects.all()
+    )
+    manufacturer = django_filters.ModelMultipleChoiceFilter(
+        queryset=Manufacturer.objects.all(),
+        field_name='device_type__manufacturer',
+        label="Manufacturer"
+    )
+    device_type = django_filters.ModelMultipleChoiceFilter(
+        queryset=DeviceType.objects.all(),
+        label="Device Type"
+    )
+    has_primary_ip = django_filters.BooleanFilter(
+        method='filter_has_primary_ip',
+        label='Has Primary IP'
     )
     has_support_contract = django_filters.BooleanFilter(
         method='filter_has_contract',
@@ -41,8 +60,16 @@ class DeviceLifecycleFilterSet(NetBoxModelFilterSet):
     class Meta:
         model = Device
         fields = [
-            'name', 'device_type', 'site', 
-            'has_support_contract', 'support_contract_end_before', 'hw_eosec_before']
+            'name', 'site', 'tenant_group', 'tenant', 'manufacturer', 'device_type', 
+            'has_primary_ip', 'has_support_contract', 'support_contract_end_before', 
+            'hw_eosec_before'
+        ]
+
+    def filter_has_primary_ip(self, queryset, name, value):
+        if value:
+            return queryset.exclude(primary_ip4__isnull=True, primary_ip6__isnull=True)
+        else:
+            return queryset.filter(primary_ip4__isnull=True, primary_ip6__isnull=True)
 
     def filter_has_contract(self, queryset, name, value):
         if value:
@@ -52,4 +79,12 @@ class DeviceLifecycleFilterSet(NetBoxModelFilterSet):
 
     def filter_contract_end_before(self, queryset, name, value):
         return queryset.filter(contracts__end__lte=value).distinct()
+
+    def search(self, queryset, name, value):
+        if not value.strip():
+            return queryset
+        qs_filter = Q(
+            Q(name__icontains=value)
+        )
+        return queryset.filter(qs_filter).distinct()
         

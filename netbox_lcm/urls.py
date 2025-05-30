@@ -95,5 +95,5 @@ urlpatterns = [
     path('license-assignment/<int:pk>/changelog', ObjectChangeLogView.as_view(), \
         name='licenseassignment_changelog', kwargs={'model': LicenseAssignment}),
 
-    path('device-lifecycle/', views.DeviceLifecycleListView.as_view(), name='devicelifecycle_list'),
+    path('devices/', views.DeviceLifecycleListView.as_view(), name='devicelifecycle_list'),
 ]

@@ -5,7 +5,8 @@ from django.utils.html import format_html, format_html_join
 
 from netbox.tables import columns, NetBoxTable
 
-from dcim.models import Device
+from dcim.models import Device, DeviceType, Manufacturer
+from tenancy.models import Tenant
 
 __all__ = (
     'DeviceLifecycleTable',
@@ -13,27 +14,38 @@ __all__ = (
 
 class DeviceLifecycleTable(NetBoxTable):
     actions = None
-    device = tables.Column(
+    name = tables.Column(
         linkify=True,
         verbose_name=_('Name')
     )
-
-    site = tables.Column(
-        accessor='site',
-        linkify=True,
-        verbose_name='Site'
-    )
-
     status = tables.Column(
         verbose_name=_('Status')
     )
-    
+    serial = tables.Column(
+        verbose_name=_("Serial Number")
+    )
+    manufacturer = tables.Column(
+        accessor='device_type.manufacturer',
+        linkify=True,
+        verbose_name=_('Manufacturer')
+    )
     device_type = tables.Column(
         accessor='device_type',
         linkify=True,
         verbose_name='Device Type'
     )
-
+    tenant_group = tables.Column(
+        accessor='tenant.group', 
+        verbose_name='Tenant Group'
+    )
+    tenant = tables.Column(
+        linkify=True
+    )
+    site = tables.Column(
+        accessor='site',
+        linkify=True,
+        verbose_name='Site'
+    )
     hw_end_of_security = TemplateColumn(
         template_code="""
         {% load lcm_filters %}
@@ -41,7 +53,6 @@ class DeviceLifecycleTable(NetBoxTable):
         """,
         verbose_name="HW - EoVSS"
     )
-
     hw_end_of_support = TemplateColumn(
         template_code="""
         {% load lcm_filters %}
@@ -88,11 +99,12 @@ class DeviceLifecycleTable(NetBoxTable):
         model = Device
         
         fields = (
-            'name', 'site', 'status', 'device_type',
-            'hw_end_of_security', 'hw_end_of_support',
-            'support_contract_id', 'support_contract_sku', 'support_contract_end' )
+            'name', 'site', 'status', 'serial', 'manufacturer', 'device_type', 
+            'tenant_group', 'tenant', 'hw_end_of_security', 'hw_end_of_support',
+            'support_contract_id', 'support_contract_sku', 'support_contract_end' 
+        )
         default_columns = (
-            'name', 'site', 'status', 'device_type',
+            'name', 'site', 'status', 'manufacturer', 'device_type',
             'hw_end_of_security', 
             'support_contract_id', 'support_contract_sku', 'support_contract_end'
         )

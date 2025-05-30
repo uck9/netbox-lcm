@@ -6,6 +6,7 @@ from django.forms import CharField, DateField, NullBooleanField, Select
 
 from dcim.choices import DeviceStatusChoices
 from dcim.models import Device, DeviceType, Manufacturer, Site
+from tenancy.models import Tenant, TenantGroup
 from netbox.forms import NetBoxModelFilterSetForm
 from netbox_lcm.models import HardwareLifecycle, HardwareLifecyclePlan, SupportContract, \
     Vendor, License, LicenseAssignment, SupportContractAssignment, SupportSKU
@@ -238,20 +239,43 @@ class LicenseAssignmentFilterForm(NetBoxModelFilterSetForm):
 
 class DeviceLifecycleFilterForm(NetBoxModelFilterSetForm):
     model = Device
+    fieldsets = (
+        FieldSet('q', 'filter_id', 'tag'),
+        FieldSet('site', 'tenant_group', 'tenant', name='Organisation Information'),
+        FieldSet('manufacturer', 'device_type', 'has_primary_ip', name='Hardware Information'),
+        FieldSet('has_support_contract', 'support_contract_end_before', 
+            'hw_eosec_before', name='Lifecyle Information'),
+    )
 
     site = DynamicModelMultipleChoiceField(
         queryset=Site.objects.all(),
         required=False
     )
-    name = CharField(
+    tenant_group = DynamicModelMultipleChoiceField(
+        queryset=TenantGroup.objects.all(),
         required=False,
-        label="Device Name"
+        label='Tenant Group'
+    )
+    tenant = DynamicModelMultipleChoiceField(
+        queryset=Tenant.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Tenant')
+    )
+    manufacturer = DynamicModelMultipleChoiceField(
+        queryset=Manufacturer.objects.all(),
+        required=False
     )
     device_type = DynamicModelMultipleChoiceField(
         queryset=DeviceType.objects.all(),
         required=False
     )
-    has_support_contract  = NullBooleanField(
+    has_primary_ip = NullBooleanField(
+        required=False,
+        label=_("Has Primary IP"),
+        widget=Select(choices=BOOLEAN_WITH_BLANK_CHOICES)
+    )
+    has_support_contract = NullBooleanField(
         required=False,
         label=_("Has Support Contract"),
         widget=Select(choices=BOOLEAN_WITH_BLANK_CHOICES)
