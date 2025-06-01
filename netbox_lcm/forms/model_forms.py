@@ -4,7 +4,8 @@ from django.utils.translation import gettext as _
 from dcim.models import DeviceType, ModuleType, Manufacturer, Device
 from netbox.forms import NetBoxModelForm
 from netbox_lcm.models import HardwareLifecycle, HardwareLifecyclePlan, Vendor, SupportContract, \
-    LicenseAssignment, License, SupportContractAssignment, SupportSKU
+    LicenseAssignment, License, SupportContractAssignment, SupportSKU, SoftwareProduct, \
+    SoftwareRelease, SoftwareReleaseAssignment
 from utilities.forms.fields import DynamicModelChoiceField, DynamicModelMultipleChoiceField
 from utilities.forms.widgets import DatePicker
 
@@ -17,7 +18,10 @@ __all__ = (
     'LicenseForm',
     'LicenseAssignmentForm',
     'HardwareLifecycleForm',
-    'HardwareLifecyclePlanForm'
+    'HardwareLifecyclePlanForm',
+    'SoftwareProductForm',
+    'SoftwareReleaseForm',
+    'SoftwareReleaseAssignmentForm'
 )
 
 
@@ -244,3 +248,35 @@ class HardwareLifecyclePlanForm(NetBoxModelForm):
             self.instance.assigned_object = self.cleaned_data[selected_objects[0]]
         else:
             self.instance.assigned_object = None
+
+class SoftwareProductForm(NetBoxModelForm):
+    class Meta:
+        model = SoftwareProduct
+        fields = fields = [
+            'name',
+            'platform',
+            'major_version',
+            'minor_version',
+            'alias',
+            'release_date',
+            'end_of_security_date',
+            'end_of_support_date',
+            'documentation_url',
+        ]
+        widgets = {
+            'end_of_security_date': DatePicker(),
+            'end_of_support_date': DatePicker(),
+            'release_date': DatePicker(),
+        }
+
+class SoftwareReleaseForm(NetBoxModelForm):
+    class Meta:
+        model = SoftwareRelease
+        fields = ['product', 'version', 'device_type', 'device_role', 'status',\
+        'notes'
+        ]
+
+class SoftwareReleaseAssignmentForm(NetBoxModelForm):
+    class Meta:
+        model = SoftwareReleaseAssignment
+        fields = ['device', 'release', 'currently_active']

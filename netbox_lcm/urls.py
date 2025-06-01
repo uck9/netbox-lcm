@@ -3,7 +3,8 @@ from django.urls import path
 from netbox.views.generic import ObjectChangeLogView
 from . import views
 from netbox_lcm.models import HardwareLifecycle, HardwareLifecyclePlan, SupportContract, License, \
-    LicenseAssignment, SupportContractAssignment, SupportSKU, Vendor
+    LicenseAssignment, SupportContractAssignment, SupportSKU, Vendor, SoftwareProduct, SoftwareRelease, \
+    SoftwareReleaseAssignment
 
 urlpatterns = [
     path('hardware/', views.HardwareLifecycleListView.as_view(), name='hardwarelifecycle_list'),
@@ -94,6 +95,30 @@ urlpatterns = [
     path('license-assignment/<int:pk>/delete', views.LicenseAssignmentDeleteView.as_view(), name='licenseassignment_delete'),
     path('license-assignment/<int:pk>/changelog', ObjectChangeLogView.as_view(), \
         name='licenseassignment_changelog', kwargs={'model': LicenseAssignment}),
+
+    path('software-product/', views.SoftwareProductListView.as_view(), name='softwareproduct_list'),
+    path('software-product/add/', views.SoftwareProductEditView.as_view(), name='softwareproduct_add'),
+    path('software-product/<int:pk>/', views.SoftwareProductView.as_view(), name='softwareproduct'),
+    path('software-product/<int:pk>/edit/', views.SoftwareProductEditView.as_view(), name='softwareproduct_edit'),
+    path('software-product/<int:pk>/delete/', views.SoftwareProductDeleteView.as_view(), name='softwareproduct_delete'),
+    path('software-product/<int:pk>/changelog', ObjectChangeLogView.as_view(), \
+        name='softwareproduct_changelog', kwargs={'model': SoftwareProduct}),
+
+    path('software-release/', views.SoftwareReleaseListView.as_view(), name='softwarerelease_list'),
+    path('software-release/add/', views.SoftwareReleaseEditView.as_view(), name='softwarerelease_add'),
+    path('software-release/<int:pk>/', views.SoftwareReleaseView.as_view(), name='softwarerelease'),
+    path('software-release/<int:pk>/edit/', views.SoftwareReleaseEditView.as_view(), name='softwarerelease_edit'),
+    path('software-release/<int:pk>/delete/', views.SoftwareReleaseDeleteView.as_view(), name='softwarerelease_delete'),
+    path('software-release/<int:pk>/changelog', ObjectChangeLogView.as_view(), \
+        name='softwarerelease_changelog', kwargs={'model': SoftwareRelease}),
+
+    path('software-release-assignment/', views.SoftwareReleaseAssignmentListView.as_view(), name='softwarereleaseassignment_list'),
+    path('software-release-assignment/add/', views.SoftwareReleaseAssignmentEditView.as_view(), name='softwarereleaseassignment_add'),
+    path('software-release-assignment/<int:pk>/', views.SoftwareReleaseAssignmentView.as_view(), name='softwarereleaseassignment'),
+    path('software-release-assignment/<int:pk>/edit/', views.SoftwareReleaseAssignmentEditView.as_view(), name='softwarereleaseassignment_edit'),
+    path('software-release-assignment/<int:pk>/delete/', views.SoftwareReleaseAssignmentDeleteView.as_view(), name='softwarereleaseassignment_delete'),
+    path('software-release-assignment/<int:pk>/changelog', ObjectChangeLogView.as_view(), \
+        name='softwarereleaseassignment_changelog', kwargs={'model': SoftwareReleaseAssignment}),
 
     path('devices/', views.DeviceLifecycleListView.as_view(), name='devicelifecycle_list'),
 ]

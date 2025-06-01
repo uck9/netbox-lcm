@@ -48,12 +48,25 @@ license_assignments = PluginMenuItem(
     link_text='License Assignments',
     permissions=['netbox_lcm.view_licenseassignment'],
 )
+software_product = PluginMenuItem(
+    link='plugins:netbox_lcm:softwareproduct_list', 
+    link_text='Software',
+)
+software_release = PluginMenuItem(
+    link='plugins:netbox_lcm:softwarerelease_list', 
+    link_text='Software Releases'
+)
+software_assignments = PluginMenuItem(
+    link='plugins:netbox_lcm:softwarereleaseassignment_list', 
+    link_text='Software Assignments',
+)
 
 
 menu = PluginMenu(
     label='Lifecycle Management',
     groups=(
-        ('Lifecycle', (device_lifecycle, lifecycle, lifecycle_plans)),
+        ('Hardware', (device_lifecycle, lifecycle, lifecycle_plans)),
+        ('Software', (software_product, software_release, software_assignments)),
         ('Support Contracts', (vendors, skus, contracts, contract_assignments)),
         ('Licensing', (licenses, license_assignments)),
     ),
