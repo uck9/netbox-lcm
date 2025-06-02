@@ -4,6 +4,7 @@ from .views import *
 router = NetBoxRouter()
 router.register('hardwarelifecycle', HardwareLifecycleViewSet)
 router.register('hardwarelifecycleplan', HardwareLifecyclePlanViewSet)
+router.register('device-type-families', DeviceTypeFamilyViewSet)
 router.register('softwareproduct', SoftwareProductViewSet)
 router.register('softwarerelease', SoftwareReleaseViewSet)
 router.register('softwarereleaseassignment', SoftwareReleaseAssignmentViewSet)

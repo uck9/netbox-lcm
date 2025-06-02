@@ -14,4 +14,5 @@ __all__ = (
     'LicenseSerializer',
     'LicenseAssignmentSerializer',
     'SoftwareProductSerializer',
+    'DeviceTypeFamilySerializer',
 )

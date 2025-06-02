@@ -1,0 +1,35 @@
+{% extends 'generic/object.html' %}
+{% load i18n %}
+
+{% block title %}{{ object.name }}{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+  <div class="col col-md-12">
+    <div class="card">
+      <h5 class="card-header">{% trans "Device Type Family Details" %}</h5>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-sm-3">{% trans "Name" %}</dt>
+          <dd class="col-sm-9">{{ object.name }}</dd>
+
+          <dt class="col-sm-3">{% trans "Description" %}</dt>
+          <dd class="col-sm-9">{{ object.description|linebreaksbr }}</dd>
+
+          <dt class="col-sm-3">{% trans "Manufacturer" %}</dt>
+          <dd class="col-sm-9">{{ object.manufacturer|linebreaksbr }}</dd>
+
+          <dt class="col-sm-3">{% trans "Device Types" %}</dt>
+          <dd class="col-sm-9">
+            {% for dt in object.device_types.all %}
+              <a href="{{ dt.get_absolute_url }}">{{ dt }}</a>{% if not forloop.last %}, {% endif %}
+            {% empty %}
+              <em>{% trans "None" %}</em>
+            {% endfor %}
+          </dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

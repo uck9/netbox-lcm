@@ -2,17 +2,34 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 
-from dcim.models import Device, DeviceType, DeviceRole
+from dcim.models import Device, DeviceType, DeviceRole, Manufacturer
 from netbox.models import PrimaryModel
 from netbox_lcm.choices import SoftwareReleaseStatusChoices
 
 
 __all__ = (
+    'DeviceTypeFamily',
     'SoftwareProduct',
     'SoftwareRelease',
     'SoftwareReleaseAssignment'
 )
 
+class DeviceTypeFamily(PrimaryModel):
+    name = models.CharField(max_length=100, unique=True)
+    manufacturer = models.ForeignKey(
+        to=Manufacturer,
+        on_delete=models.PROTECT,
+        related_name='device_type_families'
+    )  
+    device_types = models.ManyToManyField(
+        to='dcim.DeviceType',
+        related_name='device_type_families',
+        blank=True
+    )
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.pk})"
 
 class SoftwareProduct(PrimaryModel):
     """A software version for a Device, Virtual Machine or Inventory Item."""
@@ -48,11 +65,22 @@ class SoftwareProduct(PrimaryModel):
 
 
 class SoftwareRelease(PrimaryModel):
-    product = models.ForeignKey(SoftwareProduct, on_delete=models.CASCADE, related_name='releases')
+    product = models.ForeignKey(
+        SoftwareProduct, 
+        on_delete=models.CASCADE, 
+        related_name='releases'
+    )
+    devicetype_family = models.ForeignKey(
+        to='DeviceTypeFamily', 
+        on_delete=models.PROTECT
+    )
     version = models.CharField(max_length=100)
     version_alias = models.CharField(max_length=100)
-    device_type = models.ForeignKey(DeviceType, on_delete=models.CASCADE)
-    device_role = models.ForeignKey(DeviceRole, on_delete=models.SET_NULL, null=True, blank=True)
+    device_role = models.ForeignKey(
+        DeviceRole, 
+        on_delete=models.SET_NULL,
+        null=True, blank=True
+    )
     status = models.CharField(
         max_length=50,
         choices=SoftwareReleaseStatusChoices,
@@ -69,12 +97,12 @@ class SoftwareRelease(PrimaryModel):
         return self.get_status_display()
 
     class Meta:
-        unique_together = ('product', 'version', 'device_type', 'device_role')
+        unique_together = ('product', 'version', 'devicetype_family', 'device_role')
         ordering = ['product__name', 'version']
 
     def __str__(self):
         role = f" for {self.device_role}" if self.device_role else " (Default)"
-        return f"{self.version} [Model: {self.device_type}, Role:{role}]"
+        return f"{self.version} [Model: {self.devicetype_family}, Role:{role}]"
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_lcm:softwarerelease', args=[self.pk])
@@ -100,3 +128,4 @@ class SoftwareReleaseAssignment(PrimaryModel):
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_lcm:softwarereleaseassignment', args=[self.pk])
+    

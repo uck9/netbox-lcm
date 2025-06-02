@@ -1,9 +1,10 @@
 from netbox.views import generic
-from netbox_lcm.models import SoftwareProduct, SoftwareRelease, SoftwareReleaseAssignment
-from netbox_lcm.forms.model_forms import SoftwareProductForm, SoftwareReleaseForm, SoftwareReleaseAssignmentForm
-from netbox_lcm.tables import SoftwareProductTable, SoftwareReleaseTable, SoftwareReleaseAssignmentTable
-from netbox_lcm.filtersets import SoftwareProductFilterSet, SoftwareReleaseFilterSet, SoftwareReleaseAssignmentFilterSet
 from utilities.views import register_model_view
+
+from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, SoftwareReleaseAssignment
+from netbox_lcm.forms.model_forms import DeviceTypeFamilyForm, SoftwareProductForm, SoftwareReleaseForm, SoftwareReleaseAssignmentForm
+from netbox_lcm.tables import DeviceTypeFamilyTable, SoftwareProductTable, SoftwareReleaseTable, SoftwareReleaseAssignmentTable
+from netbox_lcm.filtersets import DeviceTypeFamilyFilterSet, SoftwareProductFilterSet, SoftwareReleaseFilterSet, SoftwareReleaseAssignmentFilterSet
 
 # SoftwareProduct
 @register_model_view(SoftwareProduct, name='list')
@@ -64,3 +65,23 @@ class SoftwareReleaseAssignmentEditView(generic.ObjectEditView):
 @register_model_view(SoftwareReleaseAssignment, name='delete')
 class SoftwareReleaseAssignmentDeleteView(generic.ObjectDeleteView):
     queryset = SoftwareReleaseAssignment.objects.all()
+
+# DeviceTypeFamily
+@register_model_view(DeviceTypeFamily, name='list')
+class DeviceTypeFamilyListView(generic.ObjectListView):
+    queryset = DeviceTypeFamily.objects.prefetch_related('device_types')
+    filterset = DeviceTypeFamilyFilterSet
+    table = DeviceTypeFamilyTable
+
+@register_model_view(DeviceTypeFamily)
+class DeviceTypeFamilyView(generic.ObjectView):
+    queryset = DeviceTypeFamily.objects.all()
+
+@register_model_view(DeviceTypeFamily, name='edit')
+class DeviceTypeFamilyEditView(generic.ObjectEditView):
+    queryset = DeviceTypeFamily.objects.all()
+    form = DeviceTypeFamilyForm
+
+@register_model_view(DeviceTypeFamily, name='delete')
+class DeviceTypeFamilyDeleteView(generic.ObjectDeleteView):
+    queryset = DeviceTypeFamily.objects.all()

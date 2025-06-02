@@ -2,20 +2,41 @@ from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from netbox.api.serializers import NetBoxModelSerializer
 from dcim.api.serializers import DeviceSerializer, DeviceTypeSerializer, DeviceRoleSerializer
-from dcim.models import Device, DeviceType, DeviceRole
-from netbox_lcm.models import SoftwareProduct, SoftwareRelease, SoftwareReleaseAssignment
+from dcim.models import Device, DeviceType, DeviceRole, Manufacturer
+from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, SoftwareReleaseAssignment
 
 
 __all__ = (
+    'DeviceTypeFamilySerializer',
     'SoftwareProductSerializer',
     'SoftwareReleaseSerializer',
     'SoftwareReleaseAssignmentSerializer',
-
 )
 
+class DeviceTypeFamilySerializer(NetBoxModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_lcm-api:devicetypefamily-detail'
+    )
+    manufacturer = serializers.PrimaryKeyRelatedField(
+        queryset=Manufacturer.objects.all()
+    )
+    device_types = serializers.PrimaryKeyRelatedField(
+        queryset=DeviceType.objects.all(),
+        many=True
+    )
+    class Meta:
+        model = DeviceTypeFamily
+        fields = [
+            'id', 'url', 'display',
+            'name', 'manufacturer',
+            'device_types', 'description',
+            'created', 'last_updated'
+        ]
 
 class SoftwareProductSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_lcm-api:softwareproduct-detail')
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_lcm-api:softwareproduct-detail'
+    )
     class Meta:
         model = SoftwareProduct
         fields = [
@@ -28,17 +49,22 @@ class SoftwareProductSerializer(NetBoxModelSerializer):
 class SoftwareReleaseSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_lcm-api:softwarerelease-detail')
     product = serializers.PrimaryKeyRelatedField(queryset=SoftwareProduct.objects.all())
-    device_type = serializers.PrimaryKeyRelatedField(queryset=DeviceType.objects.all())
+    devicetype_family = DeviceTypeFamilySerializer(read_only=True)
+    devicetype_family_id = serializers.PrimaryKeyRelatedField(
+        queryset=DeviceTypeFamily.objects.all(),
+        source='devicetype_family',
+        write_only=True
+    )
     device_role = serializers.PrimaryKeyRelatedField(queryset=DeviceRole.objects.all(), allow_null=True)
 
     class Meta:
         model = SoftwareRelease
         fields = [
             'id', 'url', 'display', 'product', 'version',
-            'device_type', 'device_role', 'status',
+            'devicetype_family', 'devicetype_family_id',
+            'device_role', 'status',
             'created', 'last_updated',
         ]
-
 
 class SoftwareReleaseAssignmentSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_lcm-api:softwarereleaseassignment-detail')

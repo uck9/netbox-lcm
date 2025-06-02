@@ -3,7 +3,7 @@ from django.utils.translation import gettext as _
 
 from dcim.models import DeviceType, ModuleType, Manufacturer, Device
 from netbox.forms import NetBoxModelForm
-from netbox_lcm.models import HardwareLifecycle, HardwareLifecyclePlan, Vendor, SupportContract, \
+from netbox_lcm.models import DeviceTypeFamily, HardwareLifecycle, HardwareLifecyclePlan, Vendor, SupportContract, \
     LicenseAssignment, License, SupportContractAssignment, SupportSKU, SoftwareProduct, \
     SoftwareRelease, SoftwareReleaseAssignment
 from utilities.forms.fields import DynamicModelChoiceField, DynamicModelMultipleChoiceField
@@ -19,6 +19,7 @@ __all__ = (
     'LicenseAssignmentForm',
     'HardwareLifecycleForm',
     'HardwareLifecyclePlanForm',
+    'DeviceTypeFamilyForm',
     'SoftwareProductForm',
     'SoftwareReleaseForm',
     'SoftwareReleaseAssignmentForm'
@@ -272,7 +273,7 @@ class SoftwareProductForm(NetBoxModelForm):
 class SoftwareReleaseForm(NetBoxModelForm):
     class Meta:
         model = SoftwareRelease
-        fields = ['product', 'version', 'device_type', 'device_role', 'status',\
+        fields = ['product', 'version', 'devicetype_family', 'device_role', 'status',\
         'notes'
         ]
 
@@ -280,3 +281,8 @@ class SoftwareReleaseAssignmentForm(NetBoxModelForm):
     class Meta:
         model = SoftwareReleaseAssignment
         fields = ['device', 'release', 'currently_active']
+
+class DeviceTypeFamilyForm(NetBoxModelForm):
+    class Meta:
+        model = DeviceTypeFamily
+        fields = ('name', 'manufacturer', 'device_types', 'description')

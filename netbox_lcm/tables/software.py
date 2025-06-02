@@ -2,15 +2,25 @@ from django.utils.translation import gettext as _
 import django_tables2 as tables
 
 from netbox.tables import NetBoxTable, ChoiceFieldColumn
-from netbox_lcm.models import SoftwareProduct, SoftwareRelease, SoftwareReleaseAssignment
+from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, \
+    SoftwareReleaseAssignment
 
 
 __all__ = (
+    'DeviceTypeFamilyTable',
     'SoftwareProductTable',
     'SoftwareReleaseTable',
     'SoftwareReleaseAssignmentTable'
 )
 
+class DeviceTypeFamilyTable(NetBoxTable):
+    name = tables.Column(linkify=True)
+    manufacturer = tables.Column(linkify=True)
+    device_types = tables.ManyToManyColumn(accessor='device_types.all')
+
+    class Meta(NetBoxTable.Meta):
+        model = DeviceTypeFamily
+        fields = ('name', 'manufacturer', 'device_types', 'description')
 
 class SoftwareProductTable(NetBoxTable):
     manufacturer = tables.Column(
@@ -58,14 +68,14 @@ class SoftwareProductTable(NetBoxTable):
 
 class SoftwareReleaseTable(NetBoxTable):
     product = tables.Column(linkify=True)
-    version = tables.Column()
-    device_type = tables.Column(linkify=True)
+    device_type_family = tables.Column(linkify=True)
     device_role = tables.Column(linkify=True)
+    version = tables.Column()
     status = ChoiceFieldColumn()
 
     class Meta(NetBoxTable.Meta):
         model = SoftwareRelease
-        fields = ('product', 'version', 'device_type', 'device_role', 'status')
+        fields = ('product', 'version', 'device_type_family', 'device_role', 'status')
 
 class SoftwareReleaseAssignmentTable(NetBoxTable):
     device = tables.Column(linkify=True)

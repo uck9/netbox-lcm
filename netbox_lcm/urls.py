@@ -2,7 +2,7 @@ from django.urls import path
 
 from netbox.views.generic import ObjectChangeLogView
 from . import views
-from netbox_lcm.models import HardwareLifecycle, HardwareLifecyclePlan, SupportContract, License, \
+from netbox_lcm.models import DeviceTypeFamily, HardwareLifecycle, HardwareLifecyclePlan, SupportContract, License, \
     LicenseAssignment, SupportContractAssignment, SupportSKU, Vendor, SoftwareProduct, SoftwareRelease, \
     SoftwareReleaseAssignment
 
@@ -103,6 +103,14 @@ urlpatterns = [
     path('software-product/<int:pk>/delete/', views.SoftwareProductDeleteView.as_view(), name='softwareproduct_delete'),
     path('software-product/<int:pk>/changelog', ObjectChangeLogView.as_view(), \
         name='softwareproduct_changelog', kwargs={'model': SoftwareProduct}),
+
+    path('devicetype-family/', views.DeviceTypeFamilyListView.as_view(), name='devicetypefamily_list'),
+    path('devicetype-family/add/', views.DeviceTypeFamilyEditView.as_view(), name='devicetypefamily_add'),
+    path('devicetype-family/<int:pk>/', views.DeviceTypeFamilyView.as_view(), name='devicetypefamily'),
+    path('devicetype-family/<int:pk>/edit/', views.DeviceTypeFamilyEditView.as_view(), name='devicetypefamily_edit'),
+    path('devicetype-family/<int:pk>/delete/', views.DeviceTypeFamilyDeleteView.as_view(), name='devicetypefamily_delete'),
+    path('devicetype-family/<int:pk>/changelog/', ObjectChangeLogView.as_view(), \
+        name='devicetypefamily_changelog', kwargs={'model': DeviceTypeFamily}),
 
     path('software-release/', views.SoftwareReleaseListView.as_view(), name='softwarerelease_list'),
     path('software-release/add/', views.SoftwareReleaseEditView.as_view(), name='softwarerelease_add'),
