@@ -3,14 +3,14 @@ import django_tables2 as tables
 
 from netbox.tables import NetBoxTable, ChoiceFieldColumn
 from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, \
-    SoftwareReleaseAssignment, SoftwareReleaseStatus
+    SoftwareReleaseAssignment, SoftwareReleaseCompatability
 
 
 __all__ = (
     'DeviceTypeFamilyTable',
     'SoftwareProductTable',
     'SoftwareReleaseTable',
-    'SoftwareReleaseStatusTable',
+    'SoftwareReleaseCompatabilityTable',
     'SoftwareReleaseAssignmentTable'
 )
 
@@ -75,16 +75,13 @@ class SoftwareReleaseTable(NetBoxTable):
         model = SoftwareRelease
         fields = ('id', 'product', 'version', 'status')
 
-class SoftwareReleaseStatusTable(NetBoxTable):
-    release = tables.Column(
-        accessor='release.version',
-        verbose_name='Release Version',
+class SoftwareReleaseCompatabilityTable(NetBoxTable):
+    software_release = tables.Column(
+        verbose_name='Software Release Version',
         linkify=True
     )
-    device_role = tables.Column(linkify=True)
-    status = ChoiceFieldColumn()
     devicetype_manufacturer = tables.Column(
-        accessor='release.devicetype_family.manufacturer',
+        accessor='devicetype_family.manufacturer',
         verbose_name='Manufacturer'
     )
     devicetype_family = tables.Column(
@@ -93,8 +90,8 @@ class SoftwareReleaseStatusTable(NetBoxTable):
     )
 
     class Meta(NetBoxTable.Meta):
-        model = SoftwareReleaseStatus
-        fields = ('id', 'release', 'manufacturer', 'devicetype_family', 'device_role', 'status')
+        model = SoftwareReleaseCompatability
+        fields = ('id', 'devicetype_manufacturer', 'devicetype_family', 'software_release')
 
 class SoftwareReleaseAssignmentTable(NetBoxTable):
     device = tables.Column(linkify=True)

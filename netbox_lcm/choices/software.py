@@ -5,15 +5,17 @@ class SoftwareReleaseStatusChoices(ChoiceSet):
     
     TARGET = 'target'
     ACCEPTED = 'accepted'
-    RETIRED_SEV_01 = 'retired_sev_01'
-    RETIRED_SEV_02 = 'retired_sev_02'
+    RETIRED_UPGRADE_PRI_01 = 'retired_upgrade_pri_01'
+    RETIRED_UPGRADE_PRI_02 = 'retired_upgrade_pri_02'
+    RETIRED_UPGRADE_PRI_03 = 'retired_upgrade_pri_03'
     EXEMPTED = 'exempted'
 
     CHOICES = [
         (TARGET, 'Target Active Version'),
         (ACCEPTED, 'Accepted Active Version'),
-        (RETIRED_SEV_01, 'Upgrade Required - Retired Sev. 1'),
-        (RETIRED_SEV_02, 'Upgrade Required - Retired Sev. 2'),
+        (RETIRED_UPGRADE_PRI_01, 'Upgrade Required - High Priority'),
+        (RETIRED_UPGRADE_PRI_02, 'Upgrade Required - Medium Priority'),
+        (RETIRED_UPGRADE_PRI_03, 'Upgrade Required - Low Priority'),
         (EXEMPTED, 'Exempted'),
     ]
 

@@ -4,7 +4,7 @@ from netbox.views.generic import ObjectChangeLogView
 from . import views
 from netbox_lcm.models import DeviceTypeFamily, HardwareLifecycle, HardwareLifecyclePlan, SupportContract, License, \
     LicenseAssignment, SupportContractAssignment, SupportSKU, Vendor, SoftwareProduct, SoftwareRelease, \
-    SoftwareReleaseAssignment, SoftwareReleaseStatus
+    SoftwareReleaseAssignment, SoftwareReleaseCompatability
 
 urlpatterns = [
     path('hardware/', views.HardwareLifecycleListView.as_view(), name='hardwarelifecycle_list'),
@@ -120,13 +120,13 @@ urlpatterns = [
     path('software-release/<int:pk>/changelog', ObjectChangeLogView.as_view(), \
         name='softwarerelease_changelog', kwargs={'model': SoftwareRelease}),
 
-    path('software-release-status/', views.SoftwareReleaseStatusListView.as_view(), name='softwarereleasestatus_list'),
-    path('software-release-status/add/', views.SoftwareReleaseStatusEditView.as_view(), name='softwarereleasestatus_add'),
-    path('software-release-status/<int:pk>/', views.SoftwareReleaseStatusView.as_view(), name='softwarereleasestatus'),
-    path('software-release-status/<int:pk>/edit/', views.SoftwareReleaseStatusEditView.as_view(), name='softwarereleasestatus_edit'),
-    path('software-release-status/<int:pk>/delete/', views.SoftwareReleaseStatusDeleteView.as_view(), name='softwarereleasestatus_delete'),
-    path('software-release-status/<int:pk>/changelog', ObjectChangeLogView.as_view(), \
-        name='softwarereleasestatus_changelog', kwargs={'model': SoftwareReleaseStatus}),
+    path('software-release-compatability/', views.SoftwareReleaseCompatabilityListView.as_view(), name='softwarereleasecompatability_list'),
+    path('software-release-compatability/add/', views.SoftwareReleaseCompatabilityEditView.as_view(), name='softwarereleasecompatability_add'),
+    path('software-release-compatability/<int:pk>/', views.SoftwareReleaseCompatabilityView.as_view(), name='softwarereleasecompatability'),
+    path('software-release-compatability/<int:pk>/edit/', views.SoftwareReleaseCompatabilityEditView.as_view(), name='softwarereleasecompatability_edit'),
+    path('software-release-compatability/<int:pk>/delete/', views.SoftwareReleaseCompatabilityDeleteView.as_view(), name='softwarereleasecompatability_delete'),
+    path('software-release-compatability/<int:pk>/changelog', ObjectChangeLogView.as_view(), \
+        name='softwarereleasecompatability_changelog', kwargs={'model': SoftwareReleaseCompatability}),
 
     path('software-release-assignment/', views.SoftwareReleaseAssignmentListView.as_view(), name='softwarereleaseassignment_list'),
     path('software-release-assignment/add/', views.SoftwareReleaseAssignmentEditView.as_view(), name='softwarereleaseassignment_add'),

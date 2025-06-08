@@ -3,14 +3,14 @@ from rest_framework import serializers
 from netbox.api.serializers import NetBoxModelSerializer
 from dcim.api.serializers import DeviceSerializer, DeviceTypeSerializer, DeviceRoleSerializer
 from dcim.models import Device, DeviceType, DeviceRole, Manufacturer
-from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, SoftwareReleaseStatus, SoftwareReleaseAssignment
+from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, SoftwareReleaseCompatability, SoftwareReleaseAssignment
 
 
 __all__ = (
     'DeviceTypeFamilySerializer',
     'SoftwareProductSerializer',
     'SoftwareReleaseSerializer',
-    'SoftwareReleaseStatusSerializer',
+    'SoftwareReleaseCompatabilitySerializer',
     'SoftwareReleaseAssignmentSerializer',
 )
 
@@ -58,9 +58,8 @@ class SoftwareReleaseSerializer(NetBoxModelSerializer):
             'created', 'last_updated',
         ]
 
-class SoftwareReleaseStatusSerializer(NetBoxModelSerializer):
-    release = serializers.PrimaryKeyRelatedField(queryset=SoftwareRelease.objects.all())
-    device_role = serializers.PrimaryKeyRelatedField(queryset=DeviceRole.objects.all(), allow_null=True)
+class SoftwareReleaseCompatabilitySerializer(NetBoxModelSerializer):
+    software_release = serializers.PrimaryKeyRelatedField(queryset=SoftwareRelease.objects.all())
     devicetype_family = DeviceTypeFamilySerializer(read_only=True)
     devicetype_family_id = serializers.PrimaryKeyRelatedField(
         queryset=DeviceTypeFamily.objects.all(),
@@ -69,12 +68,11 @@ class SoftwareReleaseStatusSerializer(NetBoxModelSerializer):
     )
 
     class Meta:
-        model = SoftwareReleaseStatus
+        model = SoftwareReleaseCompatability
         fields = [
             'id', 'url', 'display',
             'devicetype_family', 'devicetype_family_id',
-            'release', 'device_role', 'status',
-            'created', 'last_updated',
+            'software_release', 'created', 'last_updated',
         ]
 
 class SoftwareReleaseAssignmentSerializer(NetBoxModelSerializer):

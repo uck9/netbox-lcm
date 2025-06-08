@@ -11,7 +11,8 @@ __all__ = (
     'DeviceTypeFamily',
     'SoftwareProduct',
     'SoftwareRelease',
-    'SoftwareReleaseStatus',
+    'SoftwareReleaseCompatability',
+    'SoftwareReleaseCompatibilityStatus',
     'SoftwareReleaseAssignment'
 )
 
@@ -90,37 +91,60 @@ class SoftwareRelease(PrimaryModel):
         return reverse('plugins:netbox_lcm:softwarerelease', args=[self.pk])
 
 
-class SoftwareReleaseStatus(PrimaryModel):
-    release = models.ForeignKey('SoftwareRelease', on_delete=models.CASCADE, related_name='status_assignments')
+class SoftwareReleaseCompatability(PrimaryModel):
+    software_release = models.ForeignKey('SoftwareRelease', on_delete=models.CASCADE, related_name='status_assignments')
     devicetype_family = models.ForeignKey(
         to='DeviceTypeFamily', 
         on_delete=models.PROTECT
     )
-    device_role = models.ForeignKey(DeviceRole, null=True, blank=True, on_delete=models.CASCADE)
-    status = models.CharField(max_length=50, 
-        choices=SoftwareReleaseStatusChoices, 
-        default=SoftwareReleaseStatusChoices.ACCEPTED
+    image_file_name = models.CharField(blank=False, max_length=100, verbose_name="Image File Name")
+    download_url = models.URLField(blank=True, verbose_name="Download URL")
+    image_file_checksum = models.CharField(blank=True, max_length=256, verbose_name="Image File Checksum")
+    hashing_algorithm = models.CharField(
+        default="", blank=True, max_length=50, verbose_name="Hashing Algorithm"
     )
 
     class Meta:
         verbose_name = "Software Release Statuse"
-        unique_together = ('release', 'device_role')
-        ordering = ['release', 'device_role']
+        unique_together = ('software_release', 'devicetype_family')
+        ordering = ['software_release', 'devicetype_family']
 
     def __str__(self):
-        role = self.device_role.name if self.device_role else 'Default'
-        return f"{self.release} [{role}]: {self.get_status_display()}"
+        return f"{self.software_release.version} - {self.devicetype_family}"
 
-    def get_effective_status(release, device_role):
-        return (
-            SoftwareReleaseStatus.objects.filter(release=release, device_role=device_role).first() or
-            SoftwareReleaseStatus.objects.filter(release=release, device_role=None).first()
-        )
+
+class SoftwareReleaseCompatibilityStatus(PrimaryModel):
+    compatibility = models.ForeignKey(
+        SoftwareReleaseCompatability,
+        on_delete=models.CASCADE,
+        related_name='status_by_role'
+    )
+    device_role = models.ForeignKey(
+        'dcim.DeviceRole',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        help_text="Leave blank to define a default status for all roles"
+    )
+    status = models.CharField(
+        max_length=32,
+        choices=SoftwareReleaseStatusChoices,
+        help_text="Compatibility status for this role or all roles (default)"
+    )
+
+    class Meta:
+        unique_together = ('compatibility', 'device_role')
+
+    def __str__(self):
+        suffix = f" (role: {self.device_role})" if self.device_role else " (default)"
+        return f"{self.compatibility} → {self.status}{suffix}"
+
+
 
 
 class SoftwareReleaseAssignment(PrimaryModel):
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
-    release = models.ForeignKey(SoftwareReleaseStatus, on_delete=models.CASCADE)
+    release = models.ForeignKey(SoftwareReleaseCompatability, on_delete=models.CASCADE)
     assigned_on = models.DateTimeField(auto_now_add=True)
     unassigned_on = models.DateTimeField(null=True, blank=True)
 

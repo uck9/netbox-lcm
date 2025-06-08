@@ -5,16 +5,18 @@ from django.db.models import Q
 from dcim.models import DeviceType, Manufacturer
 from netbox.filtersets import NetBoxModelFilterSet
 from netbox_lcm.models.software import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, \
-    SoftwareReleaseAssignment, SoftwareReleaseStatus
+    SoftwareReleaseCompatability, SoftwareReleaseAssignment
 
 
 __all__ = (
     'DeviceTypeFamilyFilterSet',
     'SoftwareProductFilterSet',
     'SoftwareReleaseFilterSet',
-    'SoftwareReleaseStatusFilterSet',
+    'SoftwareReleaseCompatabilityFilterSet',
     'SoftwareReleaseAssignmentFilterSet',
 )
+
+
 class DeviceTypeFamilyFilterSet(NetBoxModelFilterSet):
     manufacturer = django_filters.ModelChoiceFilter(
         queryset=Manufacturer.objects.all()
@@ -29,20 +31,21 @@ class DeviceTypeFamilyFilterSet(NetBoxModelFilterSet):
         model = DeviceTypeFamily
         fields = ['name', 'manufacturer', 'device_types']
 
+
 class SoftwareReleaseFilterSet(NetBoxModelFilterSet):
     class Meta:
         model = SoftwareRelease
         fields = ['product', 'version']
 
 
-class SoftwareReleaseStatusFilterSet(NetBoxModelFilterSet):
+class SoftwareReleaseCompatabilityFilterSet(NetBoxModelFilterSet):
     devicetype_family = django_filters.ModelChoiceFilter(
         queryset=DeviceTypeFamily.objects.all()
     )
 
     class Meta:
-        model = SoftwareReleaseStatus
-        fields = ['release', 'devicetype_family', 'device_role', 'status']
+        model = SoftwareReleaseCompatability
+        fields = ['software_release', 'devicetype_family']
 
 
 class SoftwareProductFilterSet(NetBoxModelFilterSet):
