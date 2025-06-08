@@ -60,6 +60,10 @@ software_release = PluginMenuItem(
     link='plugins:netbox_lcm:softwarerelease_list', 
     link_text='Software Releases'
 )
+software_release_status = PluginMenuItem(
+    link='plugins:netbox_lcm:softwarereleasestatus_list', 
+    link_text='Software Release Status'
+)
 software_assignments = PluginMenuItem(
     link='plugins:netbox_lcm:softwarereleaseassignment_list', 
     link_text='Software Assignments',
@@ -70,7 +74,7 @@ menu = PluginMenu(
     label='Lifecycle Management',
     groups=(
         ('Hardware', (device_lifecycle, lifecycle, lifecycle_plans)),
-        ('Software', (software_product, devicetype_family, software_release, software_assignments)),
+        ('Software', (software_product, devicetype_family, software_release, software_release_status, software_assignments)),
         ('Support Contracts', (vendors, skus, contracts, contract_assignments)),
         ('Licensing', (licenses, license_assignments)),
     ),

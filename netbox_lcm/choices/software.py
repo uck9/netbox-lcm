@@ -18,3 +18,21 @@ class SoftwareReleaseStatusChoices(ChoiceSet):
     ]
 
     default = ACCEPTED
+
+
+class CVESeverityChoices(ChoiceSet):
+    """Choices for the types of CVE severities."""
+
+    CRITICAL = "Critical"
+    HIGH = "High"
+    MEDIUM = "Medium"
+    LOW = "Low"
+    NONE = "None"
+
+    CHOICES = (
+        (CRITICAL, CRITICAL),
+        (HIGH, HIGH),
+        (MEDIUM, MEDIUM),
+        (LOW, LOW),
+        (NONE, NONE),
+    )

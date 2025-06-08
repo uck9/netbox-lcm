@@ -3,13 +3,14 @@ import django_tables2 as tables
 
 from netbox.tables import NetBoxTable, ChoiceFieldColumn
 from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, \
-    SoftwareReleaseAssignment
+    SoftwareReleaseAssignment, SoftwareReleaseStatus
 
 
 __all__ = (
     'DeviceTypeFamilyTable',
     'SoftwareProductTable',
     'SoftwareReleaseTable',
+    'SoftwareReleaseStatusTable',
     'SoftwareReleaseAssignmentTable'
 )
 
@@ -42,8 +43,8 @@ class SoftwareProductTable(NetBoxTable):
         model = SoftwareProduct
         fields = (
             'id',
-            'name',
             'manufacturer',
+            'name',
             'platform',
             'major_version',
             'minor_version',
@@ -55,8 +56,8 @@ class SoftwareProductTable(NetBoxTable):
         )
         default_volumns = (
             'id',
-            'name',
             'manufacturer',
+            'name',
             'platform',
             'major_version',
             'minor_version',
@@ -68,14 +69,34 @@ class SoftwareProductTable(NetBoxTable):
 
 class SoftwareReleaseTable(NetBoxTable):
     product = tables.Column(linkify=True)
-    device_type_family = tables.Column(linkify=True)
-    device_role = tables.Column(linkify=True)
+    devicetype_family = tables.Column(linkify=True)
     version = tables.Column()
     status = ChoiceFieldColumn()
 
     class Meta(NetBoxTable.Meta):
         model = SoftwareRelease
-        fields = ('product', 'version', 'device_type_family', 'device_role', 'status')
+        fields = ('id', 'product', 'version', 'devicetype_family', 'status')
+
+class SoftwareReleaseStatusTable(NetBoxTable):
+    release = tables.Column(
+        accessor='release.version',
+        verbose_name='Release Version',
+        linkify=True
+    )
+    device_role = tables.Column(linkify=True)
+    status = ChoiceFieldColumn()
+    devicetype_manufacturer = tables.Column(
+        accessor='release.devicetype_family.manufacturer',
+        verbose_name='Manufacturer'
+    )
+    devicetype_family = tables.Column(
+        accessor='release.devicetype_family.name',
+        verbose_name='Device Type Family'
+    )
+
+    class Meta(NetBoxTable.Meta):
+        model = SoftwareReleaseStatus
+        fields = ('release', 'manufacturer', 'devicetype_family', 'device_role', 'status')
 
 class SoftwareReleaseAssignmentTable(NetBoxTable):
     device = tables.Column(linkify=True)

@@ -3,13 +3,14 @@ from rest_framework import serializers
 from netbox.api.serializers import NetBoxModelSerializer
 from dcim.api.serializers import DeviceSerializer, DeviceTypeSerializer, DeviceRoleSerializer
 from dcim.models import Device, DeviceType, DeviceRole, Manufacturer
-from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, SoftwareReleaseAssignment
+from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, SoftwareReleaseStatus, SoftwareReleaseAssignment
 
 
 __all__ = (
     'DeviceTypeFamilySerializer',
     'SoftwareProductSerializer',
     'SoftwareReleaseSerializer',
+    'SoftwareReleaseStatusSerializer',
     'SoftwareReleaseAssignmentSerializer',
 )
 
@@ -63,6 +64,17 @@ class SoftwareReleaseSerializer(NetBoxModelSerializer):
             'id', 'url', 'display', 'product', 'version',
             'devicetype_family', 'devicetype_family_id',
             'device_role', 'status',
+            'created', 'last_updated',
+        ]
+class SoftwareReleaseStatusSerializer(NetBoxModelSerializer):
+    release = serializers.PrimaryKeyRelatedField(queryset=SoftwareRelease.objects.all())
+    device_role = serializers.PrimaryKeyRelatedField(queryset=DeviceRole.objects.all(), allow_null=True)
+
+    class Meta:
+        model = SoftwareReleaseStatus
+        fields = [
+            'id', 'url', 'display',
+            'release', 'device_role', 'status',
             'created', 'last_updated',
         ]
 

@@ -1,10 +1,10 @@
 from netbox.views import generic
-from utilities.views import register_model_view
+from utilities.views import register_model_view, GetRelatedModelsMixin
 
-from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, SoftwareReleaseAssignment
-from netbox_lcm.forms.model_forms import DeviceTypeFamilyForm, SoftwareProductForm, SoftwareReleaseForm, SoftwareReleaseAssignmentForm
-from netbox_lcm.tables import DeviceTypeFamilyTable, SoftwareProductTable, SoftwareReleaseTable, SoftwareReleaseAssignmentTable
-from netbox_lcm.filtersets import DeviceTypeFamilyFilterSet, SoftwareProductFilterSet, SoftwareReleaseFilterSet, SoftwareReleaseAssignmentFilterSet
+from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, SoftwareReleaseStatus, SoftwareReleaseAssignment
+from netbox_lcm.forms.model_forms import DeviceTypeFamilyForm, SoftwareProductForm, SoftwareReleaseForm, SoftwareReleaseAssignmentForm, SoftwareReleaseStatusForm
+from netbox_lcm.tables import DeviceTypeFamilyTable, SoftwareProductTable, SoftwareReleaseTable, SoftwareReleaseAssignmentTable, SoftwareReleaseStatusTable
+from netbox_lcm.filtersets import DeviceTypeFamilyFilterSet, SoftwareProductFilterSet, SoftwareReleaseFilterSet, SoftwareReleaseAssignmentFilterSet, SoftwareReleaseStatusFilterSet
 
 # SoftwareProduct
 @register_model_view(SoftwareProduct, name='list')
@@ -14,9 +14,22 @@ class SoftwareProductListView(generic.ObjectListView):
     filterset = SoftwareProductFilterSet
 
 @register_model_view(SoftwareProduct)
-class SoftwareProductView(generic.ObjectView):
+class SoftwareProductView(GetRelatedModelsMixin, generic.ObjectView):
     queryset = SoftwareProduct.objects.all()
-
+    
+    def get_extra_context(self, request, instance):
+        active_assignments = SoftwareReleaseAssignment.objects.filter(
+            release__product=instance,
+            currently_active=True
+        )
+        return {
+            'related_models': self.get_related_models(
+                request,
+                instance,
+                extra=[(active_assignments, 'release__product')]
+            )
+        }
+    
 @register_model_view(SoftwareProduct, name='edit')
 class SoftwareProductEditView(generic.ObjectEditView):
     queryset = SoftwareProduct.objects.all()
@@ -85,3 +98,19 @@ class DeviceTypeFamilyEditView(generic.ObjectEditView):
 @register_model_view(DeviceTypeFamily, name='delete')
 class DeviceTypeFamilyDeleteView(generic.ObjectDeleteView):
     queryset = DeviceTypeFamily.objects.all()
+
+
+class SoftwareReleaseStatusListView(generic.ObjectListView):
+    queryset = SoftwareReleaseStatus.objects.all()
+    table = SoftwareReleaseStatusTable
+    filterset = SoftwareReleaseStatusFilterSet
+
+class SoftwareReleaseStatusView(generic.ObjectView):
+    queryset = SoftwareReleaseStatus.objects.all()
+
+class SoftwareReleaseStatusEditView(generic.ObjectEditView):
+    queryset = SoftwareReleaseStatus.objects.all()
+    form = SoftwareReleaseStatusForm
+
+class SoftwareReleaseStatusDeleteView(generic.ObjectDeleteView):
+    queryset = SoftwareReleaseStatus.objects.all()

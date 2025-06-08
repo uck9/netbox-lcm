@@ -5,7 +5,7 @@ from dcim.models import DeviceType, ModuleType, Manufacturer, Device
 from netbox.forms import NetBoxModelForm
 from netbox_lcm.models import DeviceTypeFamily, HardwareLifecycle, HardwareLifecyclePlan, Vendor, SupportContract, \
     LicenseAssignment, License, SupportContractAssignment, SupportSKU, SoftwareProduct, \
-    SoftwareRelease, SoftwareReleaseAssignment
+    SoftwareRelease, SoftwareReleaseAssignment, SoftwareReleaseStatus
 from utilities.forms.fields import DynamicModelChoiceField, DynamicModelMultipleChoiceField
 from utilities.forms.widgets import DatePicker
 
@@ -273,14 +273,17 @@ class SoftwareProductForm(NetBoxModelForm):
 class SoftwareReleaseForm(NetBoxModelForm):
     class Meta:
         model = SoftwareRelease
-        fields = ['product', 'version', 'devicetype_family', 'device_role', 'status',\
-        'notes'
-        ]
+        fields = ['product', 'version', 'devicetype_family', 'notes']
+
+class SoftwareReleaseStatusForm(NetBoxModelForm):
+    class Meta:
+        model = SoftwareReleaseStatus
+        fields = ['release', 'device_role', 'status']
 
 class SoftwareReleaseAssignmentForm(NetBoxModelForm):
     class Meta:
         model = SoftwareReleaseAssignment
-        fields = ['device', 'release', 'currently_active']
+        fields = ['device', 'release']
 
 class DeviceTypeFamilyForm(NetBoxModelForm):
     class Meta:
