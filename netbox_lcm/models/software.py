@@ -107,7 +107,7 @@ class SoftwareReleaseCompatability(PrimaryModel):
     class Meta:
         verbose_name = "Software Release Statuse"
         unique_together = ('software_release', 'devicetype_family')
-        ordering = ['software_release', 'devicetype_family']
+        ordering = ['devicetype_family','software_release']
 
     def __str__(self):
         return f"{self.software_release.version} - {self.devicetype_family}"
