@@ -30,19 +30,19 @@ class DeviceTypeFamilyFilterSet(NetBoxModelFilterSet):
         fields = ['name', 'manufacturer', 'device_types']
 
 class SoftwareReleaseFilterSet(NetBoxModelFilterSet):
+    class Meta:
+        model = SoftwareRelease
+        fields = ['product', 'version']
+
+
+class SoftwareReleaseStatusFilterSet(NetBoxModelFilterSet):
     devicetype_family = django_filters.ModelChoiceFilter(
         queryset=DeviceTypeFamily.objects.all()
     )
 
     class Meta:
-        model = SoftwareRelease
-        fields = ['product', 'devicetype_family', 'version']
-
-
-class SoftwareReleaseStatusFilterSet(NetBoxModelFilterSet):
-    class Meta:
         model = SoftwareReleaseStatus
-        fields = ['release', 'device_role', 'status']
+        fields = ['release', 'devicetype_family', 'device_role', 'status']
 
 
 class SoftwareProductFilterSet(NetBoxModelFilterSet):
@@ -60,8 +60,22 @@ class SoftwareProductFilterSet(NetBoxModelFilterSet):
         ]
 
 class SoftwareReleaseAssignmentFilterSet(NetBoxModelFilterSet):
+    is_active = django_filters.BooleanFilter(
+        method='filter_is_active',
+        label='Active Assignment',
+        widget=django_filters.widgets.BooleanWidget(),
+        initial=True  # Important for defaulting in form
+    )
+
+    def filter_is_active(self, queryset, name, value):
+        if value is True:
+            return queryset.filter(unassigned_on__isnull=True)
+        elif value is False:
+            return queryset.filter(unassigned_on__isnull=False)
+        return queryset
+
     class Meta:
         model = SoftwareReleaseAssignment
         fields = (
-            'device', 'release', 'assigned_on',
+            'device', 'release', 'assigned_on', 'is_active'
         )

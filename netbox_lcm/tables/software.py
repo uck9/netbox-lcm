@@ -69,13 +69,11 @@ class SoftwareProductTable(NetBoxTable):
 
 class SoftwareReleaseTable(NetBoxTable):
     product = tables.Column(linkify=True)
-    devicetype_family = tables.Column(linkify=True)
     version = tables.Column()
-    status = ChoiceFieldColumn()
 
     class Meta(NetBoxTable.Meta):
         model = SoftwareRelease
-        fields = ('id', 'product', 'version', 'devicetype_family', 'status')
+        fields = ('id', 'product', 'version', 'status')
 
 class SoftwareReleaseStatusTable(NetBoxTable):
     release = tables.Column(
@@ -90,19 +88,28 @@ class SoftwareReleaseStatusTable(NetBoxTable):
         verbose_name='Manufacturer'
     )
     devicetype_family = tables.Column(
-        accessor='release.devicetype_family.name',
+        linkify=True,
         verbose_name='Device Type Family'
     )
 
     class Meta(NetBoxTable.Meta):
         model = SoftwareReleaseStatus
-        fields = ('release', 'manufacturer', 'devicetype_family', 'device_role', 'status')
+        fields = ('id', 'release', 'manufacturer', 'devicetype_family', 'device_role', 'status')
 
 class SoftwareReleaseAssignmentTable(NetBoxTable):
     device = tables.Column(linkify=True)
     release = tables.Column(linkify=True)
-    currently_active = tables.BooleanColumn()
+    is_active = tables.Column(
+        accessor='unassigned_on', 
+        verbose_name='Active', 
+        orderable=False
+    )
+
+    def render_is_active(self, record):
+        return '✅' if record.unassigned_on is None else '❌'
 
     class Meta(NetBoxTable.Meta):
         model = SoftwareReleaseAssignment
-        fields = ('id', 'device', 'release', 'assigned', 'currently_active')
+        fields = ('id', 'device', 'release', 'assigned_on', 'is_active', 
+            'unassigned_on'
+        )

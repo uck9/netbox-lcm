@@ -66,6 +66,13 @@ class SoftwareReleaseAssignmentListView(generic.ObjectListView):
     table = SoftwareReleaseAssignmentTable
     filterset = SoftwareReleaseAssignmentFilterSet
 
+    def get(self, request, *args, **kwargs):
+        # If no filter is applied, apply default is_active=True
+        if not request.GET:
+            request.GET = request.GET.copy()
+            request.GET['is_active'] = 'true'
+        return super().get(request, *args, **kwargs)
+
 @register_model_view(SoftwareReleaseAssignment)
 class SoftwareReleaseAssignmentView(generic.ObjectView):
     queryset = SoftwareReleaseAssignment.objects.all()

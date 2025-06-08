@@ -50,30 +50,29 @@ class SoftwareProductSerializer(NetBoxModelSerializer):
 class SoftwareReleaseSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_lcm-api:softwarerelease-detail')
     product = serializers.PrimaryKeyRelatedField(queryset=SoftwareProduct.objects.all())
+
+    class Meta:
+        model = SoftwareRelease
+        fields = [
+            'id', 'url', 'display', 'product', 'version',
+            'created', 'last_updated',
+        ]
+
+class SoftwareReleaseStatusSerializer(NetBoxModelSerializer):
+    release = serializers.PrimaryKeyRelatedField(queryset=SoftwareRelease.objects.all())
+    device_role = serializers.PrimaryKeyRelatedField(queryset=DeviceRole.objects.all(), allow_null=True)
     devicetype_family = DeviceTypeFamilySerializer(read_only=True)
     devicetype_family_id = serializers.PrimaryKeyRelatedField(
         queryset=DeviceTypeFamily.objects.all(),
         source='devicetype_family',
         write_only=True
     )
-    device_role = serializers.PrimaryKeyRelatedField(queryset=DeviceRole.objects.all(), allow_null=True)
-
-    class Meta:
-        model = SoftwareRelease
-        fields = [
-            'id', 'url', 'display', 'product', 'version',
-            'devicetype_family', 'devicetype_family_id',
-            'device_role', 'status',
-            'created', 'last_updated',
-        ]
-class SoftwareReleaseStatusSerializer(NetBoxModelSerializer):
-    release = serializers.PrimaryKeyRelatedField(queryset=SoftwareRelease.objects.all())
-    device_role = serializers.PrimaryKeyRelatedField(queryset=DeviceRole.objects.all(), allow_null=True)
 
     class Meta:
         model = SoftwareReleaseStatus
         fields = [
             'id', 'url', 'display',
+            'devicetype_family', 'devicetype_family_id',
             'release', 'device_role', 'status',
             'created', 'last_updated',
         ]
@@ -87,6 +86,6 @@ class SoftwareReleaseAssignmentSerializer(NetBoxModelSerializer):
         model = SoftwareReleaseAssignment
         fields = [
             'id', 'url', 'display', 'device', 'release',
-            'assigned', 'currently_active',
+            'assigned_on', 'unassigned_on',
             'created', 'last_updated',
         ]

@@ -71,10 +71,6 @@ class SoftwareRelease(PrimaryModel):
         on_delete=models.CASCADE, 
         related_name='releases'
     )
-    devicetype_family = models.ForeignKey(
-        to='DeviceTypeFamily', 
-        on_delete=models.PROTECT
-    )
     version = models.CharField(max_length=100)
     version_alias = models.CharField(max_length=100)
     notes = models.CharField(
@@ -84,11 +80,11 @@ class SoftwareRelease(PrimaryModel):
     )
 
     class Meta:
-        unique_together = ('product', 'version', 'devicetype_family')
+        unique_together = ('product', 'version')
         ordering = ['product__name', 'version']
 
     def __str__(self):
-        return f"{self.version} [Family: {self.devicetype_family}]"
+        return f"{self.version}"
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_lcm:softwarerelease', args=[self.pk])
@@ -96,6 +92,10 @@ class SoftwareRelease(PrimaryModel):
 
 class SoftwareReleaseStatus(PrimaryModel):
     release = models.ForeignKey('SoftwareRelease', on_delete=models.CASCADE, related_name='status_assignments')
+    devicetype_family = models.ForeignKey(
+        to='DeviceTypeFamily', 
+        on_delete=models.PROTECT
+    )
     device_role = models.ForeignKey(DeviceRole, null=True, blank=True, on_delete=models.CASCADE)
     status = models.CharField(max_length=50, 
         choices=SoftwareReleaseStatusChoices, 
@@ -103,7 +103,7 @@ class SoftwareReleaseStatus(PrimaryModel):
     )
 
     class Meta:
-        verbose_name = "Software Releases Statuse"
+        verbose_name = "Software Release Statuse"
         unique_together = ('release', 'device_role')
         ordering = ['release', 'device_role']
 
@@ -120,7 +120,7 @@ class SoftwareReleaseStatus(PrimaryModel):
 
 class SoftwareReleaseAssignment(PrimaryModel):
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
-    release = models.ForeignKey(SoftwareRelease, on_delete=models.CASCADE)
+    release = models.ForeignKey(SoftwareReleaseStatus, on_delete=models.CASCADE)
     assigned_on = models.DateTimeField(auto_now_add=True)
     unassigned_on = models.DateTimeField(null=True, blank=True)
 
@@ -134,7 +134,7 @@ class SoftwareReleaseAssignment(PrimaryModel):
         ]
 
     def __str__(self):
-        return f"{self.device} => {self.release}"
+        return f"{self.device}"
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_lcm:softwarereleaseassignment', args=[self.pk])
