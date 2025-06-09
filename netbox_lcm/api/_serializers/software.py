@@ -1,9 +1,12 @@
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from netbox.api.serializers import NetBoxModelSerializer
+from netbox.api.serializers import WritableNestedSerializer
 from dcim.api.serializers import DeviceSerializer, DeviceTypeSerializer, DeviceRoleSerializer
 from dcim.models import Device, DeviceType, DeviceRole, Manufacturer
-from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, SoftwareReleaseCompatibility, SoftwareReleaseAssignment
+from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, \
+    SoftwareReleaseCompatibility, SoftwareReleaseAssignment, SoftwareReleaseCompatibilityStatus
+from netbox_lcm.choices import SoftwareReleaseStatusChoices
 
 
 __all__ = (
@@ -11,8 +14,12 @@ __all__ = (
     'SoftwareProductSerializer',
     'SoftwareReleaseSerializer',
     'SoftwareReleaseCompatibilitySerializer',
+    'SoftwareReleaseCompatibilityStatusSerializer',
     'SoftwareReleaseAssignmentSerializer',
+    'SoftwareReleaseCompatibilityStatusSerializer',
+    'SoftwareReleaseCompatibilityStatusNestedSerializer',
 )
+
 
 class DeviceTypeFamilySerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(
@@ -34,6 +41,7 @@ class DeviceTypeFamilySerializer(NetBoxModelSerializer):
             'created', 'last_updated'
         ]
 
+
 class SoftwareProductSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         view_name='plugins-api:netbox_lcm-api:softwareproduct-detail'
@@ -47,6 +55,7 @@ class SoftwareProductSerializer(NetBoxModelSerializer):
             'documentation_url', 'created', 'last_updated',
         ]
 
+
 class SoftwareReleaseSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_lcm-api:softwarerelease-detail')
     product = serializers.PrimaryKeyRelatedField(queryset=SoftwareProduct.objects.all())
@@ -57,6 +66,7 @@ class SoftwareReleaseSerializer(NetBoxModelSerializer):
             'id', 'url', 'display', 'product', 'version',
             'created', 'last_updated',
         ]
+
 
 class SoftwareReleaseCompatibilitySerializer(NetBoxModelSerializer):
     software_release = serializers.PrimaryKeyRelatedField(queryset=SoftwareRelease.objects.all())
@@ -74,6 +84,42 @@ class SoftwareReleaseCompatibilitySerializer(NetBoxModelSerializer):
             'devicetype_family', 'devicetype_family_id',
             'software_release', 'created', 'last_updated',
         ]
+
+
+class SoftwareReleaseCompatibilityNestedSerializer(WritableNestedSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_lcm:softwarereleasecompatibility-detail'
+    )
+
+    class Meta:
+        model = SoftwareReleaseCompatibility
+        fields = ['id', 'url', 'software_release', 'device_type_family']
+
+
+class SoftwareReleaseCompatibilityStatusSerializer(NetBoxModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_lcm:softwarereleasecompatibilitystatus-detail'
+    )
+    compatibility = SoftwareReleaseCompatibilityNestedSerializer()
+    device_role = DeviceRoleSerializer()
+    status = serializers.ChoiceField(choices=SoftwareReleaseStatusChoices)
+
+    class Meta:
+        model = SoftwareReleaseCompatibilityStatus
+        fields = [
+            'id', 'url', 'compatibility', 'device_role', 'status',
+        ]
+
+
+class SoftwareReleaseCompatibilityStatusNestedSerializer(WritableNestedSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_lcm:softwarereleasecompatibilitystatus-detail'
+    )
+
+    class Meta:
+        model = SoftwareReleaseCompatibilityStatus
+        fields = ['id', 'url', 'status']
+
 
 class SoftwareReleaseAssignmentSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_lcm-api:softwarereleaseassignment-detail')

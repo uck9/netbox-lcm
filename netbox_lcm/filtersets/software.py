@@ -2,10 +2,16 @@ import django_filters
 from django.utils.translation import gettext as _
 from django.db.models import Q
 
-from dcim.models import DeviceType, Manufacturer
+from dcim.models import DeviceRole, DeviceType, Manufacturer
 from netbox.filtersets import NetBoxModelFilterSet
-from netbox_lcm.models.software import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, \
-    SoftwareReleaseCompatibility, SoftwareReleaseAssignment
+from netbox_lcm.models.software import (
+    DeviceTypeFamily, 
+    SoftwareProduct,
+    SoftwareRelease,
+    SoftwareReleaseCompatibility, 
+    SoftwareReleaseAssignment,
+    SoftwareReleaseCompatibilityStatus
+)
 
 
 __all__ = (
@@ -13,6 +19,7 @@ __all__ = (
     'SoftwareProductFilterSet',
     'SoftwareReleaseFilterSet',
     'SoftwareReleaseCompatibilityFilterSet',
+    'SoftwareReleaseCompatibilityStatusFilterSet',
     'SoftwareReleaseAssignmentFilterSet',
 )
 
@@ -82,3 +89,20 @@ class SoftwareReleaseAssignmentFilterSet(NetBoxModelFilterSet):
         fields = (
             'device', 'release', 'assigned_on', 'is_active'
         )
+
+
+class SoftwareReleaseCompatibilityStatusFilterSet(NetBoxModelFilterSet):
+    compatibility_id = django_filters.ModelChoiceFilter(
+        queryset=SoftwareReleaseCompatibilityStatus.objects.all(),
+        field_name='compatibility__id',
+        label='Compatibility'
+    )
+    device_role_id = django_filters.ModelChoiceFilter(
+        queryset=DeviceRole.objects.all(),
+        field_name='device_role__id',
+        label='Device Role'
+    )
+
+    class Meta:
+        model = SoftwareReleaseCompatibilityStatus
+        fields = ['compatibility_id', 'device_role_id', 'status']

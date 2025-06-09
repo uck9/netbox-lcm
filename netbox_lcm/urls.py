@@ -4,7 +4,7 @@ from netbox.views.generic import ObjectChangeLogView
 from . import views
 from netbox_lcm.models import DeviceTypeFamily, HardwareLifecycle, HardwareLifecyclePlan, SupportContract, License, \
     LicenseAssignment, SupportContractAssignment, SupportSKU, Vendor, SoftwareProduct, SoftwareRelease, \
-    SoftwareReleaseAssignment, SoftwareReleaseCompatibility
+    SoftwareReleaseAssignment, SoftwareReleaseCompatibility, SoftwareReleaseCompatibilityStatus
 
 urlpatterns = [
     path('hardware/', views.HardwareLifecycleListView.as_view(), name='hardwarelifecycle_list'),
@@ -127,6 +127,15 @@ urlpatterns = [
     path('software-release-compatibility/<int:pk>/delete/', views.SoftwareReleaseCompatibilityDeleteView.as_view(), name='softwarereleasecompatibility_delete'),
     path('software-release-compatibility/<int:pk>/changelog', ObjectChangeLogView.as_view(), \
         name='softwarereleasecompatibility_changelog', kwargs={'model': SoftwareReleaseCompatibility}),
+    
+    path('software-compatibility-status/', views.SoftwareReleaseCompatibilityStatusListView.as_view(), name='softwarecompatibility_list'),
+    path('software-compatibility-status/add/', views.SoftwareReleaseCompatibilityStatusEditView.as_view(), name='softwarecompatibility_add'),
+    path('software-compatibility-status/<int:pk>/', views.SoftwareReleaseCompatibilityStatusView.as_view(), name='softwarecompatibility'),
+    path('software-compatibility-status/<int:pk>/edit/', views.SoftwareReleaseCompatibilityStatusEditView.as_view(), name='softwarecompatibility_edit'),
+    path('software-compatibility-status/<int:pk>/delete/', views.SoftwareReleaseCompatibilityStatusDeleteView.as_view(), name='softwarecompatibility_delete'),
+    path('software-compatibility-status/<int:pk>/changelog', ObjectChangeLogView.as_view(), \
+        name='softwarecompatibilitystatus_changelog', kwargs={'model': SoftwareReleaseCompatibilityStatus}),
+
 
     path('software-release-assignment/', views.SoftwareReleaseAssignmentListView.as_view(), name='softwarereleaseassignment_list'),
     path('software-release-assignment/add/', views.SoftwareReleaseAssignmentEditView.as_view(), name='softwarereleaseassignment_add'),

@@ -2,8 +2,14 @@ from django.utils.translation import gettext as _
 import django_tables2 as tables
 
 from netbox.tables import NetBoxTable, ChoiceFieldColumn
-from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, \
-    SoftwareReleaseAssignment, SoftwareReleaseCompatibility
+from netbox_lcm.models import (
+    DeviceTypeFamily,
+    SoftwareProduct,
+    SoftwareRelease,
+    SoftwareReleaseAssignment,
+    SoftwareReleaseCompatibility,
+    SoftwareReleaseCompatibilityStatus,
+)
 
 
 __all__ = (
@@ -11,6 +17,7 @@ __all__ = (
     'SoftwareProductTable',
     'SoftwareReleaseTable',
     'SoftwareReleaseCompatibilityTable',
+    'SoftwareReleaseCompatibilityStatusTable',
     'SoftwareReleaseAssignmentTable'
 )
 
@@ -109,4 +116,32 @@ class SoftwareReleaseAssignmentTable(NetBoxTable):
         model = SoftwareReleaseAssignment
         fields = ('id', 'device', 'release', 'assigned_on', 'is_active', 
             'unassigned_on'
+        )
+
+
+class SoftwareReleaseCompatibilityStatusTable(NetBoxTable):
+    compatibility = tables.Column(
+        linkify=True,
+        verbose_name="Release Compatibility"
+    )
+    device_role = tables.Column(
+        linkify=True,
+        verbose_name="Device Role",
+        accessor='device_role',
+        default="Default"
+    )
+    status = ChoiceFieldColumn()  # Auto-renders color-coded badge if defined in choices
+
+    class Meta(NetBoxTable.Meta):
+        model = SoftwareReleaseCompatibilityStatus
+        fields = (
+            'id',
+            'compatibility',
+            'device_role',
+            'status',
+        )
+        default_columns = (
+            'compatibility',
+            'device_role',
+            'status',
         )

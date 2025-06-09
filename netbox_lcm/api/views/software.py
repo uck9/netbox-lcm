@@ -1,7 +1,13 @@
 from netbox.api.viewsets import NetBoxModelViewSet
 from dcim.api.views import DeviceViewSet
-from netbox_lcm.models import \
-    DeviceTypeFamily, SoftwareProduct, SoftwareRelease, SoftwareReleaseCompatibility, SoftwareReleaseAssignment
+from netbox_lcm.models import (
+    DeviceTypeFamily, 
+    SoftwareProduct, 
+    SoftwareRelease, 
+    SoftwareReleaseCompatibility, 
+    SoftwareReleaseAssignment,
+    SoftwareReleaseCompatibilityStatus,
+)
 from netbox_lcm.filtersets import (
     DeviceTypeFamilyFilterSet,
     SoftwareProductFilterSet,
@@ -15,6 +21,7 @@ from netbox_lcm.api.serializers import (
     SoftwareReleaseSerializer,
     SoftwareReleaseCompatibilitySerializer,
     SoftwareReleaseAssignmentSerializer,
+    SoftwareReleaseCompatibilityStatusSerializer,
 )
 
 __all__ = (
@@ -22,6 +29,7 @@ __all__ = (
     'SoftwareProductViewSet',
     'SoftwareReleaseViewSet',
     'SoftwareReleaseCompatibilityViewSet',
+    'SoftwareReleaseCompatibilityStatusViewSet',
     'SoftwareReleaseAssignmentViewSet',
 )
 
@@ -49,3 +57,8 @@ class SoftwareReleaseCompatibilityViewSet(NetBoxModelViewSet):
     queryset = SoftwareReleaseCompatibility.objects.all()
     serializer_class = SoftwareReleaseCompatibilitySerializer
     filterset_class = SoftwareReleaseCompatibilityFilterSet
+
+class SoftwareReleaseCompatibilityStatusViewSet(NetBoxModelViewSet):
+    queryset = SoftwareReleaseCompatibilityStatus.objects.all()
+    serializer_class = SoftwareReleaseCompatibilityStatusSerializer
+    filterset_class = SoftwareReleaseCompatibilityStatusFilterSet

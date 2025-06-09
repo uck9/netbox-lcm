@@ -1,11 +1,12 @@
 from django import forms
 from django.utils.translation import gettext as _
 
-from dcim.models import DeviceType, ModuleType, Manufacturer, Device
+from dcim.models import DeviceRole, DeviceType, ModuleType, Manufacturer, Device
 from netbox.forms import NetBoxModelForm
+from netbox_lcm.choices import SoftwareReleaseStatusChoices
 from netbox_lcm.models import DeviceTypeFamily, HardwareLifecycle, HardwareLifecyclePlan, Vendor, SupportContract, \
     LicenseAssignment, License, SupportContractAssignment, SupportSKU, SoftwareProduct, \
-    SoftwareRelease, SoftwareReleaseAssignment, SoftwareReleaseCompatibility
+    SoftwareRelease, SoftwareReleaseAssignment, SoftwareReleaseCompatibility, SoftwareReleaseCompatibilityStatus
 from utilities.forms.fields import DynamicModelChoiceField, DynamicModelMultipleChoiceField
 from utilities.forms.widgets import DatePicker
 
@@ -279,6 +280,31 @@ class SoftwareReleaseCompatibilityForm(NetBoxModelForm):
     class Meta:
         model = SoftwareReleaseCompatibility
         fields = ['devicetype_family', 'software_release']
+
+class SoftwareReleaseCompatibilityStatusForm(NetBoxModelForm):
+    compatibility = DynamicModelChoiceField(
+        queryset=SoftwareReleaseCompatibility.objects.all(),
+        label='Release Compatibility',
+        help_text='Link to the software release and device type family'
+    )
+    device_role = DynamicModelChoiceField(
+        queryset=DeviceRole.objects.all(),
+        required=False,
+        label='Device Role',
+        help_text='Leave blank to define a default status for all roles'
+    )
+    status = forms.ChoiceField(
+        choices=SoftwareReleaseStatusChoices,
+        label='Compatibility Status'
+    )
+
+    class Meta:
+        model = SoftwareReleaseCompatibilityStatus
+        fields = (
+            'compatibility',
+            'device_role',
+            'status',
+        )
 
 class SoftwareReleaseAssignmentForm(NetBoxModelForm):
     class Meta:
