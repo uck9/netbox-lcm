@@ -13,6 +13,7 @@ from netbox_lcm.filtersets import (
     SoftwareProductFilterSet,
     SoftwareReleaseFilterSet,
     SoftwareReleaseCompatibilityFilterSet,
+    SoftwareReleaseCompatibilityStatusFilterSet,
     SoftwareReleaseAssignmentFilterSet,
 )
 from netbox_lcm.api.serializers import (
