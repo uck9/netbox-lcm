@@ -3,14 +3,14 @@ import django_tables2 as tables
 
 from netbox.tables import NetBoxTable, ChoiceFieldColumn
 from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, \
-    SoftwareReleaseAssignment, SoftwareReleaseCompatability
+    SoftwareReleaseAssignment, SoftwareReleaseCompatibility
 
 
 __all__ = (
     'DeviceTypeFamilyTable',
     'SoftwareProductTable',
     'SoftwareReleaseTable',
-    'SoftwareReleaseCompatabilityTable',
+    'SoftwareReleaseCompatibilityTable',
     'SoftwareReleaseAssignmentTable'
 )
 
@@ -75,7 +75,7 @@ class SoftwareReleaseTable(NetBoxTable):
         model = SoftwareRelease
         fields = ('id', 'product', 'version', 'status')
 
-class SoftwareReleaseCompatabilityTable(NetBoxTable):
+class SoftwareReleaseCompatibilityTable(NetBoxTable):
     software_release = tables.Column(
         verbose_name='Software Release Version',
         linkify=True
@@ -90,7 +90,7 @@ class SoftwareReleaseCompatabilityTable(NetBoxTable):
     )
 
     class Meta(NetBoxTable.Meta):
-        model = SoftwareReleaseCompatability
+        model = SoftwareReleaseCompatibility
         fields = ('id', 'devicetype_manufacturer', 'devicetype_family', 'software_release')
 
 class SoftwareReleaseAssignmentTable(NetBoxTable):

@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('dcim', '0200_populate_mac_addresses'),
         ('extras', '0123_journalentry_kind_default'),
-        ('netbox_lcm', '0029_softwarereleasecompatability_and_more'),
+        ('netbox_lcm', '0029_softwarereleasecompatibility_and_more'),
     ]
 
     operations = [
@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('description', models.CharField(blank=True, max_length=200)),
                 ('comments', models.TextField(blank=True)),
                 ('status', models.CharField(max_length=32)),
-                ('compatibility', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='status_by_role', to='netbox_lcm.softwarereleasecompatability')),
+                ('compatibility', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='status_by_role', to='netbox_lcm.softwarereleasecompatibility')),
                 ('device_role', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='dcim.devicerole')),
                 ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
             ],

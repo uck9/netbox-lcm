@@ -3,14 +3,14 @@ from rest_framework import serializers
 from netbox.api.serializers import NetBoxModelSerializer
 from dcim.api.serializers import DeviceSerializer, DeviceTypeSerializer, DeviceRoleSerializer
 from dcim.models import Device, DeviceType, DeviceRole, Manufacturer
-from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, SoftwareReleaseCompatability, SoftwareReleaseAssignment
+from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, SoftwareReleaseCompatibility, SoftwareReleaseAssignment
 
 
 __all__ = (
     'DeviceTypeFamilySerializer',
     'SoftwareProductSerializer',
     'SoftwareReleaseSerializer',
-    'SoftwareReleaseCompatabilitySerializer',
+    'SoftwareReleaseCompatibilitySerializer',
     'SoftwareReleaseAssignmentSerializer',
 )
 
@@ -58,7 +58,7 @@ class SoftwareReleaseSerializer(NetBoxModelSerializer):
             'created', 'last_updated',
         ]
 
-class SoftwareReleaseCompatabilitySerializer(NetBoxModelSerializer):
+class SoftwareReleaseCompatibilitySerializer(NetBoxModelSerializer):
     software_release = serializers.PrimaryKeyRelatedField(queryset=SoftwareRelease.objects.all())
     devicetype_family = DeviceTypeFamilySerializer(read_only=True)
     devicetype_family_id = serializers.PrimaryKeyRelatedField(
@@ -68,7 +68,7 @@ class SoftwareReleaseCompatabilitySerializer(NetBoxModelSerializer):
     )
 
     class Meta:
-        model = SoftwareReleaseCompatability
+        model = SoftwareReleaseCompatibility
         fields = [
             'id', 'url', 'display',
             'devicetype_family', 'devicetype_family_id',

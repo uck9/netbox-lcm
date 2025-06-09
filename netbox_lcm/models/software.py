@@ -11,7 +11,7 @@ __all__ = (
     'DeviceTypeFamily',
     'SoftwareProduct',
     'SoftwareRelease',
-    'SoftwareReleaseCompatability',
+    'SoftwareReleaseCompatibility',
     'SoftwareReleaseCompatibilityStatus',
     'SoftwareReleaseAssignment'
 )
@@ -91,7 +91,7 @@ class SoftwareRelease(PrimaryModel):
         return reverse('plugins:netbox_lcm:softwarerelease', args=[self.pk])
 
 
-class SoftwareReleaseCompatability(PrimaryModel):
+class SoftwareReleaseCompatibility(PrimaryModel):
     software_release = models.ForeignKey('SoftwareRelease', on_delete=models.CASCADE, related_name='status_assignments')
     devicetype_family = models.ForeignKey(
         to='DeviceTypeFamily', 
@@ -105,7 +105,8 @@ class SoftwareReleaseCompatability(PrimaryModel):
     )
 
     class Meta:
-        verbose_name = "Software Release Statuse"
+        verbose_name = "Software Release Compatibility"
+        verbose_name_plural = "Software Release Compatibilities"
         unique_together = ('software_release', 'devicetype_family')
         ordering = ['devicetype_family','software_release']
 
@@ -115,7 +116,7 @@ class SoftwareReleaseCompatability(PrimaryModel):
 
 class SoftwareReleaseCompatibilityStatus(PrimaryModel):
     compatibility = models.ForeignKey(
-        SoftwareReleaseCompatability,
+        SoftwareReleaseCompatibility,
         on_delete=models.CASCADE,
         related_name='status_by_role'
     )
@@ -140,11 +141,9 @@ class SoftwareReleaseCompatibilityStatus(PrimaryModel):
         return f"{self.compatibility} → {self.status}{suffix}"
 
 
-
-
 class SoftwareReleaseAssignment(PrimaryModel):
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
-    release = models.ForeignKey(SoftwareReleaseCompatability, on_delete=models.CASCADE)
+    release = models.ForeignKey(SoftwareReleaseCompatibility, on_delete=models.CASCADE)
     assigned_on = models.DateTimeField(auto_now_add=True)
     unassigned_on = models.DateTimeField(null=True, blank=True)
 

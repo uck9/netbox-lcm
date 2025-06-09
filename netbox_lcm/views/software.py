@@ -1,14 +1,14 @@
 from netbox.views import generic
 from utilities.views import register_model_view, GetRelatedModelsMixin
 
-from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, SoftwareReleaseCompatability, \
+from netbox_lcm.models import DeviceTypeFamily, SoftwareProduct, SoftwareRelease, SoftwareReleaseCompatibility, \
     SoftwareReleaseAssignment
 from netbox_lcm.forms.model_forms import DeviceTypeFamilyForm, SoftwareProductForm, SoftwareReleaseForm, \
-    SoftwareReleaseAssignmentForm, SoftwareReleaseCompatabilityForm
+    SoftwareReleaseAssignmentForm, SoftwareReleaseCompatibilityForm
 from netbox_lcm.tables import DeviceTypeFamilyTable, SoftwareProductTable, SoftwareReleaseTable, \
-    SoftwareReleaseAssignmentTable, SoftwareReleaseCompatabilityTable
+    SoftwareReleaseAssignmentTable, SoftwareReleaseCompatibilityTable
 from netbox_lcm.filtersets import DeviceTypeFamilyFilterSet, SoftwareProductFilterSet, \
-    SoftwareReleaseFilterSet, SoftwareReleaseAssignmentFilterSet, SoftwareReleaseCompatabilityFilterSet
+    SoftwareReleaseFilterSet, SoftwareReleaseAssignmentFilterSet, SoftwareReleaseCompatibilityFilterSet
 
 # SoftwareProduct
 @register_model_view(SoftwareProduct, name='list')
@@ -111,17 +111,17 @@ class DeviceTypeFamilyDeleteView(generic.ObjectDeleteView):
     queryset = DeviceTypeFamily.objects.all()
 
 
-class SoftwareReleaseCompatabilityListView(generic.ObjectListView):
-    queryset = SoftwareReleaseCompatability.objects.all()
-    table = SoftwareReleaseCompatabilityTable
-    filterset = SoftwareReleaseCompatabilityFilterSet
+class SoftwareReleaseCompatibilityListView(generic.ObjectListView):
+    queryset = SoftwareReleaseCompatibility.objects.all()
+    table = SoftwareReleaseCompatibilityTable
+    filterset = SoftwareReleaseCompatibilityFilterSet
 
-class SoftwareReleaseCompatabilityView(generic.ObjectView):
-    queryset = SoftwareReleaseCompatability.objects.all()
+class SoftwareReleaseCompatibilityView(generic.ObjectView):
+    queryset = SoftwareReleaseCompatibility.objects.all()
 
-class SoftwareReleaseCompatabilityEditView(generic.ObjectEditView):
-    queryset = SoftwareReleaseCompatability.objects.all()
-    form = SoftwareReleaseCompatabilityForm
+class SoftwareReleaseCompatibilityEditView(generic.ObjectEditView):
+    queryset = SoftwareReleaseCompatibility.objects.all()
+    form = SoftwareReleaseCompatibilityForm
 
-class SoftwareReleaseCompatabilityDeleteView(generic.ObjectDeleteView):
-    queryset = SoftwareReleaseCompatability.objects.all()
+class SoftwareReleaseCompatibilityDeleteView(generic.ObjectDeleteView):
+    queryset = SoftwareReleaseCompatibility.objects.all()

@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
-from netbox_lcm.models import SoftwareReleaseAssignment
+from netbox_lcm.models import SoftwareReleaseAssignment, SoftwareReleaseCompatibility, SoftwareReleaseCompatibilityStatus
 from netbox_lcm.choices import SoftwareReleaseStatusChoices
 
 #@receiver(post_save, sender=SoftwareReleaseStatus)
@@ -35,3 +35,16 @@ def close_previous_assignment(sender, instance, created, **kwargs):
     for assignment in prior_assignments:
         assignment.unassigned_on = instance.assigned_on or timezone.now()
         assignment.save(update_fields=['unassigned_on'])
+
+
+@receiver(post_save, sender=SoftwareReleaseCompatibility)
+def create_default_status(sender, instance, created, **kwargs):
+    if not created:
+        return
+
+    # Only create if one doesn't already exist
+    SoftwareReleaseCompatibilityStatus.objects.get_or_create(
+        compatibility=instance,
+        device_role=None,
+        defaults={'status': SoftwareReleaseStatusChoices.ACCEPTED}
+    )

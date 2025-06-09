@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='SoftwareReleaseCompatability',
+            name='SoftwareReleaseCompatibility',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='softwarereleaseassignment',
             name='release',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='netbox_lcm.softwarereleasecompatability'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='netbox_lcm.softwarereleasecompatibility'),
         ),
         migrations.DeleteModel(
             name='SoftwareReleaseStatus',
