@@ -30,6 +30,10 @@ class DeviceLifecycleFilterSet(NetBoxModelFilterSet):
         field_name='tenant',
         queryset=Tenant.objects.all()
     )
+    status = django_filters.MultipleChoiceFilter(
+        choices=DeviceStatusChoices,
+        null_value=None
+    )
     manufacturer = django_filters.ModelMultipleChoiceFilter(
         queryset=Manufacturer.objects.all(),
         field_name='device_type__manufacturer',

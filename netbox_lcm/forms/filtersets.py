@@ -242,7 +242,7 @@ class DeviceLifecycleFilterForm(NetBoxModelFilterSetForm):
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
         FieldSet('site', 'tenant_group', 'tenant', name='Organisation Information'),
-        FieldSet('manufacturer', 'device_type', 'has_primary_ip', name='Hardware Information'),
+        FieldSet('status', 'manufacturer', 'device_type', 'has_primary_ip', name='Device Information'),
         FieldSet('has_support_contract', 'support_contract_end_before', 
             'hw_eosec_before', name='Lifecyle Information'),
     )
@@ -261,6 +261,11 @@ class DeviceLifecycleFilterForm(NetBoxModelFilterSetForm):
         required=False,
         selector=True,
         label=_('Tenant')
+    )
+    status = forms.MultipleChoiceField(
+        label=_('Status'),
+        choices=DeviceStatusChoices,
+        required=False
     )
     manufacturer = DynamicModelMultipleChoiceField(
         queryset=Manufacturer.objects.all(),
