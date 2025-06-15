@@ -1,10 +1,11 @@
+from typing import Annotated, Union
+
 import strawberry
 import strawberry_django
-from netbox_lcm import filtersets, models
 
 from core.graphql.filter_mixins import BaseObjectTypeFilterMixin
+from netbox_lcm import filtersets, models
 
-from netbox.graphql.filter_mixins import autotype_decorator, BaseFilterMixin
 
 __all__ = (
     'VendorFilter',
@@ -35,15 +36,14 @@ class SupportContractFilter(BaseObjectTypeFilterMixin):
 
 
 @strawberry_django.filter(models.SupportContractAssignment, lookups=True)
-@autotype_decorator(filtersets.SupportContractAssignmentFilterSet)
 class SupportContractAssignmentFilter(BaseObjectTypeFilterMixin):
-    contract: Annotated['SupportContractFilter', strawberry.lazy('netbox_lifecycle.graphql.filters')] | None = strawberry_django.filter_field()
+    contract: Annotated['SupportContractFilter', strawberry.lazy('netbox_lcm.graphql.filters')] | None = strawberry_django.filter_field()
     contract_id: strawberry.ID | None = strawberry_django.filter_field()
-    sku: Annotated['SupportSKUFilter', strawberry.lazy('netbox_lifecycle.graphql.filters')] | None = strawberry_django.filter_field()
+    sku: Annotated['SupportSKUFilter', strawberry.lazy('netbox_lcm.graphql.filters')] | None = strawberry_django.filter_field()
     sku_id: strawberry.ID | None = strawberry_django.filter_field()
     device: Annotated['DeviceFilter', strawberry.lazy('dcim.graphql.filters')] | None = strawberry_django.filter_field()
     device_id: strawberry.ID | None = strawberry_django.filter_field()
-    license: Annotated['LicenseFilter', strawberry.lazy('netbox_lifecycle.graphql.filters')] | None = strawberry_django.filter_field()
+    license: Annotated['LicenseFilter', strawberry.lazy('netbox_lcm.graphql.filters')] | None = strawberry_django.filter_field()
     license_id: strawberry.ID | None = strawberry_django.filter_field()
 
 
@@ -54,10 +54,10 @@ class LicenseFilter(BaseObjectTypeFilterMixin):
 
 
 @strawberry_django.filter(models.LicenseAssignment, lookups=True)
-@class LicenseAssignmentFilter(BaseObjectTypeFilterMixin):
-    vendor: Annotated['VendorFilter', strawberry.lazy('netbox_lifecycle.graphql.filters')] | None = strawberry_django.filter_field()
+class LicenseAssignmentFilter(BaseObjectTypeFilterMixin):
+    vendor: Annotated['VendorFilter', strawberry.lazy('netbox_lcm.graphql.filters')] | None = strawberry_django.filter_field()
     vendor_id: strawberry.ID | None = strawberry_django.filter_field()
-    license: Annotated['LicenseFilter', strawberry.lazy('netbox_lifecycle.graphql.filters')] | None = strawberry_django.filter_field()
+    license: Annotated['LicenseFilter', strawberry.lazy('netbox_lcm.graphql.filters')] | None = strawberry_django.filter_field()
     license_id: strawberry.ID | None = strawberry_django.filter_field()
     device: Annotated['DeviceFilter', strawberry.lazy('dcim.graphql.filters')] | None = strawberry_django.filter_field()
     device_id: strawberry.ID | None = strawberry_django.filter_field()
