@@ -166,7 +166,7 @@ class SoftwareReleaseAssignment(PrimaryModel):
 class SoftwareCVE(PrimaryModel):
     """SoftwareCVE is the representation of a cve vulnerability record."""
 
-    name = models.CharField(max_length=100, blank=False, unique=True)
+    name = models.CharField(max_length=255, blank=False, unique=True)
     published_date = models.DateField(verbose_name="Published Date")
     last_modified_date = models.DateField(null=True, blank=True, verbose_name="Last Modified Date")
     documentation_url = models.URLField()
