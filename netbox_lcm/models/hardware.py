@@ -160,14 +160,32 @@ class HardwareLifecycle(PrimaryModel):
         return Module.objects.filter(module_type=self.assigned_object).count()
 
     @property
-    def support_expired(self):
+    def vendor_support_expired(self):
         """
         Return True if the current date is greater than the vendor EoS date.
 
         If the current date is less than or equal to the end of support date, return False.
         """
         today = datetime.today().date()
-        return today > getattr(self, "end_of_support")
+        if (getattr(self, "migration_calc_key") == "support"):
+            end_of_date = getattr(self, "end_of_support")
+        else:
+            end_of_date = getattr(self, "end_of_security")
+        return today > end_of_date
+
+    @property
+    def days_to_vendor_eos(self):
+        """
+        Return True if the current date is greater than the vendor EoS date.
+
+        If the current date is less than or equal to the end of support date, return False.
+        """
+        today = datetime.today().date()
+        if (getattr(self, "migration_calc_key") == "support"):
+            end_of_date = getattr(self, "end_of_support")
+        else:
+            end_of_date = getattr(self, "end_of_security")
+        return (self.end_of_support - today).days
 
     @property
     def calc_replacement_year(self):

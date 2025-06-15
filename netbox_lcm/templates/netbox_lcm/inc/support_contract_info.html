@@ -42,6 +42,8 @@
         </tr>
       </table>
     {% else %}
+      <div class="card-actions"><a href="{% url 'plugins:netbox_lcm:supportcontractassignment_add' %}?device={{ object.pk }}&return_url={% url 'dcim:device' pk=object.pk %}" class="btn btn-ghost-primary btn-sm">
+      <span class="mdi mdi-plus-thick" aria-hidden="true"></span> Add Support Contract</a></div>
       </h2>
       <div class="card-body"><span class="text-muted">No Support Contract Associated<span></div>
   {% endif %}

@@ -3,7 +3,7 @@ from django_tables2 import TemplateColumn
 from django.utils.translation import gettext as _
 from django.utils.html import format_html, format_html_join
 
-from netbox.tables import columns, NetBoxTable
+from netbox.tables import NetBoxTable, columns
 
 from dcim.models import Device, DeviceType, Manufacturer
 from tenancy.models import Tenant
@@ -18,8 +18,8 @@ class DeviceLifecycleTable(NetBoxTable):
         linkify=True,
         verbose_name=_('Name')
     )
-    status = tables.Column(
-        verbose_name=_('Status')
+    status = columns.ChoiceFieldColumn(
+        verbose_name=_('Status'),
     )
     serial = tables.Column(
         verbose_name=_("Serial Number")
@@ -60,12 +60,12 @@ class DeviceLifecycleTable(NetBoxTable):
         """,
         verbose_name="HW - EoS"
     )
-    
+
     support_contract_id = TemplateColumn(
         template_code="""
         {% if record.prefetched_contracts %}
             {% for c in record.prefetched_contracts %}
-                {{ c.contract.contract_id }}
+                <a href="{{ c.get_absolute_url }}">{{ c.contract.contract_id }}</a>{% if not forloop.last %}<br>{% endif %}
             {% endfor %}
         {% else %}—{% endif %}
         """,
