@@ -23,7 +23,7 @@ NOT FOR GENERAL PRODUCTION USE AT THIS STAGE - STILL IN DEVELOPMENT AND MAY BE D
 |        | Netbox 3.2.x   | NetBox 4.1.x    | NetBox 4.2.x   | NetBox 4.3.x   |
 |--------|----------------|-----------------|----------------|----------------|
 | 1.0.0+ | Not Compatible |  Compatible     | Compatible     | Not Compatible |
-| 1.0.0+ | Not Compatible |  Not Compatible | Not Compatible | Compatible     |
+| 1.1.7+ | Not Compatible |  Not Compatible | Not Compatible | Compatible     |
 
 ## Installation
 
