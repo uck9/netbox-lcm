@@ -13,8 +13,8 @@ class NetBoxLifeCycle(PluginConfig):
     author = metadata.get('Author')
     author_email = metadata.get('Author-email')
     base_url = 'lifecycle'
-    min_version = '4.1.0'
-    max_version = '4.2.99'
+    min_version = '4.3.0'
+    max_version = '4.3.99'
     required_settings = []
     default_settings = {}
     queues = []
