@@ -45,11 +45,13 @@ class SupportContractAssignmentSerializer(NetBoxModelSerializer):
     sku = SupportSKUSerializer(nested=True, required=False, allow_null=True)
     device = DeviceSerializer(nested=True, required=False, allow_null=True)
     license = LicenseAssignmentSerializer(nested=True, required=False, allow_null=True)
+    start = serializers.DateField(required=False)
+    end_date = serializers.DateField(required=False)
 
     class Meta:
         model = SupportContractAssignment
         fields = (
-            'url', 'id', 'display', 'contract', 'sku', 'device', 'license', 'end', 'tags', 'description', 'comments', 'custom_fields',
+            'url', 'id', 'display', 'contract', 'sku', 'device', 'license', 'start', 'end_date', 'tags', 'description', 'comments', 'custom_fields',
         )
 
-        brief_fields = ('url', 'id', 'display', 'contract', 'sku', 'device', 'license', )
+        brief_fields = ('url', 'id', 'display', 'contract', 'sku', 'device', 'license', 'start', 'end_date')
