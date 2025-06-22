@@ -1,7 +1,7 @@
 import django_filters
 from django.db.models import Q
 from django.utils.translation import gettext as _
-
+from django_filters import CharFilter
 from dcim.models import Manufacturer, Device
 from netbox.filtersets import NetBoxModelFilterSet
 from netbox_lcm.models import Vendor, SupportContract, SupportContractAssignment, SupportSKU, LicenseAssignment, \
@@ -135,10 +135,13 @@ class SupportContractAssignmentFilterSet(NetBoxModelFilterSet):
         to_field_name='status',
         label=_('Device Status'),
     )
+    support_coverage_status = CharFilter(
+        method='filter_support_coverage_status'
+    )
     
     class Meta:
         model = SupportContractAssignment
-        fields = ('id', 'q', 'end')
+        fields = ('id', 'q', 'end', 'support_coverage_status')
 
     def search(self, queryset, name, value):
         if not value.strip():
@@ -152,3 +155,6 @@ class SupportContractAssignmentFilterSet(NetBoxModelFilterSet):
             Q(license__license__name__icontains=value)
         )
         return queryset.filter(qs_filter).distinct()
+    
+    def filter_support_coverage_status(self, queryset, name, value):
+        return queryset.filter(support_coverage_status=value)

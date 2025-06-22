@@ -58,6 +58,7 @@ class SupportContractForm(NetBoxModelForm):
 class SupportContractAssignmentForm(NetBoxModelForm):
     contract = DynamicModelChoiceField(
         queryset=SupportContract.objects.all(),
+        required=False,
         selector=True,
     )
     sku = DynamicModelChoiceField(
@@ -81,7 +82,7 @@ class SupportContractAssignmentForm(NetBoxModelForm):
 
     class Meta:
         model = SupportContractAssignment
-        fields = ('contract', 'sku', 'device', 'license', 'end', 'description', 'comments', 'tags', )
+        fields = ('contract', 'sku', 'device', 'license', 'end', 'support_coverage_status', 'description', 'comments', 'tags', )
         widgets = {
             'end': DatePicker(),
         }

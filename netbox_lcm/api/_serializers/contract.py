@@ -2,10 +2,13 @@ from rest_framework import serializers
 
 from dcim.api.serializers_.devices import DeviceSerializer
 from dcim.api.serializers_.manufacturers import ManufacturerSerializer
+from netbox.api.fields import ChoiceField
 from netbox.api.serializers import NetBoxModelSerializer
 from netbox_lcm.api._serializers.license import LicenseAssignmentSerializer
 from netbox_lcm.api._serializers.vendor import VendorSerializer
+from netbox_lcm.choices.contract import SupportCoverageStatusChoices
 from netbox_lcm.models import Vendor, SupportContract, SupportContractAssignment, SupportSKU
+from netbox.api.fields import ChoiceField
 
 __all__ = (
     'SupportSKUSerializer',
@@ -44,6 +47,7 @@ class SupportContractAssignmentSerializer(NetBoxModelSerializer):
     contract = SupportContractSerializer(nested=True)
     sku = SupportSKUSerializer(nested=True, required=False, allow_null=True)
     device = DeviceSerializer(nested=True, required=False, allow_null=True)
+    support_coverage_status = ChoiceField(choices=SupportCoverageStatusChoices)
     license = LicenseAssignmentSerializer(nested=True, required=False, allow_null=True)
     start = serializers.DateField(required=False)
     end_date = serializers.DateField(required=False)
@@ -51,7 +55,8 @@ class SupportContractAssignmentSerializer(NetBoxModelSerializer):
     class Meta:
         model = SupportContractAssignment
         fields = (
-            'url', 'id', 'display', 'contract', 'sku', 'device', 'license', 'start', 'end_date', 'tags', 'description', 'comments', 'custom_fields',
+            'url', 'id', 'display', 'contract', 'sku', 'device', 'license', 'start', 'end_date', 
+            'support_coverage_status', 'tags', 'description', 'comments', 'custom_fields',
         )
 
-        brief_fields = ('url', 'id', 'display', 'contract', 'sku', 'device', 'license', 'start', 'end_date')
+        brief_fields = ('url', 'id', 'display', 'contract', 'sku', 'device', 'license', 'start', 'end_date', 'support_coverage_status')
