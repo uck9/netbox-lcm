@@ -96,8 +96,8 @@ class SupportContractAssignmentTable(NetBoxTable):
         accessor='device__status',
         orderable=True,
     )
-    support_coverage_status = tables.Column(
-        verbose_name=_('Support Status')
+    support_coverage_status = ChoiceFieldColumn(
+        verbose_name=_('Support Coverage Status')
     )
     license_name = tables.Column(
         verbose_name=_('License'),
@@ -124,7 +124,7 @@ class SupportContractAssignmentTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = SupportContractAssignment
         fields = (
-            'id', 'pk', 'contract', 'sku', 'device_name', 'license_name', 'device_model', 'device_serial', 'support_ccoverage_status', 'quantity',
+            'id', 'pk', 'contract', 'sku', 'device_name', 'license_name', 'device_model', 'device_serial', 'support_coverage_status', 'quantity',
             'renewal', 'end', 'tags', 'description', 'comments',
         )
         default_columns = (

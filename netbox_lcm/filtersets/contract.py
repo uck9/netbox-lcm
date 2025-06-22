@@ -6,6 +6,7 @@ from dcim.models import Manufacturer, Device
 from netbox.filtersets import NetBoxModelFilterSet
 from netbox_lcm.models import Vendor, SupportContract, SupportContractAssignment, SupportSKU, LicenseAssignment, \
     License
+from netbox_lcm.choices.contract import SupportCoverageStatusChoices
 
 __all__ = (
     'SupportContractFilterSet',
@@ -135,8 +136,10 @@ class SupportContractAssignmentFilterSet(NetBoxModelFilterSet):
         to_field_name='status',
         label=_('Device Status'),
     )
-    support_coverage_status = CharFilter(
-        method='filter_support_coverage_status'
+    support_coverage_status = django_filters.MultipleChoiceFilter(
+        choices=SupportCoverageStatusChoices,
+        field_name='support_coverage_status',
+
     )
     
     class Meta:
@@ -155,6 +158,3 @@ class SupportContractAssignmentFilterSet(NetBoxModelFilterSet):
             Q(license__license__name__icontains=value)
         )
         return queryset.filter(qs_filter).distinct()
-    
-    def filter_support_coverage_status(self, queryset, name, value):
-        return queryset.filter(support_coverage_status=value)
