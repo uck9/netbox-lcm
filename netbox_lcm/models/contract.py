@@ -185,6 +185,11 @@ class SupportContractAssignment(PrimaryModel):
             return
         return DeviceStatusChoices.colors.get(self.device.status)
 
+    def get_support_coverage_status_color(self):
+        if self.device is None:
+            return
+        return SupportCoverageStatusChoices.colors.get(self.support_coverage_status)
+
     @property
     def assignment_type(self):
         if self.license:

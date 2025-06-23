@@ -96,9 +96,7 @@ class SupportContractAssignmentTable(NetBoxTable):
         accessor='device__status',
         orderable=True,
     )
-    support_coverage_status = ChoiceFieldColumn(
-        verbose_name=_('Support Coverage Status')
-    )
+    support_coverage_status = ChoiceFieldColumn()
     license_name = tables.Column(
         verbose_name=_('License'),
         accessor='license__license__name',
