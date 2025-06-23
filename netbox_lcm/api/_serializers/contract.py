@@ -44,6 +44,7 @@ class SupportContractSerializer(NetBoxModelSerializer):
 
 class SupportContractAssignmentSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_lcm-api:supportcontractassignment-detail')
+    assignment_type = serializers.SerializerMethodField()
     contract = SupportContractSerializer(nested=True)
     sku = SupportSKUSerializer(nested=True, required=False, allow_null=True)
     device = DeviceSerializer(nested=True, required=False, allow_null=True)
@@ -52,11 +53,17 @@ class SupportContractAssignmentSerializer(NetBoxModelSerializer):
     start = serializers.DateField(required=False)
     end_date = serializers.DateField(required=False)
 
+    def get_assignment_type(self, obj):
+        if obj.license:
+            return 'license'
+        else:
+            return 'device'
+
     class Meta:
         model = SupportContractAssignment
         fields = (
-            'url', 'id', 'display', 'contract', 'sku', 'device', 'license', 'start', 'end_date', 
+            'url', 'id', 'display', 'assignment_type', 'contract', 'sku', 'device', 'license', 'start', 'end_date', 
             'support_coverage_status', 'tags', 'description', 'comments', 'custom_fields',
         )
 
-        brief_fields = ('url', 'id', 'display', 'contract', 'sku', 'device', 'license', 'start', 'end_date', 'support_coverage_status')
+        brief_fields = ('url', 'id', 'display', 'assignment_type', 'contract', 'sku', 'device', 'license', 'start', 'end_date', 'support_coverage_status')

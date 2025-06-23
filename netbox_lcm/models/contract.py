@@ -5,7 +5,7 @@ from django.db.models.functions import Lower
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from netbox_lcm.choices.contract import SupportCoverageStatusChoices
+from netbox_lcm.choices import SupportCoverageStatusChoices
 from dcim.choices import DeviceStatusChoices
 from netbox.models import PrimaryModel
 
@@ -185,17 +185,30 @@ class SupportContractAssignment(PrimaryModel):
             return
         return DeviceStatusChoices.colors.get(self.device.status)
 
+    @property
+    def assignment_type(self):
+        if self.license:
+            return 'license'
+        else:
+            return 'device'
+    
+
     def clean(self):
         if self.contract:
-            self.support_coverage_status = SupportCoverageStatusChoices.VENDOR_SUPPORTED
+            if not self.support_coverage_status == SupportCoverageStatusChoices.VENDOR_CONTRACT_ATTACHED:
+                raise ValidationError({
+                    'support_coverage_status': _('Contract can only be specified when "Supported - Vendor Contract Attached" is selected.')
+                })
+            else:
+                self.support_coverage_status = SupportCoverageStatusChoices.VENDOR_CONTRACT_ATTACHED
         elif not self.contract:
             if not self.support_coverage_status:
                 raise ValidationError({
                     'support_coverage_status': _('A reason must be specified if no contract is assigned.')
                 })
-            elif self.support_coverage_status == SupportCoverageStatusChoices.VENDOR_SUPPORTED:
+            elif self.support_coverage_status == SupportCoverageStatusChoices.VENDOR_CONTRACT_ATTACHED:
                 raise ValidationError({
-                    'support_coverage_status': _('"Under Vendor Support" can only be used when a contract is assigned.')
+                    'support_coverage_status': _('"Supported - Vendor Contract Attached" can only be used when a contract is assigned.')
                 })
 
         # Uniqueness constraints
