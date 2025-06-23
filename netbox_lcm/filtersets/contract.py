@@ -1,11 +1,12 @@
 import django_filters
 from django.db.models import Q
 from django.utils.translation import gettext as _
-
+from django_filters import CharFilter
 from dcim.models import Manufacturer, Device
 from netbox.filtersets import NetBoxModelFilterSet
 from netbox_lcm.models import Vendor, SupportContract, SupportContractAssignment, SupportSKU, LicenseAssignment, \
     License
+from netbox_lcm.choices.contract import SupportCoverageStatusChoices
 
 __all__ = (
     'SupportContractFilterSet',
@@ -135,10 +136,16 @@ class SupportContractAssignmentFilterSet(NetBoxModelFilterSet):
         to_field_name='status',
         label=_('Device Status'),
     )
+    support_coverage_status = django_filters.MultipleChoiceFilter(
+        choices=SupportCoverageStatusChoices,
+        field_name='support_coverage_status',
+
+    )
     
     class Meta:
         model = SupportContractAssignment
-        fields = ('id', 'q', 'end')
+        fields = ('id', 'q', 'end', 'support_coverage_status')
+
 
     def search(self, queryset, name, value):
         if not value.strip():

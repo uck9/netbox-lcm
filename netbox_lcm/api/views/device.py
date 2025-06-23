@@ -5,7 +5,7 @@ from netbox_lcm.models import HardwareLifecycle, SupportContractAssignment
 from dcim.models import Device
 
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import OuterRef, Subquery, Prefetch
+from django.db.models import Count, OuterRef, Subquery, Prefetch
 
 __all__ = (
     'DeviceLifecycleViewSet',
@@ -19,9 +19,22 @@ class DeviceLifecycleViewSet(NetBoxModelViewSet):
     
     def get_queryset(self):
         device_type_ct = ContentType.objects.get_for_model(Device._meta.get_field('device_type').related_model)
+        device_level_status = SupportContractAssignment.objects.filter(
+            device=OuterRef('pk'),
+            license__isnull=True,
+            support_coverage_status__isnull=False
+        ).exclude(support_coverage_status='').order_by(
+            '-support_coverage_status',
+            '-end',
+            '-pk'
+        )
 
         # Base queryset
         qs = Device.objects.annotate(
+            support_contract_count=Count('contracts'),
+            support_coverage_status=Subquery(
+                device_level_status.values('support_coverage_status')[:1]
+            ),
             hw_end_of_sale=Subquery(
                 HardwareLifecycle.objects.filter(
                     assigned_object_type=device_type_ct,

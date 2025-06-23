@@ -7,6 +7,7 @@ from django.forms import CharField, DateField, NullBooleanField, Select
 from dcim.choices import DeviceStatusChoices
 from dcim.models import Device, DeviceType, Manufacturer, Site
 from tenancy.models import Tenant, TenantGroup
+from netbox_lcm.choices.contract import SupportCoverageStatusChoices
 from netbox.forms import NetBoxModelFilterSetForm
 from netbox_lcm.models import HardwareLifecycle, HardwareLifecyclePlan, SupportContract, \
     Vendor, License, LicenseAssignment, SupportContractAssignment, SupportSKU
@@ -164,6 +165,7 @@ class SupportContractAssignmentFilterForm(NetBoxModelFilterSetForm):
     model = SupportContractAssignment
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
+        FieldSet('support_coverage_status', name='Coverage'),
         FieldSet('contract_id', 'device_id', 'license_id', 'sku_id', 'device_status', name='Assignment'),
         FieldSet('end__lt', name='Dates'),
     )
@@ -186,7 +188,7 @@ class SupportContractAssignmentFilterForm(NetBoxModelFilterSetForm):
         label=_('Devices'),
     )
     device_status = forms.MultipleChoiceField(
-        label=_('Status'),
+        label=_('Device Status'),
         choices=DeviceStatusChoices,
         required=False
     )
@@ -200,6 +202,11 @@ class SupportContractAssignmentFilterForm(NetBoxModelFilterSetForm):
         required=False,
         label=_('Contract End before'),
         widget=DatePicker,
+    )
+    support_coverage_status = forms.MultipleChoiceField(
+        label=_('Support Coverage Status'),
+        choices=SupportCoverageStatusChoices,
+        required=False
     )
     tag = TagFilterField(model)
 

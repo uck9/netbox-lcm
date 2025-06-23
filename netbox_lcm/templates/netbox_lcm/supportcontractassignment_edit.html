@@ -5,13 +5,6 @@
 {% block form %}
     <div class="field-group my-5">
       <div class="row mb-2">
-        <h5 class="offset-sm-3">Contract</h5>
-      </div>
-      {% render_field form.contract %}
-      {% render_field form.sku %}
-    </div>
-    <div class="field-group my-5">
-      <div class="row mb-2">
         <h5 class="offset-sm-3">Assignment</h5>
       </div>
       <div class="row mb-2">
@@ -38,6 +31,19 @@
           {% render_field form.license %}
         </div>
       </div>
+    </div>
+    <div class="field-group my-5">
+      <div class="row mb-2">
+        <h5 class="offset-sm-3">Contract</h5>
+      </div>
+      {% render_field form.contract %}
+      {% render_field form.sku %}
+    </div>
+    <div class="field-group my-5">
+      <div class="row mb-2">
+        <h5 class="offset-sm-3">Support Coverage Status</h5>
+      </div>
+      {% render_field form.support_coverage_status %}
     </div>
     <div class="field-group my-5">
       <div class="row mb-2">

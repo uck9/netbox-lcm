@@ -140,7 +140,7 @@ class HardwareLifecycle(PrimaryModel):
         return f'Device Type: {self.assigned_object.model}'
 
     @property
-    def is_currently_supported(self):
+    def is_supported(self):
         """
         Return False if the current date is greater than the selected EoX date.
 
@@ -158,20 +158,6 @@ class HardwareLifecycle(PrimaryModel):
         if isinstance(self.assigned_object, DeviceType):
             return Device.objects.filter(device_type=self.assigned_object).count()
         return Module.objects.filter(module_type=self.assigned_object).count()
-
-    @property
-    def vendor_support_expired(self):
-        """
-        Return True if the current date is greater than the vendor EoS date.
-
-        If the current date is less than or equal to the end of support date, return False.
-        """
-        today = datetime.today().date()
-        if (getattr(self, "migration_calc_key") == "support"):
-            end_of_date = getattr(self, "end_of_support")
-        else:
-            end_of_date = getattr(self, "end_of_security")
-        return today > end_of_date
 
     @property
     def days_to_vendor_eos(self):

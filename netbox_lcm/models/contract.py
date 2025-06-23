@@ -5,6 +5,7 @@ from django.db.models.functions import Lower
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
+from netbox_lcm.choices import SupportCoverageStatusChoices
 from dcim.choices import DeviceStatusChoices
 from netbox.models import PrimaryModel
 
@@ -144,6 +145,12 @@ class SupportContractAssignment(PrimaryModel):
         verbose_name=_('End Date'),
         help_text=_('A unique end date varying from the contract')
     )
+    support_coverage_status = models.CharField(
+        max_length=32,
+        choices=SupportCoverageStatusChoices,
+        blank=True,
+        help_text=_("Support Coverage Status")
+    )
 
     clone_fields = (
         'contract', 'sku', 'end',
@@ -161,8 +168,8 @@ class SupportContractAssignment(PrimaryModel):
 
     def __str__(self):
         if self.license and self.device:
-            return f'{self.device} ({self.license}): {self.contract.contract_id}'
-        return f'{self.device}: {self.contract.contract_id}'
+            return f'{self.device} ({self.license}): {self.contract.contract_id if self.contract else self.get_support_coverage_status_display()}'
+        return f'{self.device}: {self.contract.contract_id if self.contract else self.get_support_coverage_status_display()}'
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_lcm:supportcontractassignment', args=[self.pk])
@@ -178,16 +185,45 @@ class SupportContractAssignment(PrimaryModel):
             return
         return DeviceStatusChoices.colors.get(self.device.status)
 
+    def get_support_coverage_status_color(self):
+        if self.device is None:
+            return
+        return SupportCoverageStatusChoices.colors.get(self.support_coverage_status)
+
+    @property
+    def assignment_type(self):
+        if self.license:
+            return 'license'
+        else:
+            return 'device'
+    
+
     def clean(self):
-        if self.device and self.license and SupportContractAssignment.objects.filter(
-                contract=self.contract, device=self.device, license=self.license, sku=self.sku
-        ).exclude(pk=self.pk).count() > 0:
+        if self.contract:
+            if not self.support_coverage_status == SupportCoverageStatusChoices.VENDOR_CONTRACT_ATTACHED:
+                raise ValidationError({
+                    'support_coverage_status': _('Contract can only be specified when "Supported - Vendor Contract Attached" is selected.')
+                })
+            else:
+                self.support_coverage_status = SupportCoverageStatusChoices.VENDOR_CONTRACT_ATTACHED
+        elif not self.contract:
+            if not self.support_coverage_status:
+                raise ValidationError({
+                    'support_coverage_status': _('A reason must be specified if no contract is assigned.')
+                })
+            elif self.support_coverage_status == SupportCoverageStatusChoices.VENDOR_CONTRACT_ATTACHED:
+                raise ValidationError({
+                    'support_coverage_status': _('"Supported - Vendor Contract Attached" can only be used when a contract is assigned.')
+                })
+
+        # Uniqueness constraints
+        qs = SupportContractAssignment.objects.filter(
+            device=self.device, license=self.license, sku=self.sku
+        ).exclude(pk=self.pk)
+
+        if self.device and self.license and self.contract and qs.filter(contract=self.contract).exists():
             raise ValidationError('Device or License must be unique')
-        elif self.device and not self.license and SupportContractAssignment.objects.filter(
-                contract=self.contract, device=self.device, sku=self.sku, license=self.license
-        ).exclude(pk=self.pk).count() > 0:
+        elif self.device and not self.license and qs.filter(contract=self.contract).exists():
             raise ValidationError('Device must be unique')
-        elif not self.device and self.license and SupportContractAssignment.objects.filter(
-                contract=self.contract, device=self.device, license=self.license, sku=self.sku
-        ).exclude(pk=self.pk).count() > 0:
+        elif not self.device and self.license and qs.filter(contract=self.contract).exists():
             raise ValidationError('License must be unique')

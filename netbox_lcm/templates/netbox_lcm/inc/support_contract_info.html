@@ -13,6 +13,11 @@
       </h2>
       <table class="table table-hover attr-table">
         <tr>
+          <th scope="row">Coverage Status</th>
+          <td>{% badge support_contract.get_support_coverage_status_display bg_color=support_contract.get_support_coverage_status_color %}</td>
+        </tr>
+        {% if support_contract and support_contract.support_coverage_status == 'vendor_contract_attached' %}
+        <tr>
           <th scope="row">Vendor</th>
           <td>{{ support_contract.contract.vendor|linkify|placeholder }}</td>
         </tr>
@@ -36,10 +41,7 @@
           <td><span {{ support_contract.end|date_badge_class }}>{{ support_contract.end }}</span></td>
           {% endif %}
         </tr>
-        <tr>
-          <th scope="row">Tags</th>
-          <td>{% for tag in support_contract.tags.all %}{% tag tag url %}{% empty %} None {% endfor %}</td>
-        </tr>
+        {% endif %}
       </table>
     {% else %}
       <div class="card-actions"><a href="{% url 'plugins:netbox_lcm:supportcontractassignment_add' %}?device={{ object.pk }}&return_url={% url 'dcim:device' pk=object.pk %}" class="btn btn-ghost-primary btn-sm">
