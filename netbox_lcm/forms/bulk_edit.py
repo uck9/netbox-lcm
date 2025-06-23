@@ -2,10 +2,13 @@ from django import forms
 from django.utils.translation import gettext as _
 
 from netbox.forms import NetBoxModelBulkEditForm
+
 from utilities.forms.fields import DynamicModelChoiceField, CommentField
 
+from netbox_lcm.choices import SupportCoverageStatusChoices
 from netbox_lcm.models import SupportContract, SupportSKU, SupportContractAssignment, LicenseAssignment, \
     License, HardwareLifecycle, HardwareLifecyclePlan, Vendor
+from utilities.forms import add_blank_choice
 from utilities.forms.rendering import FieldSet
 from utilities.forms.widgets import DatePicker
 
@@ -56,6 +59,12 @@ class SupportContractBulkEditForm(NetBoxModelBulkEditForm):
 
 
 class SupportContractAssignmentBulkEditForm(NetBoxModelBulkEditForm):
+    support_coverage_status = forms.ChoiceField(
+        choices=add_blank_choice(SupportCoverageStatusChoices),
+        required=False,
+        help_text="Support Coverage Status",
+        initial='',
+    )
     contract = DynamicModelChoiceField(
         queryset=SupportContract.objects.all(),
         label=_('Contract'),
@@ -82,7 +91,7 @@ class SupportContractAssignmentBulkEditForm(NetBoxModelBulkEditForm):
 
     model = SupportContractAssignment
     fieldsets = (
-        FieldSet('contract', 'sku', 'description', 'end', ),
+        FieldSet('support_coverage_status', 'contract', 'sku', 'description', 'end', ),
     )
     nullable_fields = ()
 
