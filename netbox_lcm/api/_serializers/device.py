@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
-
+from tenancy.api.serializers_.tenants import TenantSerializer
 from dcim.api.serializers_.devices import DeviceSerializer
 from dcim.api.serializers_.devicetypes import DeviceTypeSerializer
 from dcim.api.serializers_.sites import SiteSerializer
@@ -52,6 +52,12 @@ class DeviceLifecycleSerializer(NetBoxModelSerializer):
     device_type = DeviceTypeSerializer(nested=True)
     site = SiteSerializer(nested=True)
     status = serializers.CharField(allow_null=True)
+    tenant = TenantSerializer(
+        nested=True,
+        required=False,
+        allow_null=True,
+        default=None
+    )
     support_coverage_status = serializers.SerializerMethodField()
     support_contract_count = serializers.IntegerField(read_only=True)
     support_contracts = SupportContractAssignmentSerializer(
@@ -89,6 +95,6 @@ class DeviceLifecycleSerializer(NetBoxModelSerializer):
     class Meta:
         model = Device
         fields = [
-            'id', 'name', 'status', 'site', 'device_type',
+            'id', 'name', 'status', 'site', 'device_type', 'tenant',
             'hw_lifecycle', 'support_coverage_status', 'support_contract_count', 'support_contracts'
         ]
