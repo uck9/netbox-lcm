@@ -41,7 +41,7 @@ class HardwareLifecycleDetailsSerializer(serializers.Serializer):
     
     def get_is_supported(self, obj):
         lifecycle = self.get_lifecycle(obj)
-        return lifecycle.is_supported if lifecycle else None
+        return lifecycle.is_supported if lifecycle else True
 
     def get_days_to_vendor_eos(self, obj):
         lifecycle = self.get_lifecycle(obj)

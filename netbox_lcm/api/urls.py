@@ -2,7 +2,7 @@ from netbox.api.routers import NetBoxRouter
 from .views import *
 
 router = NetBoxRouter()
-router.register('devicelifecycle', DeviceLifecycleViewSet)
+router.register('devices', DeviceLifecycleViewSet)
 router.register('hardwarelifecycle', HardwareLifecycleViewSet)
 router.register('hardwarelifecycleplan', HardwareLifecyclePlanViewSet)
 router.register('license', LicenseViewSet)

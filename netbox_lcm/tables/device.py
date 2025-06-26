@@ -60,7 +60,6 @@ class DeviceLifecycleTable(NetBoxTable):
         """,
         verbose_name="HW - EoS"
     )
-
     support_contract_id = TemplateColumn(
         template_code="""
         {% if record.prefetched_contracts %}
@@ -88,7 +87,7 @@ class DeviceLifecycleTable(NetBoxTable):
         {% load lcm_filters %}
         {% if record.prefetched_contracts %}
             {% for c in record.prefetched_contracts %}
-                <span {{ c.end|default:c.contract.end|date_badge_class }}>{{ c.end|default:c.contract.end }}</span>
+                <span {{ c.end|default:c.contract.end_date|date_badge_class }}>{{ c.end_date|default:c.contract.end_date }}</span>
             {% endfor %}
         {% else %}—{% endif %}
         """,
