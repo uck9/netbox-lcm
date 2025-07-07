@@ -1,10 +1,11 @@
-from netbox.views.generic import ObjectListView, ObjectEditView, ObjectDeleteView, ObjectView, ObjectChildrenView, \
-    BulkDeleteView, BulkEditView
-from netbox_lcm.filtersets import SupportContractFilterSet, VendorFilterSet, LicenseAssignmentFilterSet, \
-    SupportContractAssignmentFilterSet, SupportSKUFilterSet
-from netbox_lcm.forms import SupportContractFilterForm, VendorFilterForm, SupportContractForm, VendorForm, \
-    SupportContractAssignmentForm, SupportSKUFilterForm, SupportSKUForm, SupportContractAssignmentBulkEditForm, \
-    SupportContractAssignmentFilterForm, VendorBulkEditForm, SupportSKUBulkEditForm, SupportContractBulkEditForm
+from netbox.views.generic import ( ObjectListView, ObjectEditView, ObjectDeleteView, ObjectView, ObjectChildrenView,
+    BulkDeleteView, BulkEditView )
+from netbox_lcm.filtersets import ( SupportContractFilterSet, VendorFilterSet, LicenseAssignmentFilterSet,
+    SupportContractAssignmentFilterSet, SupportSKUFilterSet )
+from netbox_lcm.forms import (
+    SupportContractFilterForm, VendorFilterForm, SupportContractForm, VendorForm,
+    SupportContractAssignmentForm, SupportSKUFilterForm, SupportSKUForm, SupportContractAssignmentBulkEditForm,
+    SupportContractAssignmentFilterForm, VendorBulkEditForm, SupportSKUBulkEditForm, SupportContractBulkEditForm )
 from netbox_lcm.models import SupportContract, Vendor, LicenseAssignment, SupportContractAssignment, SupportSKU
 from netbox_lcm.tables import SupportContractTable, VendorTable, LicenseAssignmentTable, \
     SupportContractAssignmentTable, SupportSKUTable

@@ -2,8 +2,18 @@ from django.urls import path
 
 from netbox.views.generic import ObjectChangeLogView
 from . import views
-from netbox_lcm.models import DeviceBackupPolicy, DeviceBackupResult, HardwareLifecycle, HardwareLifecyclePlan, SupportContract, License, \
-    LicenseAssignment, SupportContractAssignment, SupportSKU, Vendor
+from netbox_lcm.models import (
+    DeviceBackupPolicy,
+    DeviceBackupResult,
+    HardwareLifecycle,
+    HardwareLifecyclePlan,
+    SupportContract,
+    License,
+    LicenseAssignment,
+    SupportContractAssignment,
+    SupportSKU,
+    Vendor,
+    )
 
 urlpatterns = [
     path('hardware/', views.HardwareLifecycleListView.as_view(), name='hardwarelifecycle_list'),
@@ -105,5 +115,6 @@ urlpatterns = [
     path('device-backup-policy/<int:pk>/changelog', ObjectChangeLogView.as_view(), \
         name='devicebackuppolicy_changelog', kwargs={'model': DeviceBackupPolicy}),
 
+    # Device Lifecycle Vew - Read Only List
     path('devices/', views.DeviceLifecycleListView.as_view(), name='devicelifecycle_list'),
 ]
