@@ -8,13 +8,13 @@ from netbox_lcm.models import DeviceBackupPolicy, DeviceBackupResult
 
 __all__ = (
     'DeviceBackupPolicyFilterSet',
-    'DeviceBackupResultFilterSe',
+    'DeviceBackupResultFilterSet',
 )
 
 class DeviceBackupPolicyFilterSet(NetBoxModelFilterSet):
     class Meta:
         model = DeviceBackupPolicy
-        fields = ['device', 'enabled', 'evaluate_status', 'backup_system']
+        fields = ['device', 'enabled', 'critical', 'evaluate_status', 'backup_system']
 
 class DeviceBackupResultFilterSet(NetBoxModelFilterSet):
     class Meta:

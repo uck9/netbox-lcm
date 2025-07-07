@@ -9,7 +9,6 @@ __all__ = (
 )
 
 
-
 class DeviceBackupPolicySerializer(NetBoxModelSerializer):
     device = DeviceSerializer(nested=True, required=False, allow_null=True)
     backup_health_score = serializers.SerializerMethodField()
@@ -32,6 +31,7 @@ class DeviceBackupPolicySerializer(NetBoxModelSerializer):
 
     def get_days_since_last_success(self, obj):
         return obj.days_since_last_success
+
 
 class DeviceBackupResultSerializer(NetBoxModelSerializer):
     policy = serializers.PrimaryKeyRelatedField(queryset=DeviceBackupPolicy.objects.all())

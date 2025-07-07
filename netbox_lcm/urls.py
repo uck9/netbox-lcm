@@ -2,7 +2,7 @@ from django.urls import path
 
 from netbox.views.generic import ObjectChangeLogView
 from . import views
-from netbox_lcm.models import HardwareLifecycle, HardwareLifecyclePlan, SupportContract, License, \
+from netbox_lcm.models import DeviceBackupPolicy, DeviceBackupResult, HardwareLifecycle, HardwareLifecyclePlan, SupportContract, License, \
     LicenseAssignment, SupportContractAssignment, SupportSKU, Vendor
 
 urlpatterns = [
@@ -94,6 +94,16 @@ urlpatterns = [
     path('license-assignment/<int:pk>/delete', views.LicenseAssignmentDeleteView.as_view(), name='licenseassignment_delete'),
     path('license-assignment/<int:pk>/changelog', ObjectChangeLogView.as_view(), \
         name='licenseassignment_changelog', kwargs={'model': LicenseAssignment}),
+    
+    path('device-backup-policy/', views.DeviceBackupPolicyListView.as_view(), name='devicebackuppolicy_list'),
+    path('device-backup-policy/add', views.DeviceBackupPolicyEditView.as_view(), name='devicebackuppolicy_add'),
+    path('device-backup-policy/edit', views.DeviceBackupPolicyBulkEditView.as_view(), name='devicebackuppolicy_bulk_edit'),
+    path('device-backup-policy/delete/', views.DeviceBackupPolicyBulkDeleteView.as_view(), name='devicebackuppolicy_bulk_delete'),
+    path('device-backup-policy/<int:pk>', views.DeviceBackupPolicyView.as_view(), name='devicebackuppolicy'),
+    path('device-backup-policy/<int:pk>/edit', views.DeviceBackupPolicyEditView.as_view(), name='devicebackuppolicy_edit'),
+    path('device-backup-policy/<int:pk>/delete', views.DeviceBackupPolicyDeleteView.as_view(), name='devicebackuppolicy_delete'),
+    path('device-backup-policy/<int:pk>/changelog', ObjectChangeLogView.as_view(), \
+        name='devicebackuppolicy_changelog', kwargs={'model': DeviceBackupPolicy}),
 
     path('devices/', views.DeviceLifecycleListView.as_view(), name='devicelifecycle_list'),
 ]
