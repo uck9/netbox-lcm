@@ -1,5 +1,18 @@
 from netbox.plugins import PluginMenuItem, PluginMenu
 
+
+device_backup_policy = PluginMenuItem(
+        link='plugins:netbox_lcm:devicebackuppolicy_list',
+        link_text='Backup Policies',
+        permissions=['netbox_lcm.view_devicebackuppolicy'],
+)
+
+device_backup_result = PluginMenuItem(
+    link='plugins:netbox_lcm:devicebackupresult_list',
+    link_text='Backup Results',
+    permissions=['netbox_lcm.view_devicebackupresult'],
+)
+
 device_lifecycle = PluginMenuItem(
     link='plugins:netbox_lcm:devicelifecycle_list',
     link_text='Device Lifecycle Information',
@@ -53,6 +66,7 @@ license_assignments = PluginMenuItem(
 menu = PluginMenu(
     label='Lifecycle Management',
     groups=(
+        ('Backup Tracking', (device_backup_policy, device_backup_result)),
         ('Lifecycle', (device_lifecycle, lifecycle, lifecycle_plans)),
         ('Support Contracts', (vendors, skus, contracts, contract_assignments)),
         ('Licensing', (licenses, license_assignments)),

@@ -1,6 +1,6 @@
 from netbox.api.viewsets import NetBoxModelViewSet
-from ..models import DeviceBackupPolicy, DeviceBackupResult
-from netbox_lcm.serializers import DeviceBackupPolicySerializer, DeviceBackupResultSerializer
+from netbox_lcm.models import DeviceBackupPolicy, DeviceBackupResult
+from netbox_lcm.api.serializers import DeviceBackupPolicySerializer, DeviceBackupResultSerializer
 from netbox_lcm.filtersets import DeviceBackupPolicyFilterSet, DeviceBackupResultFilterSet
 
 __all__ = (

@@ -171,3 +171,4 @@ class HardwareLifecyclePlanBulkEditForm(NetBoxModelBulkEditForm):
         FieldSet('description', ),
     )
     nullable_fields = ('description', 'planned_by')
+

@@ -3,7 +3,7 @@ from netbox.views.generic import (ObjectListView, ObjectEditView, ObjectDeleteVi
 from netbox_lcm.filtersets import HardwareLifecycleFilterSet, HardwareLifecyclePlanFilterSet
 from netbox_lcm.forms import HardwareLifecycleFilterForm, HardwareLifecycleBulkEditForm, \
     HardwareLifecyclePlanFilterForm, HardwareLifecyclePlanBulkEditForm
-from netbox_lcm.forms.model_forms import HardwareLifecycleForm, HardwareLifecyclePlanForm
+from netbox_lcm.forms._model_forms import HardwareLifecycleForm, HardwareLifecyclePlanForm
 from netbox_lcm.models import HardwareLifecycle, HardwareLifecyclePlan
 from netbox_lcm.tables import HardwareLifecycleTable, HardwareLifecyclePlanTable
 from utilities.views import register_model_view

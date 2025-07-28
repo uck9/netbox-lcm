@@ -1,0 +1,83 @@
+{% extends 'generic/object.html' %}
+{% load buttons %}
+{% load custom_links %}
+{% load helpers %}
+{% load lcm_filters %}
+{% load perms %}
+{% load plugins %}
+{% load tabs %}
+
+{% block content %}
+<div class="row">
+    <div class="col col-12 col-xl-6">
+      <div class="card">
+        <h2 class="card-header">Backup Policy Details</h2>
+        <table class="table table-hover attr-table">
+           <tr>
+            <th>Device</th>
+            <td>{{ object.device|linkify }}</td>
+          </tr>
+          <tr>
+            <th>Backup System</th>
+            <td>{{ object.get_backup_system_display }}</td>
+          </tr>
+          <tr>
+            <th>Enabled</th>
+            <td>{{ object.enabled }}</td>
+          </tr>
+          <tr>
+            <th>Critical</th>
+            <td>{{ object.critical }}</td>
+          </tr>
+          <tr>
+            <th>Evaluate Status</th>
+            <td>{{ object.evaluate_status }}</td>
+          </tr>
+          <tr>
+            <th>Destination</th>
+            <td><code>{{ object.destination|default:"—" }}</code></td>
+          </tr>
+          <tr>
+            <th>Method</th>
+            <td><code>{{ object.method|default:"—" }}</code></td>
+          </tr>
+          <tr>
+            <th>Health Score</th>
+            <td>{{ object.get_backup_health_score|default:"Excluded" }}</td>
+          </tr>
+          <tr>
+            <th>Health Label</th>
+            <td>
+              {% if object.backup_health_label == "Healthy" %}
+                <span class="badge text-bg-success">Healthy</span>
+              {% elif object.backup_health_label == "Warning" %}
+                <span class="badge text-bg-warning">Warning</span>
+              {% elif object.backup_health_label == "At Risk" %}
+                <span class="badge text-bg-danger">At Risk</span>
+              {% else %}
+                <span class="badge text-bg-secondary">Excluded</span>
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>Notes</th>
+            <td>{{ object.notes|linebreaksbr|default:"—" }}</td>
+          </tr>
+        </table>
+      </div>
+      {% plugin_left_page object %}
+      
+      </div>
+      <div class="col col-md-6">
+        {% include 'inc/panels/custom_fields.html' %}
+        {% include 'inc/panels/tags.html' %}
+        {% plugin_right_page object %}
+        </div>
+</div>
+  <div class="row">
+    <div class="col col-md-12">
+        {% include 'netbox_lcm/inc/devicebackupresult_table.html' with results=object.results.all %}
+        {% plugin_full_width_page object %}
+    </div>
+  </div>
+{% endblock %}

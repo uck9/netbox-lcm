@@ -1,3 +1,4 @@
+from netbox_lcm.api._serializers.backup import *
 from netbox_lcm.api._serializers.contract import *
 from netbox_lcm.api._serializers.device import *
 from netbox_lcm.api._serializers.hardware import *

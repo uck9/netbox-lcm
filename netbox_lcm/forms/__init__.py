@@ -1,3 +1,3 @@
 from .bulk_edit import *
 from .filtersets import *
-from .model_forms import *
+from ._model_forms import *

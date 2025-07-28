@@ -1,0 +1,28 @@
+{% load helpers %}
+
+{% if results %}
+<div class="card">
+  <h2 class="card-header">Backup Results</h2>
+  <table class="table table-hover table-headings">
+    <thead>
+      <tr>
+        <th>Backup Date</th>
+        <th>Status</th>
+        <th>Details</th>
+        <th>Days Since Last Success</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for result in results %}
+        <tr>
+          <td>{{ result.backup_date }}</td>
+          <td>{% badge result.get_status_display bg_color=result.get_status_color %}</td>
+          <td>{{ result.details|truncatechars:100|default:"—" }}</td>
+          <td>{{ result.days_since_last_success|default:"—" }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No backup results recorded for this policy.</p>
+{% endif %}

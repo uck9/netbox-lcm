@@ -24,7 +24,7 @@ class DeviceBackupPolicy(PrimaryModel):
     enabled = models.BooleanField(default=True)
     critical = models.BooleanField(
         default=False,
-        verbose_name="Evaluate Backup Status",
+        verbose_name="Critical Device",
         help_text="Critical Device that MUST have successful daily backup"
         )
     evaluate_status = models.BooleanField(
@@ -34,7 +34,7 @@ class DeviceBackupPolicy(PrimaryModel):
     )
     backup_system = models.CharField(
         max_length=50,
-        choices=BackupSystemChoices.choices,
+        choices=BackupSystemChoices,
         default=BackupSystemChoices.NONE
     )
     destination = models.TextField(
@@ -86,6 +86,29 @@ class DeviceBackupPolicy(PrimaryModel):
                 violation_error_message="Assigned Backup Systems must be unique."
             ),
         )
+    
+    
+    @property
+    def days_since_last_success(self):
+        if not self.enabled or not self.evaluate_status:
+            return None
+
+        last_success = self.results.filter(status='success').order_by('-backup_date').first()
+        if last_success:
+            return (date.today() - last_success.backup_date).days
+        return None
+
+    @property
+    def backup_health_label(self):
+        score = self.get_backup_health_score()
+        if score is None:
+            return "Excluded"
+        elif score >= 90:
+            return "Healthy"
+        elif score >= 70:
+            return "Warning"
+        else:
+            return "At Risk"
 
     def __str__(self):
         return f"{self.device.name} [{self.get_backup_system_display()}]"
@@ -102,7 +125,7 @@ class DeviceBackupResult(PrimaryModel):
     backup_date = models.DateField()
     status = models.CharField(
         max_length=20,
-        choices=BackupStatusChoices.choices,
+        choices=BackupStatusChoices,
         default=BackupStatusChoices.UNKNOWN
     )
     details = models.TextField(blank=True)
@@ -125,16 +148,12 @@ class DeviceBackupResult(PrimaryModel):
         return self.policy.device
     
     @property
-    def backup_health_label(self):
-        score = self.get_backup_health_score()
-        if score is None:
-            return "Excluded"
-        elif score >= 90:
-            return "Healthy"
-        elif score >= 70:
-            return "Warning"
-        else:
-            return "At Risk"
+    def get_status_color(self):
+        return BackupStatusChoices.colors.get(self.status)
+
+    @property
+    def get_status_class(self):
+        return BackupStatusChoices.label_class(self.status) or 'secondary'
     
     def get_absolute_url(self):
         return reverse('plugins:netbox_lcm:devicebackupresult', args=[self.pk])

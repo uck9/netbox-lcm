@@ -115,6 +115,16 @@ urlpatterns = [
     path('device-backup-policy/<int:pk>/changelog', ObjectChangeLogView.as_view(), \
         name='devicebackuppolicy_changelog', kwargs={'model': DeviceBackupPolicy}),
 
+    path('device-backup-result/', views.DeviceBackupResultListView.as_view(), name='devicebackupresult_list'),
+    path('device-backup-result/add', views.DeviceBackupResultEditView.as_view(), name='devicebackupresult_add'),
+    path('device-backup-result/edit', views.DeviceBackupResultBulkEditView.as_view(), name='devicebackupresult_bulk_edit'),
+    path('device-backup-result/delete/', views.DeviceBackupResultBulkDeleteView.as_view(), name='devicebackupresult_bulk_delete'),
+    path('device-backup-result/<int:pk>', views.DeviceBackupResultView.as_view(), name='devicebackupresult'),
+    path('device-backup-result/<int:pk>/edit', views.DeviceBackupResultEditView.as_view(), name='devicebackupresult_edit'),
+    path('device-backup-result/<int:pk>/delete', views.DeviceBackupResultDeleteView.as_view(), name='devicebackupresult_delete'),
+    path('device-backup-result/<int:pk>/changelog', ObjectChangeLogView.as_view(), \
+        name='devicebackuppresult_changelog', kwargs={'model': DeviceBackupResult}),
+
     # Device Lifecycle Vew - Read Only List
     path('devices/', views.DeviceLifecycleListView.as_view(), name='devicelifecycle_list'),
 ]

@@ -4,7 +4,7 @@ from utilities.choices import ChoiceSet
 
 __all__ = (
     'BackupSystemChoices',
-    'BackupStatusChoices',
+    'BackupStatusChoices'
 )
 
 class BackupSystemChoices(ChoiceSet):
@@ -30,6 +30,7 @@ class BackupSystemChoices(ChoiceSet):
             if choice[0] == value:
                 return str(choice[1])
         return None
+    
 
 class BackupStatusChoices(ChoiceSet):
     key = 'Backup.status'
@@ -41,9 +42,9 @@ class BackupStatusChoices(ChoiceSet):
 
     CHOICES = [
         (SUCCESS , _('Success'), 'green'),
-        (FAILURE, _('Failure'), 'green'),
-        (SKIPPED, _('Skipped'), 'green'),
-        (UNKNOWN, _('Unknown Status'), 'orange'),
+        (FAILURE, _('Failure'), 'red'),
+        (SKIPPED, _('Skipped'), 'gray'),
+        (UNKNOWN, _('Unknown Status'), 'dark'),
     ]
 
     @classmethod
