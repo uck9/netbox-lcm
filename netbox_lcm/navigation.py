@@ -18,6 +18,12 @@ lifecycle_plans = PluginMenuItem(
     permissions=['netbox_lcm.view_hardwarelifecycleplan'],
 )
 
+external_assessments = PluginMenuItem(
+    link="plugins:netbox_lcm:externalassessment_list",
+    link_text="External Assessments",
+    permissions=["netbox_lcm.view_externalassessment"],
+),
+
 vendors = PluginMenuItem(
     link='plugins:netbox_lcm:vendor_list',
     link_text='Vendors',
@@ -53,7 +59,8 @@ license_assignments = PluginMenuItem(
 menu = PluginMenu(
     label='Lifecycle Management',
     groups=(
-        ('Lifecycle', (device_lifecycle, lifecycle, lifecycle_plans)),
+        ('Device Info', (device_lifecycle, external_assessments)),
+        ('Hardware Lifecycle', (lifecycle, lifecycle_plans)),
         ('Vendor Support', (vendors, skus, contracts, contract_assignments)),
         ('Licensing', (licenses, license_assignments)),
     ),

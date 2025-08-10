@@ -3,13 +3,14 @@ from django.utils.translation import gettext as _
 
 from dcim.models import DeviceType, ModuleType, Manufacturer, Device
 from netbox.forms import NetBoxModelForm
-from netbox_lcm.models import HardwareLifecycle, HardwareLifecyclePlan, Vendor, SupportContract, \
+from netbox_lcm.models import ExternalAssessment, HardwareLifecycle, HardwareLifecyclePlan, Vendor, SupportContract, \
     LicenseAssignment, License, SupportContractAssignment, SupportSKU
 from utilities.forms.fields import DynamicModelChoiceField, DynamicModelMultipleChoiceField
 from utilities.forms.widgets import DatePicker
 
 
 __all__ = (
+    'ExternalAssessmentFilterForm',
     'VendorForm',
     'SupportSKUForm',
     'SupportContractForm',
@@ -20,6 +21,14 @@ __all__ = (
     'HardwareLifecyclePlanForm'
 )
 
+class ExternalAssessmentFilterForm(NetBoxModelForm):
+    model = ExternalAssessmentFilter.Meta.model
+    fieldsets = (
+        (None, ("q", "assessment_type", "status", "source", "source_run_id")),
+        ("Target", ("target_type", "target_id")),
+        ("Time", ("observed_at__gte", "observed_at__lte")),
+        ("Flags", ("is_latest",)),
+    )
 
 class VendorForm(NetBoxModelForm):
 
