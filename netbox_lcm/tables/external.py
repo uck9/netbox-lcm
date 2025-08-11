@@ -2,7 +2,7 @@
 import django_tables2 as tables
 from netbox.tables import NetBoxTable, columns
 from django.contrib.contenttypes.models import ContentType
-from 
+from netbox_lcm.models import ExternalAssessment
 
 __all__ = (
     'ExternalAssessmentTable',
@@ -17,7 +17,7 @@ class ExternalAssessmentTable(NetBoxTable):
     source = tables.Column()
     is_latest = columns.BooleanColumn()
     target = tables.Column(accessor="target_id", verbose_name="Target")
-    external_url = columns.LinkColumn(text="Report", accessor="external_url", verbose_name="Report", orderable=False)
+    external_url = tables.LinkColumn(text="Report", accessor="external_url", verbose_name="Report", orderable=False)
 
     class Meta(NetBoxTable.Meta):
         model = ExternalAssessment

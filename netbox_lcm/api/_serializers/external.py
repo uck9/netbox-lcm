@@ -1,7 +1,7 @@
 # netbox_lcm/api/serializers.py
 from rest_framework import serializers
 from django.contrib.contenttypes.models import ContentType
-from ..models.external import ExternalAssessment, ExternalAssessmentType
+from netbox_lcm.models import ExternalAssessment, ExternalAssessmentType
 
 
 __all__ = (

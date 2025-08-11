@@ -19,36 +19,41 @@ lifecycle_plans = PluginMenuItem(
 )
 
 external_assessments = PluginMenuItem(
-    link="plugins:netbox_lcm:externalassessment_list",
-    link_text="External Assessments",
-    permissions=["netbox_lcm.view_externalassessment"],
-),
+    link='plugins:netbox_lcm:externalassessment_list',
+    link_text='External Assessments',
+    permissions=['netbox_lcm.view_externalassessment'],
+)
 
 vendors = PluginMenuItem(
     link='plugins:netbox_lcm:vendor_list',
     link_text='Vendors',
     permissions=['netbox_lcm.view_vendor'],
 )
+
 skus = PluginMenuItem(
     link='plugins:netbox_lcm:supportsku_list',
     link_text='Support SKUs',
     permissions=['netbox_lcm.view_supportsku'],
 )
+
 contracts = PluginMenuItem(
     link='plugins:netbox_lcm:supportcontract_list',
     link_text='Support Contracts',
     permissions=['netbox_lcm.view_supportcontract'],
 )
+
 contract_assignments = PluginMenuItem(
     link='plugins:netbox_lcm:supportcontractassignment_list',
     link_text='Support Assignments',
     permissions=['netbox_lcm.view_supportcontractassignment'],
 )
+
 licenses = PluginMenuItem(
     link='plugins:netbox_lcm:license_list',
     link_text='Licenses',
     permissions=['netbox_lcm.view_license'],
 )
+
 license_assignments = PluginMenuItem(
     link='plugins:netbox_lcm:licenseassignment_list',
     link_text='License Assignments',

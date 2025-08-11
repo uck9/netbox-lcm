@@ -7,6 +7,12 @@ from netbox_lcm.choices import ExternalAssessmentStatusChoices
 from netbox.models import PrimaryModel
 
 
+__all__ = (
+    'ExternalAssessmentType',
+    'ExternalAssessment',
+)
+
+
 class ExternalAssessmentType(PrimaryModel):
     """
     Optional registry for types (e.g., 'nac', 'config', 'vuln').
@@ -23,6 +29,10 @@ class ExternalAssessmentType(PrimaryModel):
 
     def __str__(self):
         return self.label or self.slug
+    
+    def get_absolute_url(self):
+        return reverse('plugins:netbox_lcm:vendorexternalassessmenttype', args=[self.pk])
+
 
 class ExternalAssessment(PrimaryModel):
     """
@@ -77,11 +87,6 @@ class ExternalAssessment(PrimaryModel):
                 name="uniq_latest_per_type_target",
             ),
         ]
-        permissions = [
-            ("view_externalassessment", "Can view external assessments"),
-            ("add_externalassessment", "Can add external assessments"),
-            ("delete_externalassessment", "Can delete external assessments"),
-        ]
 
     def __str__(self):
         tgt = f"{self.target_type.app_label}.{self.target_type.model}:{self.target_id}"
@@ -124,3 +129,6 @@ class ExternalAssessment(PrimaryModel):
             # Best-effort: set this instance as latest if it's newer than current latest
             type_id = self.target_type_id
             ExternalAssessment.mark_latest_for(self.assessment_type, type_id, self.target_id)
+    
+    def get_absolute_url(self):
+        return reverse('plugins:netbox_lcm:externalassessment', args=[self.pk])

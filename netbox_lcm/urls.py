@@ -97,5 +97,5 @@ urlpatterns = [
 
     path('devices/', views.DeviceLifecycleListView.as_view(), name='devicelifecycle_list'),
 
-    path("external-assessments/", ExternalAssessmentListView.as_view(), name="externalassessment_list"),
+    path("external-assessments/", views.ExternalAssessmentListView.as_view(), name="externalassessment_list"),
 ]

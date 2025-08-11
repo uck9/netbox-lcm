@@ -1,9 +1,9 @@
 # netbox_lcm/views.py
 from netbox.views import generic
-from .models.external import ExternalAssessment
-from .filters import ExternalAssessmentFilter
-from .tables import ExternalAssessmentTable
-from .forms import ExternalAssessmentFilterForm
+from netbox_lcm.models import ExternalAssessment
+from netbox_lcm.filtersets import ExternalAssessmentFilter
+from netbox_lcm.tables import ExternalAssessmentTable
+from netbox_lcm.forms import ExternalAssessmentFilterForm
 
 __all__ = (
     'ExternalAssessmentListView',

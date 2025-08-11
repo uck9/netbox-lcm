@@ -9,6 +9,7 @@ from dcim.models import Device, DeviceType, Manufacturer, Site
 from tenancy.models import Tenant, TenantGroup
 from netbox_lcm.choices.contract import SupportCoverageStatusChoices
 from netbox.forms import NetBoxModelFilterSetForm
+from netbox_lcm.filtersets import ExternalAssessmentFilter
 from netbox_lcm.models import HardwareLifecycle, HardwareLifecyclePlan, SupportContract, \
     Vendor, License, LicenseAssignment, SupportContractAssignment, SupportSKU
 from utilities.filters import MultiValueCharFilter, MultiValueNumberFilter
@@ -19,6 +20,7 @@ from utilities.forms.widgets import APISelectMultiple, DatePicker
 
 
 __all__ = (
+    'ExternalAssessmentFilterForm',
     'HardwareLifecycleFilterForm',
     'HardwareLifecyclePlanFilterForm',
     'SupportSKUFilterForm',
@@ -29,6 +31,16 @@ __all__ = (
     'SupportContractAssignmentFilterForm',
     'DeviceLifecycleFilterForm'
 )
+
+
+class ExternalAssessmentFilterForm(NetBoxModelFilterSetForm):
+    model = ExternalAssessmentFilter.Meta.model
+    fieldsets = (
+        FieldSet("Search", ("q", "assessment_type", "status", "source", "source_run_id")),
+        FieldSet("Target", ("target_type", "target_id")),
+        FieldSet("Time", ("observed_at__gte", "observed_at__lte")),
+        FieldSet("Flags", ("is_latest",)),
+    )
 
 
 class HardwareLifecycleFilterForm(NetBoxModelFilterSetForm):

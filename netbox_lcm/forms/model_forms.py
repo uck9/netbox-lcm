@@ -10,7 +10,6 @@ from utilities.forms.widgets import DatePicker
 
 
 __all__ = (
-    'ExternalAssessmentFilterForm',
     'VendorForm',
     'SupportSKUForm',
     'SupportContractForm',
@@ -21,14 +20,6 @@ __all__ = (
     'HardwareLifecyclePlanForm'
 )
 
-class ExternalAssessmentFilterForm(NetBoxModelForm):
-    model = ExternalAssessmentFilter.Meta.model
-    fieldsets = (
-        (None, ("q", "assessment_type", "status", "source", "source_run_id")),
-        ("Target", ("target_type", "target_id")),
-        ("Time", ("observed_at__gte", "observed_at__lte")),
-        ("Flags", ("is_latest",)),
-    )
 
 class VendorForm(NetBoxModelForm):
 

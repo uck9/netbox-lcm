@@ -6,7 +6,7 @@ from netbox_lcm.models.external import ExternalAssessment, ExternalAssessmentTyp
 from netbox_lcm.api.serializers import ExternalAssessmentSerializer, ExternalAssessmentTypeSerializer
 from netbox_lcm.filtersets import ExternalAssessmentFilter
 
-class ExternalAssessmentTypeViewSet(ReadOnlyModelViewSet):
+class ExternalAssessmentTypeViewSet(ModelViewSet):
     queryset = ExternalAssessmentType.objects.all()
     serializer_class = ExternalAssessmentTypeSerializer
     filter_backends = (DjangoFilterBackend,)
