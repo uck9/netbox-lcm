@@ -1,16 +1,24 @@
 # netbox_lcm/views.py
+from netbox.views.generic import ObjectListView, ObjectEditView, ObjectDeleteView, ObjectView, ObjectChildrenView, \
+    BulkDeleteView, BulkEditView
+from netbox_lcm.forms import ExternalAssessmentForm
 from netbox.views import generic
 from netbox_lcm.models import ExternalAssessment
 from netbox_lcm.filtersets import ExternalAssessmentFilter
 from netbox_lcm.tables import ExternalAssessmentTable
 from netbox_lcm.forms import ExternalAssessmentFilterForm
 
+from utilities.views import ViewTab, register_model_view, GetRelatedModelsMixin
+
 __all__ = (
     'ExternalAssessmentListView',
+    'ExternalAssessmentView',
+    'ExternalAssessmentEditView',
+    'ExternalAssessmentDeleteView',
 )
 
-
-class ExternalAssessmentListView(generic.ObjectListView):
+@register_model_view(ExternalAssessment, name='list')
+class ExternalAssessmentListView(ObjectListView):
     """
     Read-only list. We’re not using NetBoxModel, but ObjectListView still works with a queryset + table.
     """
@@ -19,3 +27,17 @@ class ExternalAssessmentListView(generic.ObjectListView):
     filterset = ExternalAssessmentFilter
     filterset_form = ExternalAssessmentFilterForm
     action_buttons = ()  # no add/edit
+
+
+@register_model_view(ExternalAssessment)
+class ExternalAssessmentView(ObjectView):
+    queryset = ExternalAssessment.objects.all()
+
+
+class ExternalAssessmentEditView(ObjectEditView):
+    queryset = ExternalAssessment.objects.all()
+    form = ExternalAssessmentForm
+
+
+class ExternalAssessmentDeleteView(ObjectDeleteView):
+    queryset = ExternalAssessment.objects.all()

@@ -97,5 +97,10 @@ urlpatterns = [
 
     path('devices/', views.DeviceLifecycleListView.as_view(), name='devicelifecycle_list'),
 
-    path("external-assessments/", views.ExternalAssessmentListView.as_view(), name="externalassessment_list"),
+    path('external-assessments/', views.ExternalAssessmentListView.as_view(), name='externalassessment_list'),
+    path('external-assessments/add/', views.ExternalAssessmentEditView.as_view(), name='externalassessment_add'),
+    path('external-assessments/<int:pk>/', views.ExternalAssessmentView.as_view(), name='externalassessment'),
+    path('external-assessments/<int:pk>/edit/', views.ExternalAssessmentEditView.as_view(), name='externalassessment_edit'),
+    path('external-assessments/<int:pk>/delete/', views.ExternalAssessmentDeleteView.as_view(), name='externalassessment_delete'),
+
 ]

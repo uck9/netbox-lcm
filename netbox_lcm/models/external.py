@@ -2,6 +2,7 @@
 from django.db import models, transaction
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.urls import reverse
 
 from netbox_lcm.choices import ExternalAssessmentStatusChoices
 from netbox.models import PrimaryModel
@@ -31,7 +32,7 @@ class ExternalAssessmentType(PrimaryModel):
         return self.label or self.slug
     
     def get_absolute_url(self):
-        return reverse('plugins:netbox_lcm:vendorexternalassessmenttype', args=[self.pk])
+        return reverse('plugins:netbox_lcm:externalassessmenttype', args=[self.pk])
 
 
 class ExternalAssessment(PrimaryModel):
@@ -40,7 +41,12 @@ class ExternalAssessment(PrimaryModel):
     Target can be Device, Interface, VM, Site, etc.
     """
     # What family/type of assessment this is
-    assessment_type = models.CharField(max_length=64, db_index=True)
+    assessment_type = models.ForeignKey(
+        ExternalAssessmentType,
+        to_field='slug',
+        db_column='assessment_type',
+        on_delete=models.PROTECT
+    )
 
     # Generic target
     target_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, db_index=True)
@@ -88,9 +94,12 @@ class ExternalAssessment(PrimaryModel):
             ),
         ]
 
+    # models/external.py
     def __str__(self):
-        tgt = f"{self.target_type.app_label}.{self.target_type.model}:{self.target_id}"
-        return f"{self.assessment_type} {self.status} on {tgt} @ {self.observed_at:%Y-%m-%d %H:%M}"
+        obj = self.target  # dereferences the GFK (one DB query)
+        label = str(obj) if obj else f"{self.target_type.app_label}.{self.target_type.model}:{self.target_id}"
+        return f"{self.assessment_type} [{self.status}] on {label} @ {self.observed_at:%Y-%m-%d %H:%M}"
+
 
     @classmethod
     def mark_latest_for(cls, assessment_type: str, target_type_id: int, target_id: int):

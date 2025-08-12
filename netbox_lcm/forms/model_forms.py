@@ -17,9 +17,19 @@ __all__ = (
     'LicenseForm',
     'LicenseAssignmentForm',
     'HardwareLifecycleForm',
-    'HardwareLifecyclePlanForm'
+    'HardwareLifecyclePlanForm',
+    'ExternalAssessmentForm',
 )
 
+class ExternalAssessmentForm(NetBoxModelForm):
+    class Meta:
+        model = ExternalAssessment
+        fields = [
+            "assessment_type", "target_type", "target_id",
+            "source", "source_run_id", "external_reference",
+            "observed_at", "expires_at", "retention_days",
+            "status", "score", "summary", "details", "external_url",
+        ]
 
 class VendorForm(NetBoxModelForm):
 

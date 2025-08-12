@@ -10,7 +10,7 @@ __all__ = (
 
 class ExternalAssessmentTable(NetBoxTable):
     pk = columns.ToggleColumn()
-    assessment_type = tables.Column(linkify=True)
+    assessment_type = tables.Column()
     status = tables.Column()
     score = tables.Column()
     observed_at = tables.DateTimeColumn()
@@ -18,6 +18,7 @@ class ExternalAssessmentTable(NetBoxTable):
     is_latest = columns.BooleanColumn()
     target = tables.Column(accessor="target_id", verbose_name="Target")
     external_url = tables.LinkColumn(text="Report", accessor="external_url", verbose_name="Report", orderable=False)
+    actions = columns.ActionsColumn(actions=())  # no view/edit/delete
 
     class Meta(NetBoxTable.Meta):
         model = ExternalAssessment
