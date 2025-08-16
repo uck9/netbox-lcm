@@ -37,7 +37,6 @@ class ExternalAssessmentType(PrimaryModel):
 
 class ExternalAssessment(PrimaryModel):
     """
-    Generic, not-change-logged container for externally generated assessments.
     Target can be Device, Interface, VM, Site, etc.
     """
     # What family/type of assessment this is
@@ -51,7 +50,10 @@ class ExternalAssessment(PrimaryModel):
     # Generic target
     target_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, db_index=True)
     target_id = models.PositiveBigIntegerField(db_index=True)
-    target = GenericForeignKey("target_type", "target_id")
+    target = GenericForeignKey(
+        ct_field='target_type', 
+        fk_field='target_id'
+    )
 
     # Provenance/run
     source = models.CharField(max_length=128, db_index=True, help_text="Producer system")
@@ -99,6 +101,12 @@ class ExternalAssessment(PrimaryModel):
         obj = self.target  # dereferences the GFK (one DB query)
         label = str(obj) if obj else f"{self.target_type.app_label}.{self.target_type.model}:{self.target_id}"
         return f"{self.assessment_type} [{self.status}] on {label} @ {self.observed_at:%Y-%m-%d %H:%M}"
+    
+    def target_name(self):
+        obj = self.target
+        label = str(obj) if obj else f"{self.target_type.app_label}.{self.target_type.model}:{self.target_id}"
+        return f"{label}"
+
 
 
     @classmethod

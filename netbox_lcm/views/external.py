@@ -19,19 +19,19 @@ __all__ = (
 
 @register_model_view(ExternalAssessment, name='list')
 class ExternalAssessmentListView(ObjectListView):
-    """
-    Read-only list. We’re not using NetBoxModel, but ObjectListView still works with a queryset + table.
-    """
     queryset = ExternalAssessment.objects.all()
     table = ExternalAssessmentTable
     filterset = ExternalAssessmentFilter
     filterset_form = ExternalAssessmentFilterForm
-    action_buttons = ()  # no add/edit
+    actions = {
+        'export': {'view'},
+    }
 
 
 @register_model_view(ExternalAssessment)
 class ExternalAssessmentView(ObjectView):
     queryset = ExternalAssessment.objects.all()
+    actions = {}
 
 
 class ExternalAssessmentEditView(ObjectEditView):

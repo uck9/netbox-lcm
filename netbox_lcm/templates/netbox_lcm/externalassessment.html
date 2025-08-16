@@ -1,8 +1,9 @@
 {% extends 'generic/object.html' %}
-{% block actions %}{% endblock %}
+{% block buttons %}
+    {# Completely remove buttons, or selectively include your own #}
+{% endblock %}
 {% load custom_links %}
 {% load helpers %}
-{% load lcm_filters %}
 {% load perms %}
 {% load plugins %}
 {% load tabs %}
@@ -40,27 +41,27 @@
           </tr>
           <tr>
             <th scope="row">End of Sale</th>
-            <td><span {{ object.end_of_sale|date_badge_class }}>{{ object.end_of_sale }}</span></td>
+            <td><span {{ object.end_of_sale }}>{{ object.end_of_sale }}</span></td>
           </tr>
           <tr>
             <th scope="row">End of SW Maintenance</th>
-            <td><span {{ object.end_of_maintenance|date_badge_class }}>{{ object.end_of_maintenance }}</span></td>
+            <td><span {{ object.end_of_maintenance }}>{{ object.end_of_maintenance }}</span></td>
           </tr>
           <tr>
             <th scope="row">End of Security Vulnerability</th>
-            <td><span {{ object.end_of_security|date_badge_class }}>{{ object.end_of_security }}</span></td>
+            <td><span {{ object.end_of_security }}>{{ object.end_of_security }}</span></td>
           </tr>
           <tr>
             <th scope="row">End of Contract Attach</th>
-            <td><span {{ object.last_contract_attach|date_badge_class }}>{{ object.last_contract_attach }}</span></td>
+            <td><span {{ object.last_contract_attach }}>{{ object.last_contract_attach }}</span></td>
           </tr>
           <tr>
             <th scope="row">End of Contract Renewal</th>
-            <td><span {{ object.last_contract_renewal|date_badge_class }}>{{ object.last_contract_renewal }}</span></td>
+            <td><span {{ object.last_contract_renewal }}>{{ object.last_contract_renewal }}</span></td>
           </tr>
           <tr>
             <th scope="row">End of Support</th>
-            <td><span {{ object.end_of_support|date_badge_class }}>{{ object.end_of_support }}</span></td>
+            <td><span {{ object.end_of_support }}>{{ object.end_of_support }}</span></td>
           </tr>
         </table>
       </div>

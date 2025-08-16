@@ -16,7 +16,8 @@ class ExternalAssessmentTable(NetBoxTable):
     observed_at = tables.DateTimeColumn()
     source = tables.Column()
     is_latest = columns.BooleanColumn()
-    target = tables.Column(accessor="target_id", verbose_name="Target")
+    target = tables.Column(linkify=True, accessor="target_id", verbose_name="Target")
+
     external_url = tables.LinkColumn(text="Report", accessor="external_url", verbose_name="Report", orderable=False)
     actions = columns.ActionsColumn(actions=())  # no view/edit/delete
 
@@ -33,5 +34,4 @@ class ExternalAssessmentTable(NetBoxTable):
 
     def render_target(self, record):
         # Lightweight target display without requiring NB linkification helpers
-        ct: ContentType = record.target_type
-        return f"{ct.app_label}.{ct.model}:{record.target_id}"
+        return record.target_name() if record else "—"
