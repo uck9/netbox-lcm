@@ -63,6 +63,8 @@ class DeviceLifecycleViewSet(NetBoxModelViewSet):
             )
         ).exclude(
             status__in=['unmanaged', 'passive']
+        ).order_by(
+            'name'
         )
 
         return qs
