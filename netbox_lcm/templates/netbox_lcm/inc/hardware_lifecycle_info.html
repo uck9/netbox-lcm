@@ -37,7 +37,7 @@
       <td><span {{ lifecycle_info.last_contract_attach|date_badge_class }}>{{ lifecycle_info.last_contract_attach }}</span></td>
     </tr>
     <tr>
-      <th scope="row">End of Contract Renewal</th>
+      <th scope="row">Last Contract Renewal</th>
       <td><span {{ lifecycle_info.last_contract_renewal|date_badge_class }}>{{ lifecycle_info.last_contract_renewal }}</span></td>
     </tr>
     <tr>
@@ -47,6 +47,6 @@
   </table>
   {% else %}
   </h2>
-  <div class="card-body"><span class="text-muted">No Lifecycle Dates Defined</span></div>
+  <div class="card-body"><span class="text-muted">No Lifecycle Dates Annouced.</span></div>
   {% endif %}
 </div>
