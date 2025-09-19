@@ -1,4 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
+from django.conf import settings
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from tenancy.api.serializers_.tenants import TenantSerializer
@@ -64,6 +65,7 @@ class DeviceLifecycleSerializer(NetBoxModelSerializer):
         nested=True, source='prefetched_contracts', many=True, read_only=True
     )
     hw_lifecycle = serializers.SerializerMethodField()
+    custom_fields = serializers.SerializerMethodField(read_only=True)
     
 
     def get_hw_lifecycle(self, obj):
@@ -92,9 +94,29 @@ class DeviceLifecycleSerializer(NetBoxModelSerializer):
             "label": label
         }
 
+    def get_custom_fields(self, obj: Device):
+        # Pull allowed CF names from ?cf=cf1,cf2 or fall back to settings
+        request = self.context.get('request')
+        if request and request.query_params.get('cf'):
+            names = [
+                n.strip() for n in request.query_params.get('cf', '').split(',')
+                if n.strip()
+            ]
+        else:
+            names = getattr(settings, 'PLUGINS_CONFIG', {}).get(
+                'netbox_lcm', {}
+            ).get('lcm_device_cf_whitelist', [])
+
+        # NetBox v4 keeps raw dict on `custom_field_data`
+        data = getattr(obj, 'custom_field_data', {}) or {}
+
+        # Return only keys requested AND present; missing keys get ignored
+        return {k: data.get(k) for k in names if k in data}
+
     class Meta:
         model = Device
         fields = [
             'id', 'name', 'status', 'site', 'device_type', 'tenant',
-            'hw_lifecycle', 'support_coverage_status', 'support_contract_count', 'support_contracts'
+            'hw_lifecycle', 'support_coverage_status', 'support_contract_count', 'support_contracts',
+            'custom_fields'
         ]
