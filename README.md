@@ -53,6 +53,13 @@ be configured to manage the data import process from the script.
             'api_is_source_of_truth': True,         # Data received from API is considered the soruce of truth and will overwrite non matching data
             'use_eos_for_missing': True,            # If a date is not returned, use end_of_support as the date to use, otherwise null values retained
             'hw_lcm_migration_calc_month': 6,       # Month used to calc replacement and budget years. Default is 6
+            'lcm_device_cf_whitelist': [
+                'dot1x_enforcement',
+                'dot1x_device_last_measured',
+                'backup_system',
+                'backup_notes',
+                # add whatever you want exposed by default
+            ] # Include custom fields that should be exposed in the devices api view.
         },
     ],
 ```
